@@ -10,6 +10,7 @@ import br.com.a2dm.brcmn.service.UsuarioService;
 import br.com.a2dm.brcmn.util.criptografia.CriptoMD5;
 import br.com.a2dm.brcmn.util.jsf.AbstractBean;
 import br.com.a2dm.brcmn.util.jsf.JSFUtil;
+import br.com.a2dm.spdm.config.MenuControl;
 
 
 @RequestScoped
@@ -67,7 +68,8 @@ public class LoginBean extends AbstractBean<Usuario, UsuarioService>
 			
 			if(usuario != null)
 			{
-				util.getSession().setAttribute("loginUsuario", usuario);				
+				util.getSession().setAttribute("loginUsuario", usuario);
+				MenuControl.ativarMenu("flgMenuPed");
 				return ACAO_SUCESSO;
 			}
 			else

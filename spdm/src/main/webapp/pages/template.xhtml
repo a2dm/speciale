@@ -111,31 +111,31 @@
 		          <ul class="sidebar-menu">
 		            <li class="header">MENU PRINCIPAL</li>
 		      
-		            <li><h:commandLink action="#{telaAcaoBean.preparaPesquisar}"><i class="fa fa-paper-plane"></i> <span>Pedido</span></h:commandLink></li>
+		            <li class="treeview #{sessionScope.flgMenuPed}"><h:commandLink action="#{telaAcaoBean.preparaPesquisar}"><i class="fa fa-paper-plane"></i> <span>Pedido</span></h:commandLink></li>
 		            
-		            <li class="treeview">
+		            <li class="treeview #{sessionScope.flgMenuRel}">
 		              <a href="#">
 		                <i class="fa fa-file-text-o"></i>
 		                <span>Relatórios</span>
 		                <i class="fa fa-angle-left pull-right"></i>
 		              </a>
 		              <ul class="treeview-menu">
-		                <li><a href="pages/UI/general.html"><i class="fa fa-navicon"></i> Pedido</a></li>
-		                <li><a href="pages/UI/icons.html"><i class="fa fa-building-o"></i> Logistica</a></li>
+		                <li class="#{sessionScope.flgMenuRelPed}"><a href="pages/UI/general.html"><i class="fa fa-navicon"></i> Pedido</a></li>
+		                <li class="#{sessionScope.flgMenuRelLog}"><a href="pages/UI/icons.html"><i class="fa fa-building-o"></i> Logistica</a></li>
 		              </ul>
 		            </li>
 		            		            
-		            <li class="treeview">
+		            <li class="treeview #{sessionScope.flgMenuMan}">
 		              <a href="#">
 		                <i class="fa fa-cogs"></i>
 		                <span>Manutenção</span>
 		                <i class="fa fa-angle-left pull-right"></i>
 		              </a>
 		              <ul class="treeview-menu">
-		                <li><a href="pages/UI/general.html"><i class="fa fa-user"></i> Usuário</a></li>
-		                <li><a href="pages/UI/icons.html"><i class="fa fa-user-secret"></i> Cliente</a></li>
-		                <li><a href="pages/UI/buttons.html"><i class="fa fa-edit"></i> Receita</a></li>
-		                <li><a href="pages/UI/sliders.html"><i class="fa fa-inbox"></i> Produto</a></li>		                
+		                <li class="#{sessionScope.flgMenuManUsr}"><h:commandLink action="#{usuarioBean.preparaPesquisar}"><i class="fa fa-user"></i> Usuário</h:commandLink></li>
+		                <li class="#{sessionScope.flgMenuManCli}"><a href="pages/UI/icons.html"><i class="fa fa-user-secret"></i> Cliente</a></li>
+		                <li class="#{sessionScope.flgMenuManRec}"><a href="pages/UI/buttons.html"><i class="fa fa-edit"></i> Receita</a></li>
+		                <li class="#{sessionScope.flgMenuManPrd}"><a href="pages/UI/sliders.html"><i class="fa fa-inbox"></i> Produto</a></li>		                
 		              </ul>
 		            </li>
 		            
