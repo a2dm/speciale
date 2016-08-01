@@ -1,7 +1,9 @@
 package br.com.a2dm.spdm.bean;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -9,12 +11,15 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
+import br.com.a2dm.brcmn.entity.Estado;
+import br.com.a2dm.brcmn.entity.Grupo;
 import br.com.a2dm.brcmn.entity.Usuario;
+import br.com.a2dm.brcmn.service.EstadoService;
+import br.com.a2dm.brcmn.service.GrupoService;
 import br.com.a2dm.brcmn.service.UsuarioService;
 import br.com.a2dm.brcmn.util.jsf.AbstractBean;
 import br.com.a2dm.brcmn.util.jsf.JSFUtil;
 import br.com.a2dm.brcmn.util.jsf.Variaveis;
-import br.com.a2dm.brcmn.util.ws.WebServiceCep;
 import br.com.a2dm.spdm.config.MenuControl;
 
 @RequestScoped
@@ -24,6 +29,13 @@ public class UsuarioBean extends AbstractBean<Usuario, UsuarioService>
 	private JSFUtil util = new JSFUtil();
 	
 	private String login;
+	
+	private List<Grupo> listaGrupo;
+	
+	private List<Estado> listaEstado;
+	
+	private String siglaEstado;
+	
 	
 	public UsuarioBean()
 	{
@@ -54,28 +66,34 @@ public class UsuarioBean extends AbstractBean<Usuario, UsuarioService>
 		this.getSearchObject().setFlgAtivo("T");
 	}
 	
-	public void buscarCep()
+	@Override
+	protected void setListaInserir() throws Exception
 	{
-		try
-		{
-			if(this.getEntity().getCep() != null
-					&& !this.getEntity().getCep().equals(""))
-			{
-				String cep = this.getEntity().getCep().replace("-", "");
-				
-				WebServiceCep webServiceCep = WebServiceCep.searchCep(cep);
-				
-				this.getEntity().setLogradouro(webServiceCep.getLogradouroFull().toUpperCase());
-				this.getEntity().setBairro(webServiceCep.getBairro().toUpperCase());
-				this.getEntity().setCidade(webServiceCep.getCidade().toUpperCase());
-			}
-		}
-		catch (Exception e)
-		{
-			FacesMessage message = new FacesMessage(e.getMessage());
-	        message.setSeverity(FacesMessage.SEVERITY_ERROR);
-	        FacesContext.getCurrentInstance().addMessage(null, message);
-		}
+		//LISTA DE ESTADOS
+		List<Estado> resultEst = EstadoService.getInstancia().pesquisar(new Estado(), 0);
+		
+		Estado est = new Estado();
+		est.setDescricao("Escolha o Estado");
+		
+		List<Estado> listaEstado = new ArrayList<Estado>();
+		listaEstado.add(est);
+		listaEstado.addAll(resultEst);
+		
+		this.setListaEstado(listaEstado);
+		
+		//LISTA DE GRUPOS
+		Grupo grupo = new Grupo();
+		grupo.setFlgAtivo("S");
+		List<Grupo> resultGrp = GrupoService.getInstancia().pesquisar(grupo, 0);
+		
+		Grupo grp = new Grupo();
+		grp.setDescricao("Escolha o Grupo");
+		
+		List<Grupo> listaGrupo = new ArrayList<Grupo>();
+		listaGrupo.add(grp);
+		listaGrupo.addAll(resultGrp);
+		
+		this.setListaGrupo(listaGrupo);
 	}
 	
 	@Override
@@ -279,12 +297,35 @@ public class UsuarioBean extends AbstractBean<Usuario, UsuarioService>
 		this.getSearchObject().setFlgAtivo("T");
 	}
 
-
 	public String getLogin() {
 		return login;
 	}
 
 	public void setLogin(String login) {
 		this.login = login;
+	}
+
+	public List<Grupo> getListaGrupo() {
+		return listaGrupo;
+	}
+
+	public void setListaGrupo(List<Grupo> listaGrupo) {
+		this.listaGrupo = listaGrupo;
+	}
+
+	public List<Estado> getListaEstado() {
+		return listaEstado;
+	}
+
+	public void setListaEstado(List<Estado> listaEstado) {
+		this.listaEstado = listaEstado;
+	}
+
+	public String getSiglaEstado() {
+		return siglaEstado;
+	}
+
+	public void setSiglaEstado(String siglaEstado) {
+		this.siglaEstado = siglaEstado;
 	}
 }

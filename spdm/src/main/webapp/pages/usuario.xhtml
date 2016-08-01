@@ -15,7 +15,8 @@
 	<ui:param name="crudBean" value="#{usuarioBean}" />	
 	
 	<ui:define name="saveStateObjectsDefined">
-		
+		<t:saveState value="#{crudBean.listaEstado}" />
+		<t:saveState value="#{crudBean.listaGrupo}" />
 	</ui:define>
 	
 	<ui:define name="content">
@@ -25,7 +26,7 @@
                     <div class="form-group">
                       <label for="inputEmail3" class="col-sm-2 control-label">Nome</label>
                       <div class="col-sm-6">
-                        <h:inputText value="#{crudBean.searchObject.nome}" styleClass="form-control" size="100" onblur="upper(this);" id="nome">
+                        <h:inputText value="#{crudBean.searchObject.nome}" onclick="teste();" styleClass="form-control" size="100" onblur="upper(this);" id="nome">
                         	<f:passThroughAttribute name="placeholder" value="Nome do Usuário"/>
                         </h:inputText>
                       </div>
@@ -157,43 +158,12 @@
 		                 	
 		                </div>
 	                </rich:tab>
-	                
-	                <rich:tab header="Profissional">	                
-	                	<div class="box-body">
-		                	<div class="form-group">
-		                   	   <label for="inputEmail3" class="col-sm-2 control-label">Especialidade *</label>
-			                   <div class="col-sm-3">
-			                     <h:selectOneMenu value="#{crudBean.entity.idEspecialidade}" styleClass="form-control" converter="simpleIndexConverter">								
-									<t:selectItems var="i" itemValue="#{i.idEspecialidade}" itemLabel="#{i.descricao}" value="#{crudBean.listaEspecialidade}" />
-								</h:selectOneMenu>
-			                   </div>
-		                 	</div>
-		                 	
-		                 	<div class="form-group">
-		                   	   <label for="inputEmail3" class="col-sm-2 control-label">Conselho *</label>
-			                   <div class="col-sm-2">
-			                     <h:selectOneMenu value="#{crudBean.entity.idConselho}" styleClass="form-control" converter="simpleIndexConverter">								
-									<t:selectItems var="i" itemValue="#{i.idConselho}" itemLabel="#{i.descricao}" value="#{crudBean.listaConselho}" />
-								 </h:selectOneMenu>
-			                   </div>
-		                 	</div>
-		                 	
-		                 	<div class="form-group">
-		                   	   <label for="inputEmail3" class="col-sm-2 control-label">Número *</label>
-			                   <div class="col-sm-2">
-			                   	<h:inputText value="#{crudBean.entity.numConselho}" styleClass="form-control" onkeypress="return soNumero(event, this);" maxlength="15" id="numConselho">
-		                        	<f:passThroughAttribute name="placeholder" value="Número do Conselho"/>
-		                        </h:inputText>
-			                   </div>
-		                 	</div>
-	                 	</div>
-	                
+	                	                	                
+	                <rich:tab header="Endereço">
+	                	<ui:include src="panelUsuarioEndereco.xhtml" />
 	                </rich:tab>
 	                
-	                <rich:tab header="Endereço">	                
-	                </rich:tab>
-	                
-	                <rich:tab header="Permissões">	                
+	                <rich:tab header="Configuração">	                
 	                	<div class="box-body">
 		                    <div class="form-group">
 		                      <label for="inputEmail3" class="col-sm-2 control-label">Grupo *</label>
@@ -203,20 +173,7 @@
 								 </h:selectOneMenu>
 		                      </div>
 		                    </div>
-		                    
-		                    <div class="form-group">
-		                      <label for="inputEmail3" class="col-sm-2 control-label">Acesso Segurança *</label>
-		                      <div class="col-sm-6">
-		                        <div style="width: 180px;" class="radio">
-									<h:selectOneRadio value="#{crudBean.entity.flgSeguranca}" style="width: 100%;" >
-										<f:selectItem itemValue="S" itemLabel="Sim" />
-										<f:selectItem itemValue="N" itemLabel="Não"/>
-									</h:selectOneRadio>
-								</div>
-		                      </div>
-		                    </div>
-	                    </div>
-	                
+	                    </div>	                
 	                </rich:tab>
                 </rich:tabPanel>
 			</f:subview>
@@ -285,9 +242,9 @@
 					</rich:dataTable>
 				</div>
 				<h:panelGroup style="color: #D8D8D8" rendered="#{not empty crudBean.searchResult and crudBean.searching}"><div align="right">Foi(ram) encontrado(s) <h:outputText value="#{crudBean.searchResult.size()}"/> registro(s). &nbsp;&nbsp; </div></h:panelGroup>
-				<div align="center">
-					<rich:dataScroller for="tblData" maxPages="10" rendered="#{not empty crudBean.searchResult and crudBean.searching}"/>
-				</div>
+				<h:panelGroup layout="block" style="padding: 16px; text-align: center;" rendered="#{not empty crudBean.searchResult and crudBean.searching}">
+					<rich:dataScroller for="tblData" maxPages="10" />
+				</h:panelGroup>
 			</f:subview>
 		</h:panelGrid>
 	</ui:define>

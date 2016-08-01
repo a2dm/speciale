@@ -133,7 +133,7 @@
 		              </a>
 		              <ul class="treeview-menu">
 		                <li class="#{sessionScope.flgMenuManUsr}"><h:commandLink action="#{usuarioBean.preparaPesquisar}"><i class="fa fa-user"></i> Usuário</h:commandLink></li>
-		                <li class="#{sessionScope.flgMenuManCli}"><a href="pages/UI/icons.html"><i class="fa fa-user-secret"></i> Cliente</a></li>
+		                <li class="#{sessionScope.flgMenuManCli}"><h:commandLink action="#{clienteBean.preparaPesquisar}"><i class="fa fa-user-secret"></i> Cliente</h:commandLink></li>
 		                <li class="#{sessionScope.flgMenuManRec}"><a href="pages/UI/buttons.html"><i class="fa fa-edit"></i> Receita</a></li>
 		                <li class="#{sessionScope.flgMenuManPrd}"><a href="pages/UI/sliders.html"><i class="fa fa-inbox"></i> Produto</a></li>		                
 		              </ul>
@@ -166,7 +166,10 @@
 						<ui:insert name="content"/>
 						<ui:insert name="buttons">
 							<div class="box-footer">
-			                    <ui:insert name="buttonItens"/>
+		                      <label for="inputEmail3" class="col-sm-2 control-label"></label>
+		                      <div class="col-sm-6">
+		                        <ui:insert name="buttonItens"/>
+		                      </div>
 			                </div>		
 						</ui:insert>
 						<ui:insert name="list"/>
@@ -186,7 +189,8 @@
 	       </div>
 		</h:form>
    		
-		<script src="../js/custom.js"></script>	
+		<script src="../js/custom.js"></script>
+		<script src="../js/cep.js"></script>	
 	    <script src="../layout/plugins/jQuery/jQuery-2.1.4.min.js"></script>
 	    
 	    <script src="../layout/bootstrap/js/bootstrap.min.js"></script>

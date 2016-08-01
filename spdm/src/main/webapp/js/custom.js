@@ -192,6 +192,13 @@ function mcep(v){
     return v
 }
 
+function mhor(v)
+{
+	v=v.replace(/\D/g,"")                 //Remove tudo o que não é dígito	
+	v=v.replace(/(\d)(\d{2})$/,"$1:$2");
+	return v
+}
+
 function formataData(evt, campo) 
 {
 	if (soNumero(evt, campo))
