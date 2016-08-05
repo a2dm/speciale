@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+					  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:a4j="http://richfaces.org/a4j"
+				xmlns:rich="http://richfaces.org/rich"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:t="http://myfaces.apache.org/tomahawk"
+				xmlns:mj="http://mojarra.dev.java.net/mojarra_ext">
+	
+	
+		<f:facet name="header">
+			<h:panelGroup>
+				<h:outputText value="Usuário - Visualizar" />
+			</h:panelGroup>
+		</f:facet>
+		
+		<f:facet name="controls">
+			<h:outputLink value="#" onclick="#{rich:component('panVisualizar')}.hide(); return false;">
+		    	<h:graphicImage value="../images/closeModal.png" id="fechaPanelVisualizar" style="width: 16px; height: 16px; vertical-align:middle;"/>
+	       	</h:outputLink>
+		</f:facet>
+
+		<div class="modal-body">
+			
+			<rich:tabPanel switchType="client">
+				<rich:tab header="Pessoal">
+					<div class="box-body">
+		             <div class="form-group">
+		               <label for="inputEmail3" class="col-sm-3 control-label">Usuário:</label>
+		               <div class="col-sm-6" style="padding-top: 7px;">
+		                 <h:outputText value="#{crudBean.entity.idUsuario}" />
+		                 <h:outputText value=" - " />
+		                 <h:outputText value="#{crudBean.entity.nome}" />
+		               </div>
+		             </div>
+					</div>
+					
+					<div class="box-body">
+		             <div class="form-group">
+		               <label for="inputEmail3" class="col-sm-3 control-label">E-mail:</label>
+		               <div class="col-sm-6" style="padding-top: 7px;">               	 
+		                 <h:outputText value="#{crudBean.entity.email}"/>
+		               </div>
+		             </div>
+					</div>
+					
+					<div class="box-body">
+		             <div class="form-group">
+		               <label for="inputEmail3" class="col-sm-3 control-label">Login:</label>
+		               <div class="col-sm-6" style="padding-top: 7px;">               	 
+		                 <h:outputText value="#{crudBean.entity.login}"/>
+		               </div>
+		             </div>
+					</div>
+								
+					<div class="box-body">
+		             <div class="form-group">
+		               <label for="inputEmail3" class="col-sm-3 control-label">Cpf:</label>
+		               <div class="col-sm-6" style="padding-top: 7px;">               	 
+		                 <h:outputText value="#{crudBean.entity.cpf}"/>
+		               </div>
+		             </div>
+					</div>
+					
+					<div class="box-body">
+		             <div class="form-group">
+		               <label for="inputEmail3" class="col-sm-3 control-label">Telefone:</label>
+		               <div class="col-sm-6" style="padding-top: 7px;">               	 
+		                 <h:outputText value="#{crudBean.entity.telefone}"/>
+		               </div>
+		             </div>
+					</div>
+					
+					<div class="box-body">
+		             <div class="form-group">
+		               <label for="inputEmail3" class="col-sm-3 control-label">Data Nascimento:</label>
+		               <div class="col-sm-6" style="padding-top: 7px;">               	 
+		                 <h:outputText value="#{crudBean.entity.dataNascimento}" converter="converterData"/>
+		               </div>
+		             </div>
+					</div>
+					
+					<div class="box-body">
+		             <div class="form-group">
+		               <label for="inputEmail3" class="col-sm-3 control-label">Situação:</label>
+		               <div class="col-sm-6" style="padding-top: 7px;">
+		               	 <h:outputText value="ATIVO" style="color: blue;" rendered="#{crudBean.entity.flgAtivo == 'S'}"/>
+						 <h:outputText value="INATIVO" style="color:red;" rendered="#{crudBean.entity.flgAtivo == 'N'}"/>
+		               </div>
+		             </div>
+					</div>
+					
+					<div class="box-body">
+		             <div class="form-group">
+		               <label for="inputEmail3" class="col-sm-3 control-label">Usuário de Cadastro:</label>
+		               <div class="col-sm-6" style="padding-top: 7px;">
+		               	 <h:outputText value="#{crudBean.entity.usuarioCad.nome}"/>				 
+		               </div>
+		             </div>
+					</div>
+					
+					<div class="box-body">
+		             <div class="form-group">
+		               <label for="inputEmail3" class="col-sm-3 control-label">Data de Cadastro:</label>
+		               <div class="col-sm-6" style="padding-top: 7px;">
+		               	 <h:outputText value="#{crudBean.entity.dataCadastro}" converter="converterDataHora"/>				 
+		               </div>
+		             </div>
+					</div>
+					
+					<div class="box-body">
+		             <div class="form-group">
+		               <label for="inputEmail3" class="col-sm-3 control-label">Usuário da Última Alteração:</label>
+		               <div class="col-sm-6" style="padding-top: 7px;">
+		               	 <h:outputText value="#{crudBean.entity.usuarioAlt.nome}"/>				 
+		               </div>
+		             </div>
+					</div>
+					
+					<div class="box-body">
+		             <div class="form-group">
+		               <label for="inputEmail3" class="col-sm-3 control-label">Data da Ultima Alteração:</label>
+		               <div class="col-sm-6" style="padding-top: 7px;">
+		               	 <h:outputText value="#{crudBean.entity.dataAlteracao}" converter="converterDataHora"/>				 
+		               </div>
+		             </div>
+					</div>
+				</rich:tab>
+				
+				<rich:tab header="Endereço">
+                	<div class="box-body">
+		             <div class="form-group">
+		               <label for="inputEmail3" class="col-sm-3 control-label">Cep:</label>
+		               <div class="col-sm-6" style="padding-top: 7px;">
+		               	 <h:outputText value="#{crudBean.entity.cep}" />				 
+		               </div>
+		             </div>
+					</div>
+					
+					<div class="box-body">
+		             <div class="form-group">
+		               <label for="inputEmail3" class="col-sm-3 control-label">Logradouro:</label>
+		               <div class="col-sm-6" style="padding-top: 7px;">
+		               	 <h:outputText value="#{crudBean.entity.logradouro}" />
+		               </div>
+		             </div>
+					</div>
+					
+					<div class="box-body">
+		             <div class="form-group">
+		               <label for="inputEmail3" class="col-sm-3 control-label">Número:</label>
+		               <div class="col-sm-6" style="padding-top: 7px;">
+		               	 <h:outputText value="#{crudBean.entity.numEndereco}" />				 
+		               </div>
+		             </div>
+					</div>
+					
+					<div class="box-body">
+		             <div class="form-group">
+		               <label for="inputEmail3" class="col-sm-3 control-label">Bairro:</label>
+		               <div class="col-sm-6" style="padding-top: 7px;">
+		               	 <h:outputText value="#{crudBean.entity.bairro}" />
+		               </div>
+		             </div>
+					</div>
+					
+					<div class="box-body">
+		             <div class="form-group">
+		               <label for="inputEmail3" class="col-sm-3 control-label">Cidade:</label>
+		               <div class="col-sm-6" style="padding-top: 7px;">
+		               	 <h:outputText value="#{crudBean.entity.cidade}" />
+		               </div>
+		             </div>
+					</div>
+					
+					<div class="box-body">
+		             <div class="form-group">
+		               <label for="inputEmail3" class="col-sm-3 control-label">Estado:</label>
+		               <div class="col-sm-6" style="padding-top: 7px;">
+		               	 <h:outputText value="#{crudBean.entity.estado.descricao}" />
+		               </div>
+		             </div>
+					</div>
+					
+					<div class="box-body">
+		             <div class="form-group">
+		               <label for="inputEmail3" class="col-sm-3 control-label">Complemento:</label>
+		               <div class="col-sm-6" style="padding-top: 7px;">
+		               	 <h:outputText value="#{crudBean.entity.complemento}" />
+		               </div>
+		             </div>
+					</div>
+					
+					<div class="box-body">
+		             <div class="form-group">
+		               <label for="inputEmail3" class="col-sm-3 control-label">Referência:</label>
+		               <div class="col-sm-6" style="padding-top: 7px;">
+		               	 <h:outputText value="#{crudBean.entity.referencia}" />
+		               </div>
+		             </div>
+					</div>
+                </rich:tab>
+	                
+	            <rich:tab header="Configuração">
+	            	<div class="box-body">
+		             <div class="form-group">
+		               <label for="inputEmail3" class="col-sm-3 control-label">Grupo:</label>
+		               <div class="col-sm-6" style="padding-top: 7px;">
+		               	 <h:outputText value="#{crudBean.entity.grupo.descricao}" />
+		               </div>
+		             </div>
+					</div>
+					
+					<h:panelGroup layout="block" rendered="#{crudBean.entity.desCliente != null}">
+						<div class="box-body">
+			             <div class="form-group">
+			               <label for="inputEmail3" class="col-sm-3 control-label">Cliente:</label>
+			               <div class="col-sm-6" style="padding-top: 7px;">
+			               	 <h:outputText value="#{crudBean.entity.desCliente}" />
+			               </div>
+			             </div>
+						</div>
+					</h:panelGroup>
+	            </rich:tab>
+			</rich:tabPanel>		
+		</div>
+	
+		<div class="modal-footer">			
+			<input type="button" onclick="#{rich:component('panVisualizar')}.hide();" class="btn btn-default" value="Fechar (X)" accesskey="X"/>
+		</div>
+		
+</ui:composition>

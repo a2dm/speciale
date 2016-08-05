@@ -21,6 +21,8 @@ import br.com.a2dm.brcmn.util.jsf.AbstractBean;
 import br.com.a2dm.brcmn.util.jsf.JSFUtil;
 import br.com.a2dm.brcmn.util.jsf.Variaveis;
 import br.com.a2dm.spdm.config.MenuControl;
+import br.com.a2dm.spdm.entity.Cliente;
+import br.com.a2dm.spdm.service.ClienteService;
 
 @RequestScoped
 @ManagedBean
@@ -34,8 +36,12 @@ public class UsuarioBean extends AbstractBean<Usuario, UsuarioService>
 	
 	private List<Estado> listaEstado;
 	
+	private List<Cliente> listaCliente;
+	
 	private String siglaEstado;
 	
+	private String flgVisualizarCliente;
+
 	
 	public UsuarioBean()
 	{
@@ -64,6 +70,25 @@ public class UsuarioBean extends AbstractBean<Usuario, UsuarioService>
 	protected void setValoresDefault() throws Exception
 	{
 		this.getSearchObject().setFlgAtivo("T");
+		this.setFlgVisualizarCliente("N");
+	}
+	
+	@Override
+	protected void setListaPesquisa() throws Exception
+	{
+		//LISTA DE CLIENTES
+		Cliente cliente = new Cliente();
+		cliente.setFlgAtivo("S");
+		List<Cliente> resultCli = ClienteService.getInstancia().pesquisar(cliente, 0);
+		
+		Cliente cli = new Cliente();
+		cli.setDesCliente("Escolha o Cliente");
+		
+		List<Cliente> listaCliente = new ArrayList<Cliente>();
+		listaCliente.add(cli);
+		listaCliente.addAll(resultCli);
+		
+		this.setListaCliente(listaCliente);
 	}
 	
 	@Override
@@ -94,6 +119,20 @@ public class UsuarioBean extends AbstractBean<Usuario, UsuarioService>
 		listaGrupo.addAll(resultGrp);
 		
 		this.setListaGrupo(listaGrupo);
+		
+		//LISTA DE CLIENTES
+		Cliente cliente = new Cliente();
+		cliente.setFlgAtivo("S");
+		List<Cliente> resultCli = ClienteService.getInstancia().pesquisar(cliente, 0);
+		
+		Cliente cli = new Cliente();
+		cli.setDesCliente("Escolha o Cliente");
+		
+		List<Cliente> listaCliente = new ArrayList<Cliente>();
+		listaCliente.add(cli);
+		listaCliente.addAll(resultCli);
+		
+		this.setListaCliente(listaCliente);
 	}
 	
 	@Override
@@ -129,21 +168,6 @@ public class UsuarioBean extends AbstractBean<Usuario, UsuarioService>
 			throw new Exception("O campo Data de Nascimento é obrigatório.");
 		}
 		
-		if(this.getEntity().getIdEspecialidade() == null || this.getEntity().getIdEspecialidade().longValue() <= 0)
-		{
-			throw new Exception("O campo Especialidade é obrigatório.");
-		}
-		
-		if(this.getEntity().getIdConselho() == null || this.getEntity().getIdConselho().longValue() <= 0)
-		{
-			throw new Exception("O campo Conselho é obrigatório.");
-		}
-		
-		if(this.getEntity().getNumConselho() == null || this.getEntity().getNumConselho().longValue() <= 0)
-		{
-			throw new Exception("O campo Número do Conselho é obrigatório.");
-		}
-		
 		if(this.getEntity().getCep() == null || this.getEntity().getCep().trim().equals(""))
 		{
 			throw new Exception("O campo Cep é obrigatório.");
@@ -169,7 +193,7 @@ public class UsuarioBean extends AbstractBean<Usuario, UsuarioService>
 			throw new Exception("O campo Cidade é obrigatório.");
 		}
 		
-		if(this.getEntity().getIdEstado() == null || this.getEntity().getIdEstado().longValue() <= 0)
+		if(this.getSiglaEstado() == null || this.getSiglaEstado().trim().equals(""))
 		{
 			throw new Exception("O campo Estado é obrigatório.");
 		}
@@ -178,6 +202,14 @@ public class UsuarioBean extends AbstractBean<Usuario, UsuarioService>
 		{
 			throw new Exception("O campo Grupo é obrigatório.");
 		}
+		
+		if(this.getEntity().getIdGrupo().intValue() == GrupoService.GRUPO_CLIENTE.intValue())
+		{
+			if(this.getEntity().getIdCliente() == null || this.getEntity().getIdGrupo().longValue() <= 0)
+			{
+				throw new Exception("O campo Cliente é obrigatório.");
+			}
+		}
 	}
 
 	@Override
@@ -185,7 +217,14 @@ public class UsuarioBean extends AbstractBean<Usuario, UsuarioService>
 	{
 		this.getEntity().setDataCadastro(new Date());
 		this.getEntity().setFlgAtivo("S");
+		this.getEntity().setFlgSeguranca("N");
 		this.getEntity().setIdUsuarioCad(util.getUsuarioLogado().getIdUsuario());
+		
+		Estado estado = new Estado();
+		estado.setSigla(this.getSiglaEstado());
+		estado = EstadoService.getInstancia().get(estado, 0);
+		
+		this.getEntity().setIdEstado(estado.getIdEstado());
 	}
 	
 	@Override
@@ -198,8 +237,26 @@ public class UsuarioBean extends AbstractBean<Usuario, UsuarioService>
 				super.preparaAlterar();
 				Usuario usuario = new Usuario();
 				usuario.setIdUsuario(getEntity().getIdUsuario());
-				usuario = UsuarioService.getInstancia().get(usuario, 0);
+				usuario = UsuarioService.getInstancia().get(usuario, UsuarioService.JOIN_ESTADO
+																   | UsuarioService.JOIN_GRUPO	
+																   | UsuarioService.JOIN_USUARIO_CAD
+																   | UsuarioService.JOIN_USUARIO_ALT);
 				
+				Estado estado = new Estado();
+				estado.setIdEstado(this.getEntity().getIdEstado());				
+				estado = EstadoService.getInstancia().get(estado, 0);
+				
+				if(usuario.getIdCliente() != null
+						&& usuario.getIdCliente().intValue() > 0)
+				{
+					this.setFlgVisualizarCliente("S");
+				}
+				else
+				{
+					this.setFlgVisualizarCliente("N");
+				}
+				
+				this.setSiglaEstado(estado.getSigla());
 				setEntity(usuario);
 			}
 		}
@@ -268,6 +325,60 @@ public class UsuarioBean extends AbstractBean<Usuario, UsuarioService>
 		}		
 	}
 	
+	public void atualizarCliente()
+	{
+		if(this.getEntity().getIdGrupo() != null)
+		{
+			if(this.getEntity().getIdGrupo().intValue() == GrupoService.GRUPO_CLIENTE.intValue())
+			{
+				this.setFlgVisualizarCliente("S");
+			}
+			else
+			{
+				this.setFlgVisualizarCliente("N");
+			}
+		}
+		else
+		{
+			this.setFlgVisualizarCliente("N");
+		}
+	}
+	
+	public void visualizar()
+	{
+		try
+		{
+			Usuario usuario = new Usuario();
+			usuario.setIdUsuario(this.getEntity().getIdUsuario());
+			
+			usuario = UsuarioService.getInstancia().get(usuario, UsuarioService.JOIN_USUARIO_CAD
+															   | UsuarioService.JOIN_USUARIO_ALT
+															   | UsuarioService.JOIN_ESTADO
+															   | UsuarioService.JOIN_GRUPO);
+			
+			if(usuario != null)
+			{
+				if(usuario.getIdCliente() != null
+						&& usuario.getIdCliente().intValue() > 0)
+				{
+					Cliente cliente = new Cliente();
+					cliente.setIdCliente(usuario.getIdCliente());
+					cliente = ClienteService.getInstancia().get(cliente, 0);
+					
+					usuario.setDesCliente(cliente.getDesCliente());
+				}
+			}
+			
+			this.setEntity(usuario);
+		}
+		catch (Exception e) 
+		{
+			FacesMessage message = new FacesMessage(e.getMessage());
+	        message.setSeverity(FacesMessage.SEVERITY_ERROR);
+	        FacesContext.getCurrentInstance().addMessage(null, message);
+		}
+	}
+	
 	@Override
 	protected boolean validarAcesso(String acao)
 	{
@@ -327,5 +438,21 @@ public class UsuarioBean extends AbstractBean<Usuario, UsuarioService>
 
 	public void setSiglaEstado(String siglaEstado) {
 		this.siglaEstado = siglaEstado;
+	}
+
+	public String getFlgVisualizarCliente() {
+		return flgVisualizarCliente;
+	}
+
+	public void setFlgVisualizarCliente(String flgVisualizarCliente) {
+		this.flgVisualizarCliente = flgVisualizarCliente;
+	}
+
+	public List<Cliente> getListaCliente() {
+		return listaCliente;
+	}
+
+	public void setListaCliente(List<Cliente> listaCliente) {
+		this.listaCliente = listaCliente;
 	}
 }
