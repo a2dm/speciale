@@ -4,8 +4,10 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 
 import br.com.a2dm.brcmn.entity.Usuario;
+import br.com.a2dm.brcmn.service.RecuperarSenhaService;
 import br.com.a2dm.brcmn.service.UsuarioService;
 import br.com.a2dm.brcmn.util.criptografia.CriptoMD5;
 import br.com.a2dm.brcmn.util.jsf.AbstractBean;
@@ -88,6 +90,36 @@ public class LoginBean extends AbstractBean<Usuario, UsuarioService>
 			return null;
 		}		
 		
+	}
+	
+	public void preparaRecuperarSenha(ActionEvent event)
+	{
+		this.setMensagem(null);
+		this.setEmailRecuperarSenha(null);
+	}
+	
+	public void recuperarSenha(ActionEvent event)
+	{
+		try
+		{
+			this.setMensagem(null);
+			
+			if(this.getEmailRecuperarSenha() == null
+					|| this.getEmailRecuperarSenha().trim().equals(""))
+			{
+				throw new Exception("Informe seu E-mail para o sistema enviar o link de recuperação de senha!");
+			}
+			
+			RecuperarSenhaService.getInstancia().gerarHash(this.getEmailRecuperarSenha());
+			
+			FacesMessage message = new FacesMessage("O link de recuperação de senha foi enviado para o seu e-mail!");
+	        message.setSeverity(FacesMessage.SEVERITY_INFO);
+	        FacesContext.getCurrentInstance().addMessage(null, message);
+		}
+		catch (Exception e)
+		{
+			this.setMensagem(e.getMessage());
+		}
 	}
 	
 	public String logout()

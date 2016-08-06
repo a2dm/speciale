@@ -27,8 +27,20 @@
 	</h:head>
 	
 	<h:body class="hold-transition login-page">
+	
+		<rich:popupPanel id="panel_loading" autosized="true" modal="true" style="z-index: 100000;">
+			<table>
+				<tr>
+					<td><h:graphicImage url="../images/ajax-loader.gif" style="border:0px; vertical-align: middle; padding: 5px;" /></td>
+					<td><h:outputText value=" Aguarde..." /></td>
+				</tr>
+			</table>
+		</rich:popupPanel>
+		
+		<a4j:status id="loading" onstart="#{rich:component('panel_loading')}.show();" onstop="#{rich:component('panel_loading')}.hide();" />
+		
 		<a4j:outputPanel style="width:100%;height:100%;" ajaxRendered="true">
-			<rich:messages layout="table" globalOnly="true" errorClass="alert alert-danger" infoClass="alert alert-info" warnClass="alertLoginSucess" id="messages"/>
+			<rich:messages layout="table" globalOnly="true" errorClass="alert alert-danger" infoClass="alert alert-success" warnClass="alertLoginSucess" id="messages"/>
 		</a4j:outputPanel>
 		
 		<div class="login-box">
@@ -71,11 +83,62 @@
 			              <h:commandButton styleClass="btn btn-primary btn-block btn-flat" id="logar" action="#{loginBean.login}" value="Entrar"/>
 			            </div><!-- /.col -->
 			   		</div>
+			   		
+			   		
+			   		<!--  Panel de Recuperar Senha -->
+			   		
+			   		<rich:popupPanel id="panRecuperarSenha" domElementAttachment="form" modal="true" width="600" height="175" resizeable="false" onmaskclick="#{rich:component('panRecuperarSenha')}.hide()">
+					<f:facet name="header">
+						<h:panelGroup>
+							<h:outputText value="Esqueci Minha Senha" />
+						</h:panelGroup>
+					</f:facet>
+			
+					<f:facet name="controls">
+						<h:outputLink value="#" onclick="#{rich:component('panRecuperarSenha')}.hide(); return false;">
+					    	<h:graphicImage value="../images/closeModal.png" id="fechaPanelRecuperarSenha" style="width: 18px; height: 18px; vertical-align:middle;"/>
+				       	</h:outputLink>
+					</f:facet>
+						
+					<div class="box-body">
+	                    <div class="form-group">                      
+	                      <div class="col-sm-12">
+							<h:inputText styleClass="form-control" value="#{loginBean.emailRecuperarSenha}" onblur="validarEmail(this);" autocomplete="off">
+								<f:passThroughAttribute name="placeholder" value="Informe seu E-mail"/>
+							</h:inputText>
+						  </div>
+						</div>
+					</div>
+					
+					<br/>
+					
+					<div align="center">
+						<a4j:commandButton styleClass="btn btn-primary btn-block btn-flat" id="enviar" actionListener="#{loginBean.recuperarSenha}" style="width:20%" value="Enviar" oncomplete="validarRecuperarSenha('#{loginBean.mensagem}')" />
+					</div>
+					
+					<script>
+						function validarRecuperarSenha(msg)
+						{
+							if(msg == '')
+							{
+								#{rich:component('panRecuperarSenha')}.hide();
+							}
+							else
+							{
+								alert(msg);
+							}
+						}
+					</script>
+					
+				</rich:popupPanel>
+				<!-- Fim -->	
+			   		
+			   		
         		</h:form>
 
        
 
-        		<a href="#">Esqueci minha senha</a><br/>
+        		<a4j:commandLink value="Esqueci minha senha" actionListener="#{loginBean.preparaRecuperarSenha}" oncomplete="#{rich:component('panRecuperarSenha')}.show()" render="panRecuperarSenha"/><br/>
 
       		</div><!-- /.login-box-body -->
     	</div>

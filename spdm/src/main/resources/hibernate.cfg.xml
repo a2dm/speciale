@@ -29,6 +29,8 @@
 		<mapping class="br.com.a2dm.brcmn.entity.Conselho"/>
 		<mapping class="br.com.a2dm.brcmn.entity.Especialidade"/>
 		<mapping class="br.com.a2dm.brcmn.entity.Estado"/>
+		<mapping class="br.com.a2dm.brcmn.entity.Parametro"/>
+		<mapping class="br.com.a2dm.brcmn.entity.RecuperarSenha"/>
 		
 		<mapping class="br.com.a2dm.spdm.entity.Cliente"/>
 		

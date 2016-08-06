@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html 		xmlns="http://www.w3.org/1999/xhtml"
+			xmlns:ui="http://java.sun.com/jsf/facelets"
+			xmlns:h="http://java.sun.com/jsf/html"
+			xmlns:f="http://java.sun.com/jsf/core"
+			xmlns:a4j="http://richfaces.org/a4j"
+			xmlns:rich="http://richfaces.org/rich"
+			xmlns:mj="http://mojarra.dev.java.net/mojarra_ext"
+			xmlns:t="http://myfaces.apache.org/tomahawk">
+			
+	<f:loadBundle basename="ApplicationResources" var="bundle"/>
+			
+	<h:head>	
+		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+		
+	    <link rel="stylesheet" href="../layout/bootstrap/css/bootstrap.min.css"/>
+	    <link rel="stylesheet" href="../layout/dist/css/AdminLTE.min.css"/>	
+	    <link rel="stylesheet" href="../layout/plugins/iCheck/square/blue.css"/>
+	    <link rel="stylesheet" href="../css/main.css"/>
+	    <link rel="shortcut icon" href="../images/favicon.ico"/>
+	
+		<title>
+			<h:outputText value="#{bundle.tituloAplicacao}" /> 
+		</title>		 
+	</h:head>
+	
+	<h:body>
+	
+		<div class="container">		   
+	            
+			<h:form class="form-signin" method="post">
+	        	<h3 class="form-signin-heading" style="color: red;">O Link que você está tentando acessar expirou!!!</h3>
+	         
+	          	<div class="checkbox" align="center">
+                	<h:commandLink value="Login" action="login" />
+                </div>
+             	            
+	        </h:form>
+       	</div>
+		       
+		<div align="center">
+		</div>
+	</h:body>
+		
+</html>

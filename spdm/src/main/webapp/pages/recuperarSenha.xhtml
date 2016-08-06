@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html 		xmlns="http://www.w3.org/1999/xhtml"
+			xmlns:ui="http://java.sun.com/jsf/facelets"
+			xmlns:h="http://java.sun.com/jsf/html"
+			xmlns:f="http://java.sun.com/jsf/core"
+			xmlns:a4j="http://richfaces.org/a4j"
+			xmlns:rich="http://richfaces.org/rich"
+			xmlns:mj="http://mojarra.dev.java.net/mojarra_ext"
+			xmlns:t="http://myfaces.apache.org/tomahawk">
+			
+	<f:loadBundle basename="ApplicationResources" var="bundle"/>
+			
+	<h:head>	
+		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+		
+	    <link rel="stylesheet" href="../layout/bootstrap/css/bootstrap.min.css"/>
+	    <link rel="stylesheet" href="../layout/dist/css/AdminLTE.min.css"/>	
+	    <link rel="stylesheet" href="../layout/plugins/iCheck/square/blue.css"/>
+	    <link rel="stylesheet" href="../css/main.css"/>
+	    <link rel="shortcut icon" href="../images/favicon.ico"/>
+	
+		<title>
+			<h:outputText value="#{bundle.tituloAplicacao}" /> 
+		</title>		 
+	</h:head>
+	
+	<h:body class="hold-transition login-page">
+	
+		<rich:popupPanel id="panel_loading" autosized="true" modal="true">
+			<table>
+				<tr>
+					<td><h:graphicImage url="../resources/img/ajax-loaders/ajax-loader-1.gif" style="border:0px; vertical-align: middle;" /></td>
+					<td><h:outputText value="Aguarde..." /></td>
+				</tr>
+			</table>
+		</rich:popupPanel>
+		
+		<a4j:status id="loading" onstart="#{rich:component('panel_loading')}.show();" onstop="#{rich:component('panel_loading')}.hide();" />
+	
+	
+		<div class="login-box">
+		
+	    	<div class="login-logo">
+		    	
+		    </div>	   
+	            
+	        <div class="login-box-body" style="width: 400px;">
+      		
+      			<div align="center"><img src="../images/logo.png" alt="" /></div>
+      		
+        		<p class="login-box-msg">Informe a nova senha de acesso ao sistema</p>
+				
+				<h:form class="form-signin" method="post" id="formAS">
+					
+					<t:saveState value="#{recuperarSenhaBean}" />
+					
+					<div class="form-group has-feedback">
+			        	<h:inputSecret id="novaSenha" class="form-control" value="#{recuperarSenhaBean.novaSenha}" maxlength="100" onblur="upper(this);" style="text-transform: none;" autocomplete="off">
+							<f:passThroughAttribute name="placeholder" value="Nova Senha"/>
+						</h:inputSecret>
+		            </div>
+		            
+		            <div class="form-group has-feedback">
+		            	<h:inputSecret id="confirmaNovaSenha" class="form-control" value="#{recuperarSenhaBean.confirmaNovaSenha}" maxlength="100" onblur="upper(this);" style="text-transform: none;" autocomplete="off">
+		                	<f:passThroughAttribute name="placeholder" value="Confirma Nova Senha"/>
+		               	</h:inputSecret>
+		            </div>
+		            
+		            <div class="row">
+			            <div class="col-xs-8">
+			              <div class="checkbox icheck">
+			                <label>
+			               
+			                </label>
+			              </div>
+			            </div><!-- /.col -->
+			            <div class="col-xs-4">
+			              <h:commandButton styleClass="btn btn-primary btn-block btn-flat" id="confirmar" style="width:100%" action="#{recuperarSenhaBean.alterarSenha}" value="Confirmar" render="formAS">
+			              	<f:param value="!@*B" name="chave"/>
+			              </h:commandButton>
+			            </div><!-- /.col -->
+			   		</div>
+		            
+		        </h:form>
+       		</div>
+       	</div>
+       	<div align="center">
+			<a4j:outputPanel style="width:100%;height:100%;" ajaxRendered="true">
+				<rich:messages layout="table" globalOnly="true" errorClass="alertLoginError" infoClass="alertLoginSucess" warnClass="alertLoginSucess" id="messages"/>
+			</a4j:outputPanel>
+		</div>
+	</h:body>
+		
+</html>
