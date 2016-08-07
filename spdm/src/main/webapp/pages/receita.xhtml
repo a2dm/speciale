@@ -12,7 +12,7 @@
 				template="crud_template.xhtml">
 			
 			
-	<ui:param name="crudBean" value="#{clienteBean}" />	
+	<ui:param name="crudBean" value="#{receitaBean}" />	
 	
 	<ui:define name="saveStateObjectsDefined">
 	</ui:define>
@@ -24,8 +24,8 @@
                     <div class="form-group">
                       <label for="inputEmail3" class="col-sm-2 control-label">Descrição</label>
                       <div class="col-sm-6">
-                        <h:inputText value="#{crudBean.searchObject.desCliente}" styleClass="form-control" maxlength="200" id="nome">
-                        	<f:passThroughAttribute name="placeholder" value="Nome do Usuário"/>
+                        <h:inputText value="#{crudBean.searchObject.desReceita}" styleClass="form-control" maxlength="200" id="nome">
+                        	<f:passThroughAttribute name="placeholder" value="Descrição da Receita"/>
                         </h:inputText>
                       </div>
                     </div>
@@ -48,12 +48,13 @@
 		
 		<h:panelGroup id="panelGroupDeEdicao" style="height:100%;width:100%;" rendered="#{crudBean.updating}">
 			<f:subview id="viewEdicao">
+			
 				<h:panelGroup id="panelGroupDeAlterar" style="height:100%;width:100%;" rendered="#{crudBean.editing}">
 					<div class="box-body" style="padding: 1px;">
 	                	<div class="form-group">
 	                   	   <label for="inputEmail3" class="col-sm-2 control-label">Código</label>
 		                   <div class="col-sm-6" style="padding-top: 5px;">
-		                     <h:outputText value="#{crudBean.entity.idCliente}"/>
+		                     <h:outputText value="#{crudBean.entity.idReceita}"/>
 		                   </div>
 	                 	</div>
                  	</div>
@@ -63,24 +64,17 @@
                 	<div class="form-group">
                    	   <label for="inputEmail3" class="col-sm-2 control-label">Descrição *</label>
 	                   <div class="col-sm-6">
-	                     <h:inputText value="#{crudBean.entity.desCliente}" styleClass="form-control" maxlength="200" id="descricao">
-		                     <f:passThroughAttribute name="placeholder" value="Descrição do Cliente"/>
+	                     <h:inputText value="#{crudBean.entity.desReceita}" styleClass="form-control" maxlength="200" id="descricao">
+		                     <f:passThroughAttribute name="placeholder" value="Descrição da Receita"/>
 	                     </h:inputText>
-	                   </div>
-                 	</div>
-                
-                	<div class="form-group">
-                   	   <label for="inputEmail3" class="col-sm-2 control-label">Hora Limite *</label>
-	                   <div class="col-sm-2">
-	                     <h:inputText value="#{crudBean.entity.horLimite}" styleClass="form-control" maxlength="5" id="hrLim" onkeypress="javascript: mascara(this, mhor);"/>
 	                   </div>
                  	</div>
                 </div>
 			</f:subview>
-		</h:panelGroup>			
+		</h:panelGroup>
 	</ui:define>
 	
-	<ui:define name="list">	
+	<ui:define name="list">
 		<h:panelGrid id="tblResult" layout="block" style="width: 100%; height: 100%;z" >
 			<f:subview id="viewListagem">
 				<div class="box-content">
@@ -98,10 +92,7 @@
 								</rich:column>
 								<rich:column style="width: 68%; text-align: center;">
 									Descrição
-								</rich:column>
-								<rich:column style="width: 9%; text-align: center;">
-									Hora Limite
-								</rich:column>
+								</rich:column>								
 								<rich:column style="width: 9%; text-align: center;">
 									Situação
 								</rich:column>
@@ -111,14 +102,11 @@
 							</rich:columnGroup>
 						</f:facet>
 						<rich:column style="text-align: right;">
-							<h:outputText value="#{rst.idCliente}" />
+							<h:outputText value="#{rst.idReceita}" />
 						</rich:column>
 						<rich:column style="text-align: left;">
-							<h:outputText value="#{rst.desCliente}" />
-						</rich:column>
-						<rich:column style="text-align: center;" id="teste3">
-							<h:outputText value="#{rst.horLimite}"/>
-						</rich:column>
+							<h:outputText value="#{rst.desReceita}" />
+						</rich:column>						
 						<rich:column style="text-align: left;">
 							<h:outputText value="ATIVO" style="color: blue;" rendered="#{rst.flgAtivo == 'S'}"/>
 							<h:outputText value="INATIVO" style="color:red;" rendered="#{rst.flgAtivo == 'N'}"/>
@@ -153,7 +141,7 @@
 	
 	<ui:define name="modal">
 		<rich:popupPanel id="panVisualizar" styleClass="modal-content" domElementAttachment="form" modal="true" width="1110" height="580" resizeable="false" onmaskclick="#{rich:component('panVisualizar')}.hide()">
-			<ui:include src="panelVisualizarCliente.xhtml" />
+			<ui:include src="panelVisualizarReceita.xhtml" />
 		</rich:popupPanel>
 	</ui:define>
 			

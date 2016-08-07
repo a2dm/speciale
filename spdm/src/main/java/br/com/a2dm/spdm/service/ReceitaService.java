@@ -15,11 +15,11 @@ import br.com.a2dm.brcmn.util.A2DMHbNgc;
 import br.com.a2dm.brcmn.util.HibernateUtil;
 import br.com.a2dm.brcmn.util.RestritorHb;
 import br.com.a2dm.brcmn.util.jsf.JSFUtil;
-import br.com.a2dm.spdm.entity.Cliente;
+import br.com.a2dm.spdm.entity.Receita;
 
-public class ClienteService extends A2DMHbNgc<Cliente>
+public class ReceitaService extends A2DMHbNgc<Receita>
 {
-	private static ClienteService instancia = null;
+	private static ReceitaService instancia = null;
 
 	public static final int JOIN_USUARIO_CAD = 1;
 	
@@ -33,58 +33,57 @@ public class ClienteService extends A2DMHbNgc<Cliente>
 	@SuppressWarnings("rawtypes")
 	private static Map restritores = new HashMap();
 	
-	public static ClienteService getInstancia()
+	public static ReceitaService getInstancia()
 	{
 		if (instancia == null)
 		{
-			instancia = new ClienteService();
+			instancia = new ReceitaService();
 		}
 		return instancia;
 	}
 	
-	public ClienteService()
+	public ReceitaService()
 	{
-		adicionarFiltro("idCliente", RestritorHb.RESTRITOR_EQ,"idCliente");
-		adicionarFiltro("idCliente", RestritorHb.RESTRITOR_NE, "filtroMap.idClienteNotEq");
-		adicionarFiltro("desCliente", RestritorHb.RESTRITOR_LIKE, "desCliente");
-		adicionarFiltro("desCliente", RestritorHb.RESTRITOR_EQ, "filtroMap.desCliente");
+		adicionarFiltro("idReceita", RestritorHb.RESTRITOR_EQ,"idReceita");
+		adicionarFiltro("desReceita", RestritorHb.RESTRITOR_LIKE, "desReceita");
+		adicionarFiltro("desReceita", RestritorHb.RESTRITOR_EQ, "filtroMap.desReceita");
 		adicionarFiltro("flgAtivo", RestritorHb.RESTRITOR_EQ, "flgAtivo");
 	}
 	
 	@Override
-	protected void validarInserir(Session sessao, Cliente vo) throws Exception
+	protected void validarInserir(Session sessao, Receita vo) throws Exception
 	{
-		Cliente cliente = new Cliente();
-		cliente.setFlgAtivo("S");		
-		cliente.setFiltroMap(new HashMap<String, Object>());
-		cliente.getFiltroMap().put("desCliente", vo.getDesCliente().trim());		
+		Receita receita = new Receita();
+		receita.setFlgAtivo("S");
+		receita.setFiltroMap(new HashMap<String, Object>());
+		receita.getFiltroMap().put("desReceita", vo.getDesReceita().trim());		
 		
-		cliente = this.get(sessao, cliente, 0);
+		receita = this.get(sessao, receita, 0);
 		
-		if(cliente != null)
+		if(receita != null)
 		{
-			throw new Exception("Este cliente já está cadastrado na sua base de dados!");
+			throw new Exception("Esta receita já está cadastrado na sua base de dados!");
 		}
 	}
 	
 	@Override
-	protected void validarAlterar(Session sessao, Cliente vo) throws Exception
+	protected void validarAlterar(Session sessao, Receita vo) throws Exception
 	{
-		Cliente cliente = new Cliente();
-		cliente.setFiltroMap(new HashMap<String, Object>());
-		cliente.getFiltroMap().put("idClienteNotEq", vo.getIdCliente());
-		cliente.getFiltroMap().put("desCliente", vo.getDesCliente().trim());
-		cliente.setFlgAtivo(vo.getFlgAtivo());		
+		Receita receita = new Receita();
+		receita.setFiltroMap(new HashMap<String, Object>());
+		receita.getFiltroMap().put("idReceitaNotEq", vo.getIdReceita());
+		receita.getFiltroMap().put("desReceita", vo.getDesReceita().trim());
+		receita.setFlgAtivo(vo.getFlgAtivo());		
 		
-		cliente = this.get(sessao, cliente, 0);
+		receita = this.get(sessao, receita, 0);
 		
-		if(cliente != null)
+		if(receita != null)
 		{
-			throw new Exception("Este cliente já está cadastrado na sua base de dados!");
+			throw new Exception("Esta receita já está cadastrado na sua base de dados!");
 		}
 	}
 	
-	public Cliente inativar(Cliente vo) throws Exception
+	public Receita inativar(Receita vo) throws Exception
 	{
 		Session sessao = HibernateUtil.getSession();
 		sessao.setFlushMode(FlushMode.COMMIT);
@@ -107,11 +106,11 @@ public class ClienteService extends A2DMHbNgc<Cliente>
 		}
 	}
 
-	public Cliente inativar(Session sessao, Cliente vo) throws Exception
+	public Receita inativar(Session sessao, Receita vo) throws Exception
 	{
-		Cliente cliente = new Cliente();
-		cliente.setIdCliente(vo.getIdCliente());
-		cliente = this.get(sessao, cliente, 0);
+		Receita receita = new Receita();
+		receita.setIdReceita(vo.getIdReceita());
+		receita = this.get(sessao, receita, 0);
 				
 		vo.setFlgAtivo("N");
 		vo.setIdUsuarioAlt(util.getUsuarioLogado().getIdUsuario());
@@ -122,7 +121,7 @@ public class ClienteService extends A2DMHbNgc<Cliente>
 		return vo;
 	}
 	
-	public Cliente ativar(Cliente vo) throws Exception
+	public Receita ativar(Receita vo) throws Exception
 	{
 		Session sessao = HibernateUtil.getSession();
 		sessao.setFlushMode(FlushMode.COMMIT);
@@ -145,11 +144,11 @@ public class ClienteService extends A2DMHbNgc<Cliente>
 		}
 	}
 	
-	public Cliente ativar(Session sessao, Cliente vo) throws Exception
+	public Receita ativar(Session sessao, Receita vo) throws Exception
 	{
-		Cliente cliente = new Cliente();
-		cliente.setIdCliente(vo.getIdCliente());
-		cliente = this.get(sessao, cliente, 0);
+		Receita receita = new Receita();
+		receita.setIdReceita(vo.getIdReceita());
+		receita= this.get(sessao, receita, 0);
 		
 		vo.setFlgAtivo("S");
 		vo.setIdUsuarioAlt(util.getUsuarioLogado().getIdUsuario());
@@ -163,7 +162,7 @@ public class ClienteService extends A2DMHbNgc<Cliente>
 	@Override
 	protected Criteria montaCriteria(Session sessao, int join)
 	{
-		Criteria criteria = sessao.createCriteria(Cliente.class);
+		Criteria criteria = sessao.createCriteria(Receita.class);
 		
 		if ((join & JOIN_USUARIO_CAD) != 0)
 	    {
@@ -179,9 +178,9 @@ public class ClienteService extends A2DMHbNgc<Cliente>
 	}
 		
 	@Override
-	protected void setarOrdenacao(Criteria criteria, Cliente vo, int join)
+	protected void setarOrdenacao(Criteria criteria, Receita vo, int join)
 	{
-		criteria.addOrder(Order.asc("desCliente"));
+		criteria.addOrder(Order.asc("desReceita"));
 	}
 
 	@Override

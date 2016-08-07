@@ -12,24 +12,25 @@ import br.com.a2dm.brcmn.util.jsf.AbstractBean;
 import br.com.a2dm.brcmn.util.jsf.JSFUtil;
 import br.com.a2dm.brcmn.util.jsf.Variaveis;
 import br.com.a2dm.spdm.config.MenuControl;
-import br.com.a2dm.spdm.entity.Cliente;
+import br.com.a2dm.spdm.entity.Receita;
 import br.com.a2dm.spdm.service.ClienteService;
+import br.com.a2dm.spdm.service.ReceitaService;
 
 
 @RequestScoped
 @ManagedBean
-public class ClienteBean extends AbstractBean<Cliente, ClienteService>
+public class ReceitaBean extends AbstractBean<Receita, ReceitaService>
 {	
 	private JSFUtil util = new JSFUtil();
 	
-	public ClienteBean()
+	public ReceitaBean()
 	{
-		super(ClienteService.getInstancia());
-		this.ACTION_SEARCH = "cliente";
-		this.pageTitle = "Manutenção / Cliente";
+		super(ReceitaService.getInstancia());
+		this.ACTION_SEARCH = "receita";
+		this.pageTitle = "Manutenção / Receita";
 		
 		MenuControl.ativarMenu("flgMenuMan");
-		MenuControl.ativarSubMenu("flgMenuManCli");
+		MenuControl.ativarSubMenu("flgMenuManRec");
 	}
 	
 	@Override
@@ -54,34 +55,16 @@ public class ClienteBean extends AbstractBean<Cliente, ClienteService>
 	{
 		this.getSearchObject().setFlgAtivo("T");
 	}
-	
-	@Override
-	protected void setDefaultInserir() throws Exception
-	{
-		this.getEntity().setHorLimite("08:00");
-	}
-	
+		
 	@Override
 	protected void validarInserir() throws Exception
 	{
 		if(this.getEntity() == null
-				|| this.getEntity().getDesCliente() == null
-				|| this.getEntity().getDesCliente().trim().equals(""))
+				|| this.getEntity().getDesReceita() == null
+				|| this.getEntity().getDesReceita().trim().equals(""))
 		{
 			throw new Exception("O campo Descrição é obrigatório!");
-		}
-		
-		if(this.getEntity() == null
-				|| this.getEntity().getHorLimite() == null
-				|| this.getEntity().getHorLimite().trim().equals(""))
-		{
-			throw new Exception("O campo Hora Limite é obrigatório!");
-		}
-		
-		if(this.getEntity().getHorLimite().trim().length() < 5)
-		{
-			throw new Exception("Favor informar a Hora Limite no formato correto. Ex: 09:00.");
-		}
+		}		
 	}
 
 	public void inativar() 
@@ -92,7 +75,7 @@ public class ClienteBean extends AbstractBean<Cliente, ClienteService>
 			{
 				if(validarAcesso(Variaveis.ACAO_INATIVAR))
 				{
-					ClienteService.getInstancia().inativar(this.getEntity());
+					ReceitaService.getInstancia().inativar(this.getEntity());
 					
 					FacesMessage message = new FacesMessage("Registro inativado com sucesso!");
 					message.setSeverity(FacesMessage.SEVERITY_INFO);
@@ -124,7 +107,7 @@ public class ClienteBean extends AbstractBean<Cliente, ClienteService>
 			{
 				if(validarAcesso(Variaveis.ACAO_ATIVAR))
 				{
-					ClienteService.getInstancia().ativar(this.getEntity());
+					ReceitaService.getInstancia().ativar(this.getEntity());
 					
 					FacesMessage message = new FacesMessage("Registro ativado com sucesso!");
 					message.setSeverity(FacesMessage.SEVERITY_INFO);
@@ -144,13 +127,13 @@ public class ClienteBean extends AbstractBean<Cliente, ClienteService>
 	{
 		try
 		{
-			Cliente cliente = new Cliente();
-			cliente.setIdCliente(this.getEntity().getIdCliente());
+			Receita receita = new Receita();
+			receita.setIdReceita(this.getEntity().getIdReceita());
 			
-			cliente = ClienteService.getInstancia().get(cliente, ClienteService.JOIN_USUARIO_CAD
-															   | ClienteService.JOIN_USUARIO_ALT);
+			receita = ReceitaService.getInstancia().get(receita, ReceitaService.JOIN_USUARIO_CAD
+															   | ReceitaService.JOIN_USUARIO_ALT);
 			
-			this.setEntity(cliente);
+			this.setEntity(receita);
 		}
 		catch (Exception e) 
 		{

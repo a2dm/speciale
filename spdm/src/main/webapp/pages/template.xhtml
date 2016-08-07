@@ -134,8 +134,8 @@
 		              <ul class="treeview-menu">
 		                <li class="#{sessionScope.flgMenuManUsr}"><h:commandLink action="#{usuarioBean.preparaPesquisar}"><i class="fa fa-user"></i> Usuário</h:commandLink></li>
 		                <li class="#{sessionScope.flgMenuManCli}"><h:commandLink action="#{clienteBean.preparaPesquisar}"><i class="fa fa-user-secret"></i> Cliente</h:commandLink></li>
-		                <li class="#{sessionScope.flgMenuManRec}"><a href="pages/UI/buttons.html"><i class="fa fa-edit"></i> Receita</a></li>
-		                <li class="#{sessionScope.flgMenuManPrd}"><a href="pages/UI/sliders.html"><i class="fa fa-inbox"></i> Produto</a></li>		                
+		                <li class="#{sessionScope.flgMenuManRec}"><h:commandLink action="#{receitaBean.preparaPesquisar}"><i class="fa fa-edit"></i> Receita</h:commandLink></li>
+		                <li class="#{sessionScope.flgMenuManPrd}"><h:commandLink action="#{produtoBean.preparaPesquisar}"><i class="fa fa-inbox"></i> Produto</h:commandLink></li>		                
 		              </ul>
 		            </li>
 		            

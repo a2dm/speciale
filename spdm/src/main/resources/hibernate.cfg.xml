@@ -33,6 +33,7 @@
 		<mapping class="br.com.a2dm.brcmn.entity.RecuperarSenha"/>
 		
 		<mapping class="br.com.a2dm.spdm.entity.Cliente"/>
+		<mapping class="br.com.a2dm.spdm.entity.Receita"/>
 		
 	</session-factory>
 </hibernate-configuration>
