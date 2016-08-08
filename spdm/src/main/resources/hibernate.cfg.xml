@@ -34,6 +34,7 @@
 		
 		<mapping class="br.com.a2dm.spdm.entity.Cliente"/>
 		<mapping class="br.com.a2dm.spdm.entity.Receita"/>
+		<mapping class="br.com.a2dm.spdm.entity.Produto"/>
 		
 	</session-factory>
 </hibernate-configuration>
