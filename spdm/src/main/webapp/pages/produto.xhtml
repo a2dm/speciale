@@ -126,11 +126,17 @@
 								<rich:column style="width: 5%; text-align: center;">
 									Código
 								</rich:column>
-								<rich:column style="width: 68%; text-align: center;">
+								<rich:column style="width: 50%; text-align: center;">
 									Descrição
 								</rich:column>
 								<rich:column style="width: 9%; text-align: center;">
 									Receita
+								</rich:column>
+								<rich:column style="width: 9%; text-align: center;">
+									Lote Mín
+								</rich:column>
+								<rich:column style="width: 9%; text-align: center;">
+									Qtd Múlt
 								</rich:column>
 								<rich:column style="width: 9%; text-align: center;">
 									Situação
@@ -148,6 +154,12 @@
 						</rich:column>
 						<rich:column style="text-align: left;">
 							<h:outputText value="#{rst.receita.desReceita}" />
+						</rich:column>
+						<rich:column style="text-align: right;">
+							<h:outputText value="#{rst.qtdLoteMinimo}" />
+						</rich:column>
+						<rich:column style="text-align: right;">
+							<h:outputText value="#{rst.qtdMultiplo}" />
 						</rich:column>
 						<rich:column style="text-align: left;">
 							<h:outputText value="ATIVO" style="color: blue;" rendered="#{rst.flgAtivo == 'S'}"/>

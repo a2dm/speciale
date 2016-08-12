@@ -24,73 +24,122 @@
 		</f:facet>
 
 		<div class="modal-body">
-			
-			<div class="box-body">
-             <div class="form-group">
-               <label for="inputEmail3" class="col-sm-3 control-label">Cliente:</label>
-               <div class="col-sm-6" style="padding-top: 7px;">
-                 <h:outputText value="#{crudBean.entity.idCliente}" />
-                 <h:outputText value=" - " />
-                 <h:outputText value="#{crudBean.entity.desCliente}" />
-               </div>
-             </div>
-			</div>
-			
-			<div class="box-body">
-             <div class="form-group">
-               <label for="inputEmail3" class="col-sm-3 control-label">Hora Limite:</label>
-               <div class="col-sm-6" style="padding-top: 7px;">               	 
-                 <h:outputText value="#{crudBean.entity.horLimite}"/>
-               </div>
-             </div>
-			</div>
+			<rich:tabPanel switchType="client">
+			 	<rich:tab header="Geral">
+					<div class="box-body">
+		             <div class="form-group">
+		               <label for="inputEmail3" class="col-sm-3 control-label">Cliente:</label>
+		               <div class="col-sm-6" style="padding-top: 7px;">
+		                 <h:outputText value="#{crudBean.entity.idCliente}" />
+		                 <h:outputText value=" - " />
+		                 <h:outputText value="#{crudBean.entity.desCliente}" />
+		               </div>
+		             </div>
+					</div>
 						
-			<div class="box-body">
-             <div class="form-group">
-               <label for="inputEmail3" class="col-sm-3 control-label">Situação:</label>
-               <div class="col-sm-6" style="padding-top: 7px;">
-               	 <h:outputText value="ATIVO" style="color: blue;" rendered="#{crudBean.entity.flgAtivo == 'S'}"/>
-				 <h:outputText value="INATIVO" style="color:red;" rendered="#{crudBean.entity.flgAtivo == 'N'}"/>
-               </div>
-             </div>
-			</div>
-			
-			<div class="box-body">
-             <div class="form-group">
-               <label for="inputEmail3" class="col-sm-3 control-label">Usuário de Cadastro:</label>
-               <div class="col-sm-6" style="padding-top: 7px;">
-               	 <h:outputText value="#{crudBean.entity.usuarioCad.nome}"/>				 
-               </div>
-             </div>
-			</div>
-			
-			<div class="box-body">
-             <div class="form-group">
-               <label for="inputEmail3" class="col-sm-3 control-label">Data de Cadastro:</label>
-               <div class="col-sm-6" style="padding-top: 7px;">
-               	 <h:outputText value="#{crudBean.entity.datCadastro}" converter="converterDataHora"/>				 
-               </div>
-             </div>
-			</div>
-			
-			<div class="box-body">
-             <div class="form-group">
-               <label for="inputEmail3" class="col-sm-3 control-label">Usuário da Última Alteração:</label>
-               <div class="col-sm-6" style="padding-top: 7px;">
-               	 <h:outputText value="#{crudBean.entity.usuarioAlt.nome}"/>				 
-               </div>
-             </div>
-			</div>
-			
-			<div class="box-body">
-             <div class="form-group">
-               <label for="inputEmail3" class="col-sm-3 control-label">Data da Ultima Alteração:</label>
-               <div class="col-sm-6" style="padding-top: 7px;">
-               	 <h:outputText value="#{crudBean.entity.datAlteracao}" converter="converterDataHora"/>				 
-               </div>
-             </div>
-			</div>
-						
+					<div class="box-body">
+		             <div class="form-group">
+		               <label for="inputEmail3" class="col-sm-3 control-label">Hora Limite:</label>
+		               <div class="col-sm-6" style="padding-top: 7px;">               	 
+		                 <h:outputText value="#{crudBean.entity.horLimite}"/>
+		               </div>
+		             </div>
+					</div>
+								
+					<div class="box-body">
+		             <div class="form-group">
+		               <label for="inputEmail3" class="col-sm-3 control-label">Situação:</label>
+		               <div class="col-sm-6" style="padding-top: 7px;">
+		               	 <h:outputText value="ATIVO" style="color: blue;" rendered="#{crudBean.entity.flgAtivo == 'S'}"/>
+						 <h:outputText value="INATIVO" style="color:red;" rendered="#{crudBean.entity.flgAtivo == 'N'}"/>
+		               </div>
+		             </div>
+					</div>
+		
+					<div class="box-body">
+		             <div class="form-group">
+		               <label for="inputEmail3" class="col-sm-3 control-label">Usuário de Cadastro:</label>
+		               <div class="col-sm-6" style="padding-top: 7px;">
+		               	 <h:outputText value="#{crudBean.entity.usuarioCad.nome}"/>				 
+		               </div>
+		             </div>
+					</div>
+					
+					<div class="box-body">
+		             <div class="form-group">
+		               <label for="inputEmail3" class="col-sm-3 control-label">Data de Cadastro:</label>
+		               <div class="col-sm-6" style="padding-top: 7px;">
+		               	 <h:outputText value="#{crudBean.entity.datCadastro}" converter="converterDataHora"/>				 
+		               </div>
+		             </div>
+					</div>
+					
+					<div class="box-body">
+		             <div class="form-group">
+		               <label for="inputEmail3" class="col-sm-3 control-label">Usuário da Última Alteração:</label>
+		               <div class="col-sm-6" style="padding-top: 7px;">
+		               	 <h:outputText value="#{crudBean.entity.usuarioAlt.nome}"/>				 
+		               </div>
+		             </div>
+					</div>
+		
+					<div class="box-body">
+		             <div class="form-group">
+		               <label for="inputEmail3" class="col-sm-3 control-label">Data da Ultima Alteração:</label>
+		               <div class="col-sm-6" style="padding-top: 7px;">
+		               	 <h:outputText value="#{crudBean.entity.datAlteracao}" converter="converterDataHora"/>				 
+		               </div>
+		             </div>
+					</div>
+				</rich:tab>
+				
+				<rich:tab header="Produtos">
+					<div class="box-content">
+								<rich:dataTable id="tblDataProduto" 
+											 value="#{crudBean.entity.listaClienteProduto}" 
+										       var="rst"
+										styleClass="table table-bordered table-striped dataTable"
+								    onrowmouseover="this.style.cursor='default';this.style.backgroundColor='#FFF8DC';" 
+								  	 onrowmouseout="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+										  rendered="#{not empty crudBean.entity.listaClienteProduto}">						     
+									<f:facet name="header">
+										<rich:columnGroup>
+											<rich:column style="width: 5%; text-align: center;">
+												Código
+											</rich:column>
+											<rich:column style="width: 68%; text-align: center;">
+												Descrição
+											</rich:column>
+											<rich:column style="width: 9%; text-align: center;">
+												Receita
+											</rich:column>
+											<rich:column style="width: 9%; text-align: center;">
+												Lote Mín
+											</rich:column>
+											<rich:column style="width: 9%; text-align: center;">
+												Qtd Múlt
+											</rich:column>
+										</rich:columnGroup>
+									</f:facet>
+									<rich:column style="text-align: right;">
+										<h:outputText value="#{rst.idProduto}" />
+									</rich:column>
+									<rich:column style="text-align: left;">
+										<h:outputText value="#{rst.produto.desProduto}" />
+									</rich:column>
+									<rich:column style="text-align: left;">
+										<h:outputText value="#{rst.produto.receita.desReceita}" />
+									</rich:column>
+									<rich:column style="text-align: right;">
+										<h:outputText value="#{rst.produto.qtdLoteMinimo}" />
+									</rich:column>
+									<rich:column style="text-align: right;">
+										<h:outputText value="#{rst.produto.qtdMultiplo}" />
+									</rich:column>
+								</rich:dataTable>
+							</div>
+				</rich:tab>
+			</rich:tabPanel>	
 		</div>
 	
 		<div class="modal-footer">			

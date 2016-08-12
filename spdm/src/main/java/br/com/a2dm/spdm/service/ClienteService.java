@@ -16,6 +16,8 @@ import br.com.a2dm.brcmn.util.HibernateUtil;
 import br.com.a2dm.brcmn.util.RestritorHb;
 import br.com.a2dm.brcmn.util.jsf.JSFUtil;
 import br.com.a2dm.spdm.entity.Cliente;
+import br.com.a2dm.spdm.entity.ClienteProduto;
+import br.com.a2dm.spdm.entity.Produto;
 
 public class ClienteService extends A2DMHbNgc<Cliente>
 {
@@ -24,6 +26,12 @@ public class ClienteService extends A2DMHbNgc<Cliente>
 	public static final int JOIN_USUARIO_CAD = 1;
 	
 	public static final int JOIN_USUARIO_ALT = 2;
+	
+	public static final int JOIN_CLIENTE_PRODUTO = 4;
+	
+	public static final int JOIN_CLIENTE_PRODUTO_PRODUTO = 8;
+	
+	public static final int JOIN_CLIENTE_PRODUTO_PRODUTO_RECEITA = 16;
 	
 	private JSFUtil util = new JSFUtil();
 		
@@ -48,7 +56,7 @@ public class ClienteService extends A2DMHbNgc<Cliente>
 		adicionarFiltro("idCliente", RestritorHb.RESTRITOR_NE, "filtroMap.idClienteNotEq");
 		adicionarFiltro("desCliente", RestritorHb.RESTRITOR_LIKE, "desCliente");
 		adicionarFiltro("desCliente", RestritorHb.RESTRITOR_EQ, "filtroMap.desCliente");
-		adicionarFiltro("flgAtivo", RestritorHb.RESTRITOR_EQ, "flgAtivo");
+		adicionarFiltro("flgAtivo", RestritorHb.RESTRITOR_EQ, "flgAtivo");		
 	}
 	
 	@Override
@@ -68,6 +76,31 @@ public class ClienteService extends A2DMHbNgc<Cliente>
 	}
 	
 	@Override
+	public Cliente inserir(Session sessao, Cliente vo) throws Exception
+	{
+		validarInserir(sessao, vo);
+		sessao.save(vo);
+		
+		if(vo.getListaProduto() != null
+				&& vo.getListaProduto().size() >= 0)
+		{
+			for (Produto produto : vo.getListaProduto())
+			{
+				ClienteProduto clienteProduto = new ClienteProduto();
+				clienteProduto.setIdCliente(vo.getIdCliente());
+				clienteProduto.setIdProduto(produto.getIdProduto());
+				clienteProduto.setFlgAtivo("S");
+				clienteProduto.setDatCadastro(new Date());
+				clienteProduto.setIdUsuarioCad(util.getUsuarioLogado().getIdUsuario());
+				
+				ClienteProdutoService.getInstancia().inserir(sessao, clienteProduto);
+			}
+		}
+		
+		return vo;
+	}
+	
+	@Override
 	protected void validarAlterar(Session sessao, Cliente vo) throws Exception
 	{
 		Cliente cliente = new Cliente();
@@ -82,6 +115,67 @@ public class ClienteService extends A2DMHbNgc<Cliente>
 		{
 			throw new Exception("Este cliente já está cadastrado na sua base de dados!");
 		}
+	}
+	
+	@Override
+	public Cliente alterar(Session sessao, Cliente vo) throws Exception
+	{
+		validarAlterar(sessao, vo);
+		sessao.merge(vo);		
+				
+		if(vo.getListaProduto() != null
+				&& vo.getListaProduto().size() >= 0)
+		{
+			for (Produto produto : vo.getListaProduto())
+			{
+				if(produto.getFlgAtivo().equals("S"))
+				{
+					ClienteProduto clienteProduto = new ClienteProduto();
+					clienteProduto.setIdCliente(vo.getIdCliente());
+					clienteProduto.setIdProduto(produto.getIdProduto());
+					clienteProduto.setFlgAtivo("N");
+					
+					clienteProduto = ClienteProdutoService.getInstancia().get(sessao, clienteProduto, 0);
+					
+					if(clienteProduto != null)
+					{
+						clienteProduto.setFlgAtivo("S");
+						clienteProduto.setIdUsuarioAlt(util.getUsuarioLogado().getIdUsuario());
+						clienteProduto.setDatAlteracao(new Date());
+						
+						ClienteProdutoService.getInstancia().alterar(sessao, clienteProduto);
+					}
+					else
+					{
+						clienteProduto = new ClienteProduto();
+						clienteProduto.setIdCliente(vo.getIdCliente());
+						clienteProduto.setIdProduto(produto.getIdProduto());
+						clienteProduto.setFlgAtivo("S");
+						clienteProduto.setDatCadastro(new Date());
+						clienteProduto.setIdUsuarioCad(util.getUsuarioLogado().getIdUsuario());
+						
+						ClienteProdutoService.getInstancia().inserir(sessao, clienteProduto);
+					}
+				}
+				else
+				{
+					ClienteProduto clienteProduto = new ClienteProduto();
+					clienteProduto.setIdCliente(vo.getIdCliente());
+					clienteProduto.setIdProduto(produto.getIdProduto());
+					clienteProduto.setFlgAtivo("S");
+					
+					clienteProduto = ClienteProdutoService.getInstancia().get(sessao, clienteProduto, 0);
+					
+					clienteProduto.setFlgAtivo("N");
+					clienteProduto.setIdUsuarioAlt(util.getUsuarioLogado().getIdUsuario());
+					clienteProduto.setDatAlteracao(new Date());
+					
+					ClienteProdutoService.getInstancia().alterar(sessao, clienteProduto);
+				}
+			}
+		}
+		
+		return vo;
 	}
 	
 	public Cliente inativar(Cliente vo) throws Exception
@@ -164,6 +258,22 @@ public class ClienteService extends A2DMHbNgc<Cliente>
 	protected Criteria montaCriteria(Session sessao, int join)
 	{
 		Criteria criteria = sessao.createCriteria(Cliente.class);
+		
+		if ((join & JOIN_CLIENTE_PRODUTO) != 0)
+	    {
+			criteria.createAlias("listaClienteProduto", "listaClienteProduto", JoinType.LEFT_OUTER_JOIN);
+			sessao.enableFilter("filtroClienteProdutoAtivo").setParameter("flagAtivoClienteProduto", "S");
+			
+			if ((join & JOIN_CLIENTE_PRODUTO_PRODUTO) != 0)
+		    {
+				criteria.createAlias("listaClienteProduto.produto", "produto", JoinType.LEFT_OUTER_JOIN);
+				
+				if ((join & JOIN_CLIENTE_PRODUTO_PRODUTO) != 0)
+			    {
+					criteria.createAlias("produto.receita", "receita", JoinType.LEFT_OUTER_JOIN);
+			    }
+		    }
+	    }
 		
 		if ((join & JOIN_USUARIO_CAD) != 0)
 	    {

@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,50 +13,47 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.Filter;
-import org.hibernate.annotations.FilterDef;
-import org.hibernate.annotations.FilterDefs;
-import org.hibernate.annotations.ParamDef;
 import org.hibernate.annotations.Proxy;
 
 import br.com.a2dm.brcmn.entity.Usuario;
 
 /** 
  * @author Carlos Diego
- * @since 26/01/2016
+ * @since 10/08/2016
  */
 
 @Entity
-@Table(name = "tb_cliente", schema="ped")
-@SequenceGenerator(name = "SQ_CLIENTE", sequenceName = "SQ_CLIENTE", allocationSize = 1)
+@Table(name = "tb_cliente_produto", schema="ped")
+@SequenceGenerator(name = "SQ_CLIENTE_PRODUTO", sequenceName = "SQ_CLIENTE_PRODUTO", allocationSize = 1)
 @Proxy(lazy = true)
-@FilterDefs
-({
-	@FilterDef(name = "filtroClienteProdutoAtivo", parameters = @ParamDef(name = "flagAtivoClienteProduto", type = "string")),    
-})
-public class Cliente implements Serializable
+public class ClienteProduto implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SQ_CLIENTE")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SQ_CLIENTE_PRODUTO")
+	@Column(name = "id_cliente_produto")
+	private BigInteger idClienteProduto;
+	
 	@Column(name = "id_cliente")
 	private BigInteger idCliente;
 	
-	@Column(name = "des_cliente")
-	private String desCliente;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_cliente", insertable = false, updatable = false)
+	private Cliente cliente;
 	
-	@Column(name = "hor_limite")
-	private String horLimite;
+	@Column(name = "id_produto")
+	private BigInteger idProduto;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_produto", insertable = false, updatable = false)
+	private Produto produto;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "dat_cadastro")
@@ -84,16 +80,16 @@ public class Cliente implements Serializable
 	@Column(name = "flg_ativo")
 	private String flgAtivo;
 	
-	@OneToMany(mappedBy="cliente", fetch = FetchType.LAZY)
-    @Cascade(CascadeType.ALL)
-	@Filter(name = "filtroClienteProdutoAtivo", condition = ":flagAtivoClienteProduto = flg_ativo")
-	private List<ClienteProduto> listaClienteProduto;
-	
-	@Transient
-	private List<Produto> listaProduto;
-	
 	@Transient
 	private HashMap<String, Object> filtroMap;
+
+	public BigInteger getIdClienteProduto() {
+		return idClienteProduto;
+	}
+
+	public void setIdClienteProduto(BigInteger idClienteProduto) {
+		this.idClienteProduto = idClienteProduto;
+	}
 
 	public BigInteger getIdCliente() {
 		return idCliente;
@@ -103,20 +99,12 @@ public class Cliente implements Serializable
 		this.idCliente = idCliente;
 	}
 
-	public String getDesCliente() {
-		return desCliente;
+	public BigInteger getIdProduto() {
+		return idProduto;
 	}
 
-	public void setDesCliente(String desCliente) {
-		this.desCliente = desCliente;
-	}
-
-	public String getHorLimite() {
-		return horLimite;
-	}
-
-	public void setHorLimite(String horLimite) {
-		this.horLimite = horLimite;
+	public void setIdProduto(BigInteger idProduto) {
+		this.idProduto = idProduto;
 	}
 
 	public Date getDatCadastro() {
@@ -158,7 +146,7 @@ public class Cliente implements Serializable
 	public void setIdUsuarioAlt(BigInteger idUsuarioAlt) {
 		this.idUsuarioAlt = idUsuarioAlt;
 	}
-	
+
 	public Usuario getUsuarioAlt() {
 		return usuarioAlt;
 	}
@@ -183,19 +171,19 @@ public class Cliente implements Serializable
 		this.filtroMap = filtroMap;
 	}
 
-	public List<Produto> getListaProduto() {
-		return listaProduto;
+	public Cliente getCliente() {
+		return cliente;
 	}
 
-	public void setListaProduto(List<Produto> listaProduto) {
-		this.listaProduto = listaProduto;
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 
-	public List<ClienteProduto> getListaClienteProduto() {
-		return listaClienteProduto;
+	public Produto getProduto() {
+		return produto;
 	}
 
-	public void setListaClienteProduto(List<ClienteProduto> listaClienteProduto) {
-		this.listaClienteProduto = listaClienteProduto;
+	public void setProduto(Produto produto) {
+		this.produto = produto;
 	}
 }
