@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,52 +13,50 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Proxy;
 
 import br.com.a2dm.brcmn.entity.Usuario;
 
 /** 
  * @author Carlos Diego
- * @since 07/08/2016
+ * @since 12/08/2016
  */
 
 @Entity
-@Table(name = "tb_produto", schema="ped")
-@SequenceGenerator(name = "SQ_PRODUTO", sequenceName = "SQ_PRODUTO", allocationSize = 1)
+@Table(name = "tb_pedido_produto", schema="ped")
+@SequenceGenerator(name = "SQ_PEDIDO_PRODUTO", sequenceName = "SQ_PEDIDO_PRODUTO", allocationSize = 1)
 @Proxy(lazy = true)
-public class Produto implements Serializable
+public class PedidoProduto implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SQ_PRODUTO")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SQ_PEDIDO_PRODUTO")
+	@Column(name = "id_pedido_produto")
+	private BigInteger idPedidoProduto;
+	
+	@Column(name = "id_pedido")
+	private BigInteger idPedido;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_pedido", insertable = false, updatable = false)
+	private Pedido pedido;
+	
 	@Column(name = "id_produto")
 	private BigInteger idProduto;
 	
-	@Column(name = "des_produto")
-	private String desProduto;
-	
-	@Column(name = "id_receita")
-	private BigInteger idReceita;
-	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_receita", insertable = false, updatable = false)
-	private Receita receita;
+	@JoinColumn(name = "id_produto", insertable = false, updatable = false)
+	private Produto produto;
 	
-	@Column(name = "qtd_lot_minimo")
-	private BigInteger qtdLoteMinimo;
-	
-	@Column(name = "qtd_multiplo")
-	private BigInteger qtdMultiplo;
+	@Column(name = "qtd_solicitada")
+	private BigInteger qtdSolicitada;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "dat_cadastro")
@@ -86,15 +83,20 @@ public class Produto implements Serializable
 	@Column(name = "flg_ativo")
 	private String flgAtivo;
 	
-	@OneToMany(mappedBy="produto", fetch = FetchType.LAZY)
-    @Cascade(CascadeType.ALL)
-	private List<ClienteProduto> listaClienteProduto;
-	
 	@Transient
 	private HashMap<String, Object> filtroMap;
-	
-	@Transient
-	private BigInteger qtdSolicitada;
+
+	public BigInteger getIdPedido() {
+		return idPedido;
+	}
+
+	public BigInteger getIdPedidoProduto() {
+		return idPedidoProduto;
+	}
+
+	public void setIdPedidoProduto(BigInteger idPedidoProduto) {
+		this.idPedidoProduto = idPedidoProduto;
+	}
 
 	public BigInteger getIdProduto() {
 		return idProduto;
@@ -104,44 +106,12 @@ public class Produto implements Serializable
 		this.idProduto = idProduto;
 	}
 
-	public String getDesProduto() {
-		return desProduto;
+	public BigInteger getQtdSolicitada() {
+		return qtdSolicitada;
 	}
 
-	public void setDesProduto(String desProduto) {
-		this.desProduto = desProduto;
-	}
-
-	public BigInteger getIdReceita() {
-		return idReceita;
-	}
-
-	public void setIdReceita(BigInteger idReceita) {
-		this.idReceita = idReceita;
-	}
-
-	public Receita getReceita() {
-		return receita;
-	}
-
-	public void setReceita(Receita receita) {
-		this.receita = receita;
-	}
-
-	public BigInteger getQtdLoteMinimo() {
-		return qtdLoteMinimo;
-	}
-
-	public void setQtdLoteMinimo(BigInteger qtdLoteMinimo) {
-		this.qtdLoteMinimo = qtdLoteMinimo;
-	}
-
-	public BigInteger getQtdMultiplo() {
-		return qtdMultiplo;
-	}
-
-	public void setQtdMultiplo(BigInteger qtdMultiplo) {
-		this.qtdMultiplo = qtdMultiplo;
+	public void setQtdSolicitada(BigInteger qtdSolicitada) {
+		this.qtdSolicitada = qtdSolicitada;
 	}
 
 	public Date getDatCadastro() {
@@ -208,19 +178,23 @@ public class Produto implements Serializable
 		this.filtroMap = filtroMap;
 	}
 
-	public BigInteger getQtdSolicitada() {
-		return qtdSolicitada;
+	public void setIdPedido(BigInteger idPedido) {
+		this.idPedido = idPedido;
 	}
 
-	public void setQtdSolicitada(BigInteger qtdSolicitada) {
-		this.qtdSolicitada = qtdSolicitada;
+	public Pedido getPedido() {
+		return pedido;
 	}
 
-	public List<ClienteProduto> getListaClienteProduto() {
-		return listaClienteProduto;
+	public void setPedido(Pedido pedido) {
+		this.pedido = pedido;
 	}
 
-	public void setListaClienteProduto(List<ClienteProduto> listaClienteProduto) {
-		this.listaClienteProduto = listaClienteProduto;
+	public Produto getProduto() {
+		return produto;
+	}
+
+	public void setProduto(Produto produto) {
+		this.produto = produto;
 	}
 }

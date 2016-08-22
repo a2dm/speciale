@@ -29,37 +29,32 @@ import br.com.a2dm.brcmn.entity.Usuario;
 
 /** 
  * @author Carlos Diego
- * @since 07/08/2016
+ * @since 12/08/2016
  */
 
 @Entity
-@Table(name = "tb_produto", schema="ped")
-@SequenceGenerator(name = "SQ_PRODUTO", sequenceName = "SQ_PRODUTO", allocationSize = 1)
+@Table(name = "tb_pedido", schema="ped")
+@SequenceGenerator(name = "SQ_PEDIDO", sequenceName = "SQ_PEDIDO", allocationSize = 1)
 @Proxy(lazy = true)
-public class Produto implements Serializable
+public class Pedido implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SQ_PRODUTO")
-	@Column(name = "id_produto")
-	private BigInteger idProduto;
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SQ_PEDIDO")
+	@Column(name = "id_pedido")
+	private BigInteger idPedido;
 	
-	@Column(name = "des_produto")
-	private String desProduto;
-	
-	@Column(name = "id_receita")
-	private BigInteger idReceita;
+	@Column(name = "id_cliente")
+	private BigInteger idCliente;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_receita", insertable = false, updatable = false)
-	private Receita receita;
+	@JoinColumn(name = "id_cliente", insertable = false, updatable = false)
+	private Cliente cliente;
 	
-	@Column(name = "qtd_lot_minimo")
-	private BigInteger qtdLoteMinimo;
-	
-	@Column(name = "qtd_multiplo")
-	private BigInteger qtdMultiplo;
+	@Temporal(TemporalType.DATE)
+	@Column(name = "dat_pedido")
+	private Date datPedido;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "dat_cadastro")
@@ -86,62 +81,38 @@ public class Produto implements Serializable
 	@Column(name = "flg_ativo")
 	private String flgAtivo;
 	
-	@OneToMany(mappedBy="produto", fetch = FetchType.LAZY)
-    @Cascade(CascadeType.ALL)
-	private List<ClienteProduto> listaClienteProduto;
+	@OneToMany(mappedBy="pedido", fetch = FetchType.LAZY)
+    @Cascade(CascadeType.ALL)	
+	private List<PedidoProduto> listaPedidoProduto;
+	
+	@Transient
+	private List<Produto> listaProduto;
 	
 	@Transient
 	private HashMap<String, Object> filtroMap;
-	
-	@Transient
-	private BigInteger qtdSolicitada;
 
-	public BigInteger getIdProduto() {
-		return idProduto;
+	public BigInteger getIdPedido() {
+		return idPedido;
 	}
 
-	public void setIdProduto(BigInteger idProduto) {
-		this.idProduto = idProduto;
+	public void setIdPedido(BigInteger idPedido) {
+		this.idPedido = idPedido;
 	}
 
-	public String getDesProduto() {
-		return desProduto;
+	public BigInteger getIdCliente() {
+		return idCliente;
 	}
 
-	public void setDesProduto(String desProduto) {
-		this.desProduto = desProduto;
+	public void setIdCliente(BigInteger idCliente) {
+		this.idCliente = idCliente;
 	}
 
-	public BigInteger getIdReceita() {
-		return idReceita;
+	public Date getDatPedido() {
+		return datPedido;
 	}
 
-	public void setIdReceita(BigInteger idReceita) {
-		this.idReceita = idReceita;
-	}
-
-	public Receita getReceita() {
-		return receita;
-	}
-
-	public void setReceita(Receita receita) {
-		this.receita = receita;
-	}
-
-	public BigInteger getQtdLoteMinimo() {
-		return qtdLoteMinimo;
-	}
-
-	public void setQtdLoteMinimo(BigInteger qtdLoteMinimo) {
-		this.qtdLoteMinimo = qtdLoteMinimo;
-	}
-
-	public BigInteger getQtdMultiplo() {
-		return qtdMultiplo;
-	}
-
-	public void setQtdMultiplo(BigInteger qtdMultiplo) {
-		this.qtdMultiplo = qtdMultiplo;
+	public void setDatPedido(Date datPedido) {
+		this.datPedido = datPedido;
 	}
 
 	public Date getDatCadastro() {
@@ -208,19 +179,27 @@ public class Produto implements Serializable
 		this.filtroMap = filtroMap;
 	}
 
-	public BigInteger getQtdSolicitada() {
-		return qtdSolicitada;
+	public List<Produto> getListaProduto() {
+		return listaProduto;
 	}
 
-	public void setQtdSolicitada(BigInteger qtdSolicitada) {
-		this.qtdSolicitada = qtdSolicitada;
+	public void setListaProduto(List<Produto> listaProduto) {
+		this.listaProduto = listaProduto;
 	}
 
-	public List<ClienteProduto> getListaClienteProduto() {
-		return listaClienteProduto;
+	public List<PedidoProduto> getListaPedidoProduto() {
+		return listaPedidoProduto;
 	}
 
-	public void setListaClienteProduto(List<ClienteProduto> listaClienteProduto) {
-		this.listaClienteProduto = listaClienteProduto;
+	public void setListaPedidoProduto(List<PedidoProduto> listaPedidoProduto) {
+		this.listaPedidoProduto = listaPedidoProduto;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 }

@@ -27,6 +27,8 @@ public class ProdutoService extends A2DMHbNgc<Produto>
 	
 	public static final int JOIN_RECEITA = 4;
 	
+	public static final int JOIN_CLIENTE_PRODUTO = 8;
+	
 	private JSFUtil util = new JSFUtil();
 		
 	@SuppressWarnings("rawtypes")
@@ -52,6 +54,8 @@ public class ProdutoService extends A2DMHbNgc<Produto>
 		adicionarFiltro("desProduto", RestritorHb.RESTRITOR_EQ, "filtroMap.desProduto");
 		adicionarFiltro("flgAtivo", RestritorHb.RESTRITOR_EQ, "flgAtivo");
 		adicionarFiltro("idReceita", RestritorHb.RESTRITOR_EQ, "idReceita");
+		adicionarFiltro("listaClienteProduto.flgAtivo", RestritorHb.RESTRITOR_EQ, "filtroMap.flgAtivoClienteProduto");
+		adicionarFiltro("listaClienteProduto.idCliente", RestritorHb.RESTRITOR_EQ, "filtroMap.idCliente");
 	}
 	
 	@Override
@@ -181,6 +185,11 @@ public class ProdutoService extends A2DMHbNgc<Produto>
 		if ((join & JOIN_RECEITA) != 0)
 	    {
 			criteria.createAlias("receita", "receita");
+	    }
+		
+		if ((join & JOIN_CLIENTE_PRODUTO) != 0)
+	    {
+			criteria.createAlias("listaClienteProduto", "listaClienteProduto");
 	    }
 		
 		return criteria;

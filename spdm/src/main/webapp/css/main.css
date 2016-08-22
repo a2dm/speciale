@@ -321,3 +321,24 @@
     border-right: none !important;
     padding: 30px !important;
 }
+
+.rf-p {
+	position: relative !important;
+	background-color: #fff !important;
+	-webkit-background-clip: padding-box !important;
+	background-clip: padding-box !important;
+	border: 1px solid #999 !important;
+	border: 1px solid rgba(0, 0, 0, .2) !important;
+	border-radius: 6px !important;
+	outline: 0 !important;
+	-webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5) !important;
+	box-shadow: 0 2px 3px rgba(0,0,0,0.125) !important
+}
+
+.rf-p-hdr {
+	border-width: 0px !important;
+	min-height: 16.43px !important;
+	padding: 15px !important;
+	border-bottom: 1px solid #e5e5e5 !important;
+	border-bottom-color: #f4f4f4 !important;
+} 
