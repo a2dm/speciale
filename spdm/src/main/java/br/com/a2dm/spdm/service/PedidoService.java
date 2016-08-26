@@ -76,7 +76,7 @@ public class PedidoService extends A2DMHbNgc<Pedido>
 		if(listaPedido != null
 				&& listaPedido.size() > 0)
 		{
-			throw new Exception("Já existe um pedido aberto para o dia " + vo.getDatPedido());
+			throw new Exception("Já existe um pedido aberto para o dia " + new SimpleDateFormat("dd/MM/yyyy HH:mm").format(vo.getDatPedido()));
 		}
 		
 		//VERIFICAR SE O PEDIDO ESTA DENTRO DO PRAZO DE PEDIDO
@@ -128,6 +128,125 @@ public class PedidoService extends A2DMHbNgc<Pedido>
 				pedidoProduto.setIdUsuarioCad(util.getUsuarioLogado().getIdUsuario());
 				
 				PedidoProdutoService.getInstancia().inserir(sessao, pedidoProduto);
+			}
+		}
+		
+		return vo;
+	}
+	
+	@Override
+	protected void validarAlterar(Session sessao, Pedido vo) throws Exception
+	{
+		//VERIFICAR SE O PEDIDO ESTA DENTRO DO PRAZO DE PEDIDO
+		Cliente cliente = new Cliente();
+		cliente.setIdCliente(util.getUsuarioLogado().getIdCliente());
+		
+		cliente = ClienteService.getInstancia().get(sessao, cliente, 0);
+		
+		//DATA LIMITE
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");		
+		Date data = sdf.parse(cliente.getHorLimite());
+		Calendar cLim = Calendar.getInstance();
+		cLim.setTime(data);
+		
+		Calendar c = Calendar.getInstance();
+		c.setTime(vo.getDatPedido());
+		c.set(Calendar.HOUR_OF_DAY, cLim.get(Calendar.HOUR_OF_DAY));
+		c.set(Calendar.MINUTE, cLim.get(Calendar.MINUTE));
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		
+		Date dataLimite = c.getTime();
+		
+		Date dataAtual = new Date();
+		
+		if(dataAtual.after(dataLimite))
+		{
+			throw new Exception("O pedido não pode ser realizado, pois a hora do pedido ultrapassou a hora limite! Hora limite: " + new SimpleDateFormat("dd/MM/yyyy HH:mm").format(dataLimite));
+		}
+	}
+	
+	@Override
+	public Pedido alterar(Session sessao, Pedido vo) throws Exception
+	{
+		validarAlterar(sessao, vo);
+		sessao.merge(vo);	
+				
+		if(vo.getListaProduto() != null
+				&& vo.getListaProduto().size() >= 0)
+		{
+			for (Produto produto : vo.getListaProduto())
+			{
+				if(produto.getFlgAtivo() == null)
+				{
+					PedidoProduto pedidoProduto = new PedidoProduto();
+					pedidoProduto.setIdPedido(vo.getIdPedido());
+					pedidoProduto.setIdProduto(produto.getIdProduto());
+					pedidoProduto.setFlgAtivo("S");
+					
+					pedidoProduto = PedidoProdutoService.getInstancia().get(sessao, pedidoProduto, 0);
+					
+					if(produto.getQtdSolicitada().intValue() != pedidoProduto.getQtdSolicitada().intValue())
+					{
+						pedidoProduto.setQtdSolicitada(produto.getQtdSolicitada());
+						pedidoProduto.setIdUsuarioAlt(util.getUsuarioLogado().getIdUsuario());
+						pedidoProduto.setDatAlteracao(new Date());
+						
+						PedidoProdutoService.getInstancia().alterar(sessao, pedidoProduto);
+					}
+				}
+				else
+				{				
+					if(produto.getFlgAtivo().equals("S"))
+					{
+						PedidoProduto pedidoProduto = new PedidoProduto();
+						pedidoProduto.setIdPedido(vo.getIdCliente());
+						pedidoProduto.setIdProduto(produto.getIdProduto());
+						pedidoProduto.setFlgAtivo("N");
+						
+						pedidoProduto = PedidoProdutoService.getInstancia().get(sessao, pedidoProduto, 0);
+						
+						if(pedidoProduto != null)
+						{
+							pedidoProduto.setQtdSolicitada(produto.getQtdSolicitada());
+							pedidoProduto.setFlgAtivo("S");
+							pedidoProduto.setIdUsuarioAlt(util.getUsuarioLogado().getIdUsuario());
+							pedidoProduto.setDatAlteracao(new Date());
+							
+							PedidoProdutoService.getInstancia().alterar(sessao, pedidoProduto);
+						}
+						else
+						{
+							pedidoProduto = new PedidoProduto();
+							pedidoProduto.setIdPedido(vo.getIdPedido());
+							pedidoProduto.setIdProduto(produto.getIdProduto());
+							pedidoProduto.setQtdSolicitada(produto.getQtdSolicitada());
+							pedidoProduto.setFlgAtivo("S");
+							pedidoProduto.setDatCadastro(new Date());
+							pedidoProduto.setIdUsuarioCad(util.getUsuarioLogado().getIdUsuario());
+							
+							PedidoProdutoService.getInstancia().inserir(sessao, pedidoProduto);
+						}
+					}
+					else
+					{
+						if(produto.getFlgAtivo().equals("N"))
+						{
+							PedidoProduto pedidoProduto = new PedidoProduto();
+							pedidoProduto.setIdPedido(vo.getIdPedido());
+							pedidoProduto.setIdProduto(produto.getIdProduto());
+							pedidoProduto.setFlgAtivo("S");
+							
+							pedidoProduto = PedidoProdutoService.getInstancia().get(sessao, pedidoProduto, 0);
+							
+							pedidoProduto.setFlgAtivo("N");
+							pedidoProduto.setIdUsuarioAlt(util.getUsuarioLogado().getIdUsuario());
+							pedidoProduto.setDatAlteracao(new Date());
+							
+							PedidoProdutoService.getInstancia().alterar(sessao, pedidoProduto);
+						}
+					}
+				}
 			}
 		}
 		

@@ -35,7 +35,7 @@ public class ClienteBean extends AbstractBean<Cliente, ClienteService>
 	private List<Produto> listaProduto;
 	private List<Produto> listaProdutoResult;
 	
-	private final String LISTA_PERMISSOES_SESSAO = "permissoes";
+	private final String LISTA_PRODUTOS_SESSAO = "produtos";
 	
 	private JSFUtil util = new JSFUtil();
 	
@@ -75,7 +75,7 @@ public class ClienteBean extends AbstractBean<Cliente, ClienteService>
 	@Override
 	protected void setDefaultInserir() throws Exception
 	{
-		this.getEntity().setHorLimite("08:00");
+		this.getEntity().setHorLimite("07:00");
 		this.setTpPesquisaProduto(1);
 		this.setProduto(new Produto());
 		this.setListaProdutoResult(new ArrayList<Produto>());
@@ -112,7 +112,7 @@ public class ClienteBean extends AbstractBean<Cliente, ClienteService>
 		{
 			if(validarAcesso(Variaveis.ACAO_PREPARA_ALTERAR))
 			{
-				util.getSession().removeAttribute(LISTA_PERMISSOES_SESSAO);
+				util.getSession().removeAttribute(LISTA_PRODUTOS_SESSAO);
 				
 				super.preparaAlterar();
 				Cliente cliente = new Cliente();
@@ -139,7 +139,7 @@ public class ClienteBean extends AbstractBean<Cliente, ClienteService>
 				this.setProduto(new Produto());
 				this.atualizarFiltroProduto();
 				
-				util.getSession().setAttribute(LISTA_PERMISSOES_SESSAO, listaProdutoSessao);
+				util.getSession().setAttribute(LISTA_PRODUTOS_SESSAO, listaProdutoSessao);
 			}
 		}
 	    catch (Exception e)
@@ -182,7 +182,7 @@ public class ClienteBean extends AbstractBean<Cliente, ClienteService>
 		this.getEntity().setDatAlteracao(new Date());
 		this.getEntity().setIdUsuarioAlt(util.getUsuarioLogado().getIdUsuario());
 		
-		List<Produto> listaSessao = (List<Produto>) util.getSession().getAttribute(LISTA_PERMISSOES_SESSAO);
+		List<Produto> listaSessao = (List<Produto>) util.getSession().getAttribute(LISTA_PRODUTOS_SESSAO);
 		List<Produto> listaRemovidos = new ArrayList<Produto>();
 		List<Produto> listaAdicionados = new ArrayList<Produto>();
 		List<Produto> listaFinal = new ArrayList<Produto>();
@@ -432,7 +432,7 @@ public class ClienteBean extends AbstractBean<Cliente, ClienteService>
 	{
 		super.cancelar(event);
 		this.getSearchObject().setFlgAtivo("T");
-		util.getSession().removeAttribute(LISTA_PERMISSOES_SESSAO);
+		util.getSession().removeAttribute(LISTA_PRODUTOS_SESSAO);
 	}
 
 	public Integer getTpPesquisaProduto() {

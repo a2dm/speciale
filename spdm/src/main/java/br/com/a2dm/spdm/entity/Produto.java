@@ -90,12 +90,20 @@ public class Produto implements Serializable
     @Cascade(CascadeType.ALL)
 	private List<ClienteProduto> listaClienteProduto;
 	
+	@OneToMany(mappedBy="produto", fetch = FetchType.LAZY)
+    @Cascade(CascadeType.ALL)
+	private List<PedidoProduto> listaPedidoProduto;
+	
 	@Transient
 	private HashMap<String, Object> filtroMap;
 	
 	@Transient
 	private BigInteger qtdSolicitada;
+	
+	@Transient
+	private Date datPedido;
 
+	
 	public BigInteger getIdProduto() {
 		return idProduto;
 	}
@@ -222,5 +230,21 @@ public class Produto implements Serializable
 
 	public void setListaClienteProduto(List<ClienteProduto> listaClienteProduto) {
 		this.listaClienteProduto = listaClienteProduto;
+	}
+
+	public List<PedidoProduto> getListaPedidoProduto() {
+		return listaPedidoProduto;
+	}
+
+	public void setListaPedidoProduto(List<PedidoProduto> listaPedidoProduto) {
+		this.listaPedidoProduto = listaPedidoProduto;
+	}
+
+	public Date getDatPedido() {
+		return datPedido;
+	}
+
+	public void setDatPedido(Date datPedido) {
+		this.datPedido = datPedido;
 	}
 }

@@ -1,7 +1,10 @@
 package br.com.a2dm.spdm.service;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.hibernate.Criteria;
@@ -9,6 +12,9 @@ import org.hibernate.FlushMode;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
 
 import br.com.a2dm.brcmn.util.A2DMHbNgc;
@@ -16,6 +22,7 @@ import br.com.a2dm.brcmn.util.HibernateUtil;
 import br.com.a2dm.brcmn.util.RestritorHb;
 import br.com.a2dm.brcmn.util.jsf.JSFUtil;
 import br.com.a2dm.spdm.entity.Produto;
+import br.com.a2dm.spdm.entity.Receita;
 
 public class ProdutoService extends A2DMHbNgc<Produto>
 {
@@ -165,6 +172,70 @@ public class ProdutoService extends A2DMHbNgc<Produto>
 		super.alterar(sessao, vo);
 		
 		return vo;
+	}
+	
+	public List<Produto> pesquisarProducaoDia(Produto produto) throws Exception
+	{
+		Session sessao = HibernateUtil.getSession();
+		sessao.setFlushMode(FlushMode.COMMIT);
+		try
+		{
+			return this.pesquisarProducaoDia(sessao, produto);
+		}
+		catch (Exception e)
+		{
+			throw e;
+		}
+		finally
+		{
+			sessao.close();
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Produto> pesquisarProducaoDia(Session sessao, Produto produto) throws Exception
+	{
+		Criteria criteria = sessao.createCriteria(Produto.class);
+		
+		ProjectionList projection = Projections.projectionList();
+		projection.add(Projections.groupProperty("idProduto"));
+		projection.add(Projections.groupProperty("desProduto"));
+		projection.add(Projections.groupProperty("receita.desReceita"));
+		projection.add(Projections.sum("listaPedidoProduto.qtdSolicitada"));
+		
+		criteria.createAlias("listaPedidoProduto", "listaPedidoProduto");
+		criteria.createAlias("listaPedidoProduto.pedido", "pedido");
+		criteria.createAlias("receita", "receita");
+		
+		criteria.add(Restrictions.eq("pedido.flgAtivo", "S"));
+		criteria.add(Restrictions.eq("listaPedidoProduto.flgAtivo", "S"));
+		criteria.add(Restrictions.eq("pedido.datPedido", produto.getDatPedido()));
+		
+		criteria.addOrder(Order.asc("desProduto"));
+		
+		criteria.setProjection(projection);
+		List<Object[]> resultado = criteria.list();		
+		List<Produto> retorno = new ArrayList<Produto>(5);
+		
+		if (resultado != null && resultado.size() > 0)
+	    {
+	    	int j = 0;
+	    	for (int i = 0; i < resultado.size(); i++)
+	    	{
+	    		j = 0;
+	    		
+	    		Produto produtoResult = new Produto();
+	    		produtoResult.setReceita(new Receita());
+	    		produtoResult.setIdProduto((BigInteger) resultado.get(i)[j++]);
+	    		produtoResult.setDesProduto((String) resultado.get(i)[j++]);
+	    		produtoResult.getReceita().setDesReceita((String) resultado.get(i)[j++]);
+	    		produtoResult.setQtdSolicitada((BigInteger) resultado.get(i)[j++]);
+	    		
+	            retorno.add(produtoResult);
+	    	}
+	    }
+	      
+	    return retorno;
 	}
 	
 	@Override

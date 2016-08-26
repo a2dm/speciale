@@ -19,6 +19,8 @@ public class PedidoProdutoService extends A2DMHbNgc<PedidoProduto>
 	
 	public static final int JOIN_USUARIO_ALT = 2;
 	
+	public static final int JOIN_PRODUTO = 4;
+	
 	@SuppressWarnings("rawtypes")
 	private static Map filtroPropriedade = new HashMap();
 	
@@ -39,6 +41,7 @@ public class PedidoProdutoService extends A2DMHbNgc<PedidoProduto>
 		adicionarFiltro("idPedidoProduto", RestritorHb.RESTRITOR_EQ, "idPedidoProduto");
 		adicionarFiltro("idPedido", RestritorHb.RESTRITOR_EQ, "idPedido");
 		adicionarFiltro("idProduto", RestritorHb.RESTRITOR_EQ, "idProduto");
+		adicionarFiltro("flgAtivo", RestritorHb.RESTRITOR_EQ, "flgAtivo");
 	}
 	
 	@Override
@@ -54,6 +57,11 @@ public class PedidoProdutoService extends A2DMHbNgc<PedidoProduto>
 		if ((join & JOIN_USUARIO_ALT) != 0)
 	    {
 			criteria.createAlias("usuarioAlt", "usuarioAlt", JoinType.LEFT_OUTER_JOIN);
+	    }
+		
+		if ((join & JOIN_PRODUTO) != 0)
+	    {
+			criteria.createAlias("produto", "produto");
 	    }
 		
 		return criteria;

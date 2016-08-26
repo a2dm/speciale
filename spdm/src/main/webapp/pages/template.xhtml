@@ -120,8 +120,8 @@
 		                <i class="fa fa-angle-left pull-right"></i>
 		              </a>
 		              <ul class="treeview-menu">
-		                <li class="#{sessionScope.flgMenuRelPed}"><a href="pages/UI/general.html"><i class="fa fa-navicon"></i> Pedido</a></li>
-		                <li class="#{sessionScope.flgMenuRelLog}"><a href="pages/UI/icons.html"><i class="fa fa-building-o"></i> Logistica</a></li>
+		                <li class="#{sessionScope.flgMenuRelPed}"><h:commandLink action="#{producaoDiaBean.preparaPesquisar}"><i class="fa fa-navicon"></i> Produção do Dia</h:commandLink></li>
+		                <li class="#{sessionScope.flgMenuRelLog}"><h:commandLink action="#{logisticaDiaBean.preparaPesquisar}"><i class="fa fa-building-o"></i> Logística do Dia</h:commandLink></li>
 		              </ul>
 		            </li>
 		            		            

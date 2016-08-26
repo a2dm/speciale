@@ -18,7 +18,9 @@ import br.com.a2dm.brcmn.util.jsf.JSFUtil;
 import br.com.a2dm.brcmn.util.jsf.Variaveis;
 import br.com.a2dm.spdm.config.MenuControl;
 import br.com.a2dm.spdm.entity.Pedido;
+import br.com.a2dm.spdm.entity.PedidoProduto;
 import br.com.a2dm.spdm.entity.Produto;
+import br.com.a2dm.spdm.service.PedidoProdutoService;
 import br.com.a2dm.spdm.service.PedidoService;
 import br.com.a2dm.spdm.service.ProdutoService;
 
@@ -36,6 +38,8 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 	private BigInteger idProdutoRemover;
 	private List<Produto> listaProduto;
 	private List<Produto> listaProdutoResult;
+	
+	private final String LISTA_PRODUTOS_SESSAO = "produtos";
 	
 	private Pedido pedido;
 	private BigInteger idPedidoInativar;
@@ -68,6 +72,7 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 		this.atualizarFiltroProduto();
 	}
 	
+	@Override
 	public void pesquisar(ActionEvent event)
     {	   
 		try
@@ -145,7 +150,7 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 			
 			if(produto.getQtdLoteMinimo().intValue() > produto.getQtdSolicitada().intValue())
 			{
-				throw new Exception("O Lote Mínimo do produto: " + produto.getIdProduto() + " - " + produto.getDesProduto() + " não foi atingida!");
+				throw new Exception("O Lote Mínimo do produto: " + produto.getIdProduto() + " - " + produto.getDesProduto() + " não foi atingida! Quantidade de Lote Mínimo: " + produto.getQtdLoteMinimo());
 			}
 			
 			if(produto.getQtdSolicitada().intValue() % produto.getQtdMultiplo().intValue() != 0)
@@ -153,6 +158,132 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 				throw new Exception("A Quantidade do produto: " + produto.getIdProduto() + " - " + produto.getDesProduto() + " deve ser solicitada em múltiplo de "+ produto.getQtdMultiplo() +"!");
 			}
 		}
+	}
+	
+	public void preparaAlterar()
+	{
+		try
+		{
+			if(validarAcesso(Variaveis.ACAO_PREPARA_ALTERAR))
+			{
+				util.getSession().removeAttribute(LISTA_PRODUTOS_SESSAO);
+				
+				this.setTpPesquisaProduto(1);
+				this.setProduto(new Produto());
+				this.setListaProdutoResult(new ArrayList<Produto>());
+				this.atualizarFiltroProduto();
+				
+				PedidoProduto pedidoProduto = new PedidoProduto();
+				pedidoProduto.setIdPedido(this.getPedido().getIdPedido());
+				pedidoProduto.setFlgAtivo("S");
+				
+				List<PedidoProduto> listaPedidoProduto = PedidoProdutoService.getInstancia().pesquisar(pedidoProduto, PedidoProdutoService.JOIN_PRODUTO);
+				
+				this.setListaProdutoResult(new ArrayList<Produto>());
+				List<Produto> listaProdutoSessao = new ArrayList<Produto>();				
+				
+				for (PedidoProduto obj : listaPedidoProduto)
+				{
+					obj.getProduto().setQtdSolicitada(obj.getQtdSolicitada());
+					this.getListaProdutoResult().add(obj.getProduto());
+					listaProdutoSessao.add(obj.getProduto());
+				}
+				
+				util.getSession().setAttribute(LISTA_PRODUTOS_SESSAO, listaProdutoSessao);
+				
+				setCurrentState(STATE_EDIT);
+				setListaAlterar();
+			}
+		}
+		catch (Exception e)
+		{
+			FacesMessage message = new FacesMessage(e.getMessage());
+			message.setSeverity(FacesMessage.SEVERITY_ERROR);
+			if(e.getMessage() == null)
+				FacesContext.getCurrentInstance().addMessage("", message);
+			else
+				FacesContext.getCurrentInstance().addMessage(null, message);
+		}
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	protected void completarAlterar() throws Exception 
+	{
+		this.setEntity(pedido);
+		this.validarInserir();
+		this.getEntity().setDatAlteracao(new Date());
+		this.getEntity().setIdUsuarioAlt(util.getUsuarioLogado().getIdUsuario());
+		
+		List<Produto> listaSessao = (List<Produto>) util.getSession().getAttribute(LISTA_PRODUTOS_SESSAO);
+		List<Produto> listaRemovidos = new ArrayList<Produto>();
+		List<Produto> listaAdicionados = new ArrayList<Produto>();
+		List<Produto> listaMantidos = new ArrayList<Produto>();
+		List<Produto> listaFinal = new ArrayList<Produto>();
+		
+		for (Produto produtoSessao : listaSessao)
+		{
+			boolean flag = true;
+			
+			for(Produto produtoResult : this.getListaProdutoResult())
+			{
+				if(produtoResult.getIdProduto().intValue() == produtoSessao.getIdProduto().intValue())
+				{
+					flag = false;
+				}	
+			}
+			
+			if(flag)
+			{
+				//GUARDAR TODOS OS IDS DOS PRODUTOS REMOVIDOS COM FLAG N
+				Produto produto = new Produto();
+				produto.setIdProduto(produtoSessao.getIdProduto());
+				produto.setFlgAtivo("N");
+				listaRemovidos.add(produto);
+			}
+		}
+		
+		for (Produto produtoResult : this.getListaProdutoResult())
+		{
+			boolean flag = true;
+			
+			for (Produto produtoSessao : listaSessao)
+			{
+				if(produtoSessao.getIdProduto().intValue() == produtoResult.getIdProduto().intValue())
+				{
+					flag = false;
+				}
+			}
+			
+			if(flag)
+			{
+				//GUARDAR TODOS OS IDS DOS PRODUTOS ADICIONADOS COM FLAG S
+				Produto produto = new Produto();
+				produto.setIdProduto(produtoResult.getIdProduto());
+				produto.setQtdSolicitada(produtoResult.getQtdSolicitada());
+				produto.setFlgAtivo("S");
+				listaAdicionados.add(produto);
+			}
+		}
+		
+		for (Produto produtoSessao : listaSessao)
+		{
+			for(Produto produtoResult : this.getListaProdutoResult())
+			{
+				if(produtoResult.getIdProduto().intValue() == produtoSessao.getIdProduto().intValue())
+				{
+					produtoResult.setFlgAtivo(null);
+					listaMantidos.add(produtoResult);
+					break;
+				}	
+			}
+		}
+		
+		listaFinal.addAll(listaRemovidos);
+		listaFinal.addAll(listaAdicionados);
+		listaFinal.addAll(listaMantidos);
+		
+		this.getEntity().setListaProduto(listaFinal);
 	}
 	
 	@Override
