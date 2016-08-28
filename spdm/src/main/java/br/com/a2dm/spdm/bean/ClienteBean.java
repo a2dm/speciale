@@ -50,6 +50,18 @@ public class ClienteBean extends AbstractBean<Cliente, ClienteService>
 	}
 	
 	@Override
+	protected void setListaInserir() throws Exception
+	{
+		this.iniciaListaProdutos();
+		
+		Produto produto = new Produto();
+		produto.setFlgAtivo("S");
+		
+		List<Produto> lista = ProdutoService.getInstancia().pesquisar(produto, 0);	
+		this.getListaProduto().addAll(lista);
+	}
+	
+	@Override
 	protected void completarPesquisar() throws Exception
 	{
 		if(this.getSearchObject().getFlgAtivo() != null
@@ -401,8 +413,7 @@ public class ClienteBean extends AbstractBean<Cliente, ClienteService>
 			produto = ProdutoService.getInstancia().get(produto, ProdutoService.JOIN_RECEITA);
 			
 			this.getListaProdutoResult().add(produto);
-			
-			this.atualizarFiltroProduto();
+			this.getProduto().setIdProduto(null);	
 		}
 		catch (Exception e)
 		{

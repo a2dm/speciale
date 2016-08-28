@@ -73,6 +73,21 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 	}
 	
 	@Override
+	protected void setListaInserir() throws Exception
+	{
+		this.iniciaListaProdutos();
+		
+		Produto produto = new Produto();
+		produto.setFlgAtivo("S");
+		produto.setFiltroMap(new HashMap<String, Object>());
+		produto.getFiltroMap().put("flgAtivoClienteProduto", "S");
+		produto.getFiltroMap().put("idCliente", util.getUsuarioLogado().getIdCliente());
+		
+		List<Produto> lista = ProdutoService.getInstancia().pesquisar(produto, ProdutoService.JOIN_CLIENTE_PRODUTO);
+		this.getListaProduto().addAll(lista);
+	}
+	
+	@Override
 	public void pesquisar(ActionEvent event)
     {	   
 		try
@@ -168,6 +183,8 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 			{
 				util.getSession().removeAttribute(LISTA_PRODUTOS_SESSAO);
 				
+				this.getEntity().setObsPedido(this.getPedido().getObsPedido());
+				
 				this.setTpPesquisaProduto(1);
 				this.setProduto(new Produto());
 				this.setListaProdutoResult(new ArrayList<Produto>());
@@ -210,7 +227,10 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 	@SuppressWarnings("unchecked")
 	protected void completarAlterar() throws Exception 
 	{
+		String obs = this.getEntity().getObsPedido();
+		
 		this.setEntity(pedido);
+		this.getEntity().setObsPedido(obs);
 		this.validarInserir();
 		this.getEntity().setDatAlteracao(new Date());
 		this.getEntity().setIdUsuarioAlt(util.getUsuarioLogado().getIdUsuario());
@@ -434,8 +454,8 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 			produto.setQtdSolicitada(this.getQtdSolicitada());
 			
 			this.getListaProdutoResult().add(produto);
-			
-			this.atualizarFiltroProduto();
+			this.getProduto().setIdProduto(null);
+			this.setQtdSolicitada(null);
 		}
 		catch (Exception e)
 		{

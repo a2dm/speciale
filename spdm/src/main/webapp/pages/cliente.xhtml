@@ -93,35 +93,13 @@
 	                	<h:panelGroup id="panelPesquisaProduto" layout="block">
 		                	<div class="box-body">
 			                	<div class="form-group">
-			                   	   <label for="inputEmail3" class="col-sm-2 control-label">Pesquisar Por *</label>
-				                   <div class="col-sm-6">
-				                   	 <div style="width: 250px;" class="radio">
-										<h:selectOneRadio value="#{crudBean.tpPesquisaProduto}" style="width: 100%;" >
-											<f:selectItem itemValue="1" itemLabel="Código" />
-											<f:selectItem itemValue="2" itemLabel="Descrição" />											
-											<a4j:ajax event="change" render="panelPesquisaProduto" listener="#{crudBean.atualizarFiltroProduto}"/>
-										</h:selectOneRadio>
-									</div>
-				                   </div>
-			                 	</div>
-			                
-			                	<div class="form-group">
 			                   	   <label for="inputEmail3" class="col-sm-2 control-label">Produto *</label>
-				                   <div>
-					                	<h:inputText value="#{crudBean.filtroCodigoProduto}" maxlength="10" onkeypress="return soNumero(event, this)" styleClass="form-control" style="width: 150px; display: initial;" id="codProduto" rendered="#{crudBean.procurarPorCodigo}">
-											<f:passThroughAttribute name="placeholder" value="Código"/>
-										</h:inputText>
-										<h:inputText value="#{crudBean.filtroDescricaoProduto}" maxlength="300" styleClass="form-control" style="width: 250px; display: initial;" id="desProduto" rendered="#{!crudBean.procurarPorCodigo}">
-											<f:passThroughAttribute name="placeholder" value="Descrição"/>
-										</h:inputText>
-										<a4j:commandButton image="/images/buscar.png" style="vertical-align: middle; border:white; width: 21px; height: 21px; margin-left:2em; margin-right:2em;" title="PESQUISAR PRODUTO" actionListener="#{crudBean.pesquisarProdutos}" render="panelPesquisaProduto"/>
-										<h:inputHidden value="#{crudBean.codigoProduto}"/>
-										<h:inputText value="#{crudBean.produto.desProduto}" styleClass="form-control" style="width: 600px; display: initial;" disabled="true" rendered="#{crudBean.tpPesquisaProduto == 1}"/>
-										<h:selectOneMenu value="#{crudBean.produto.idProduto}" converter="simpleIndexConverter" styleClass="form-control" style="width:500px; display: initial;" rendered="#{crudBean.tpPesquisaProduto == 2}">								
-											<t:selectItems var="o" itemValue="#{o.idProduto}" itemLabel="#{o.desProduto}" value="#{crudBean.listaProduto}" />
-										</h:selectOneMenu>
-										
-										<a4j:commandButton image="/images/add.png" style="vertical-align: middle; border:white; width: 22px; height: 22px; margin-left:2em; margin-right:2em;" title="ADICIONAR PRODUTO" actionListener="#{crudBean.adicionarProduto}" render="panelProdutoResult, panelPesquisaProduto"/>
+				                   <div>					                	
+									<h:selectOneMenu value="#{crudBean.produto.idProduto}" converter="simpleIndexConverter" styleClass="form-control" style="width:700px; display: initial;">								
+										<t:selectItems var="o" itemValue="#{o.idProduto}" itemLabel="#{o.desProduto}" value="#{crudBean.listaProduto}" />
+									</h:selectOneMenu>
+									
+									<a4j:commandButton image="/images/add.png" style="vertical-align: middle; border:white; width: 22px; height: 22px; margin-left:2em; margin-right:2em;" title="ADICIONAR PRODUTO" actionListener="#{crudBean.adicionarProduto}" render="panelProdutoResult, panelPesquisaProduto"/>
 									</div>
 								</div>
 			                	
