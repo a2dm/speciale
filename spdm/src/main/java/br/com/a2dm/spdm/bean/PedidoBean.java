@@ -1,5 +1,6 @@
 package br.com.a2dm.spdm.bean;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,10 +13,12 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.servlet.http.HttpServletResponse;
 
 import br.com.a2dm.brcmn.util.jsf.AbstractBean;
 import br.com.a2dm.brcmn.util.jsf.JSFUtil;
 import br.com.a2dm.brcmn.util.jsf.Variaveis;
+import br.com.a2dm.brcmn.util.validacoes.ValidaPermissao;
 import br.com.a2dm.spdm.config.MenuControl;
 import br.com.a2dm.spdm.entity.Pedido;
 import br.com.a2dm.spdm.entity.PedidoProduto;
@@ -503,6 +506,28 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 	        message.setSeverity(FacesMessage.SEVERITY_ERROR);
 	        FacesContext.getCurrentInstance().addMessage(null, message);
 		}
+	}
+	
+	@Override
+	protected boolean validarAcesso(String acao)
+	{
+		boolean temAcesso = true;
+
+		if (!ValidaPermissao.getInstancia().verificaPermissao("pedido", acao))
+		{
+			temAcesso = false;
+			HttpServletResponse rp = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+			try
+			{
+				rp.sendRedirect("/spdm/pages/acessoNegado.jsf");
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
+		return temAcesso;
 	}
 	
 	@Override

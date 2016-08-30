@@ -1,5 +1,6 @@
 package br.com.a2dm.spdm.bean;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.servlet.http.HttpServletResponse;
 
 import br.com.a2dm.brcmn.entity.Estado;
 import br.com.a2dm.brcmn.entity.Grupo;
@@ -20,6 +22,7 @@ import br.com.a2dm.brcmn.service.UsuarioService;
 import br.com.a2dm.brcmn.util.jsf.AbstractBean;
 import br.com.a2dm.brcmn.util.jsf.JSFUtil;
 import br.com.a2dm.brcmn.util.jsf.Variaveis;
+import br.com.a2dm.brcmn.util.validacoes.ValidaPermissao;
 import br.com.a2dm.spdm.config.MenuControl;
 import br.com.a2dm.spdm.entity.Cliente;
 import br.com.a2dm.spdm.service.ClienteService;
@@ -342,6 +345,8 @@ public class UsuarioBean extends AbstractBean<Usuario, UsuarioService>
 		{
 			this.setFlgVisualizarCliente("N");
 		}
+		
+		this.getEntity().setIdCliente(null);
 	}
 	
 	public void visualizar()
@@ -384,19 +389,19 @@ public class UsuarioBean extends AbstractBean<Usuario, UsuarioService>
 	{
 		boolean temAcesso = true;
 
-//		if (!ValidaPermissao.getInstancia().verificaPermissao("usuario", acao))
-//		{
-//			temAcesso = false;
-//			HttpServletResponse rp = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-//			try
-//			{
-//				rp.sendRedirect("/spdm/pages/acessoNegado.jsf");
-//			}
-//			catch (IOException e)
-//			{
-//				e.printStackTrace();
-//			}
-//		}
+		if (!ValidaPermissao.getInstancia().verificaPermissao("usuario", acao))
+		{
+			temAcesso = false;
+			HttpServletResponse rp = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+			try
+			{
+				rp.sendRedirect("/spdm/pages/acessoNegado.jsf");
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
 		
 		return temAcesso;
 	}

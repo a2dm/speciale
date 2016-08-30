@@ -213,6 +213,8 @@
 								 value="#{crudBean.searchResult}" 
 							       var="rst" rows="10"
 							styleClass="table table-bordered table-striped dataTable"
+						onrowmouseover="this.style.cursor='default';this.style.backgroundColor='#FFF8DC';" 
+					  	 onrowmouseout="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 							  rendered="#{not empty crudBean.searchResult and crudBean.searching}">						     
 						<f:facet name="header">
 							<rich:columnGroup>

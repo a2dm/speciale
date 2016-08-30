@@ -110,9 +110,12 @@
 		          <!-- sidebar menu: : style can be found in sidebar.less -->
 		          <ul class="sidebar-menu">
 		            <li class="header">MENU PRINCIPAL</li>
-		      
+		      		
+		      		<h:panelGroup layout="block" rendered="#{sessionScope.loginUsuario.idGrupo == bundle.grupoCliente}">
 		            <li class="treeview #{sessionScope.flgMenuPed}"><h:commandLink action="#{pedidoBean.preparaPesquisar}"><i class="fa fa-paper-plane"></i> <span>Pedido</span></h:commandLink></li>
+		            </h:panelGroup>
 		            
+		            <h:panelGroup layout="block" rendered="#{sessionScope.loginUsuario.idGrupo == bundle.grupoFuncionario or sessionScope.loginUsuario.idGrupo == bundle.grupoGerente}">
 		            <li class="treeview #{sessionScope.flgMenuRel}">
 		              <a href="#">
 		                <i class="fa fa-file-text-o"></i>
@@ -124,7 +127,9 @@
 		                <li class="#{sessionScope.flgMenuRelLog}"><h:commandLink action="#{logisticaDiaBean.preparaPesquisar}"><i class="fa fa-building-o"></i> Logística do Dia</h:commandLink></li>
 		              </ul>
 		            </li>
-		            		            
+		           	</h:panelGroup>
+		           	
+		           	<h:panelGroup layout="block" rendered="#{sessionScope.loginUsuario.idGrupo == bundle.grupoGerente}">
 		            <li class="treeview #{sessionScope.flgMenuMan}">
 		              <a href="#">
 		                <i class="fa fa-cogs"></i>
@@ -138,6 +143,7 @@
 		                <li class="#{sessionScope.flgMenuManPrd}"><h:commandLink action="#{produtoBean.preparaPesquisar}"><i class="fa fa-inbox"></i> Produto</h:commandLink></li>		                
 		              </ul>
 		            </li>
+		            </h:panelGroup>
 		            
 		            
 		          </ul>
