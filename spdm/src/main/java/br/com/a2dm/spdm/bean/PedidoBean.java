@@ -354,6 +354,31 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 		this.getEntity().setListaProduto(this.getListaProdutoResult());
 	}
 	
+	   public void inserir(ActionEvent event) 
+	   {
+	      try
+	      {
+	    	  if(validarAcesso(Variaveis.ACAO_INSERIR))
+	    	  {
+	    		  validarInserir();
+	    		  completarInserir();
+	    		  setEntity(PedidoService.getInstancia().inserir(getEntity()));
+	    		  FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro inserido com sucesso. Protocolo do Pedido: "+ getEntity().getIdPedido(), null));
+	    		  
+	    		  this.cancelar(event);
+	    	  }
+	      }
+	      catch (Exception e)
+	      {
+	         FacesMessage message = new FacesMessage(e.getMessage());
+	         message.setSeverity(FacesMessage.SEVERITY_ERROR);
+	         if(e.getMessage() == null)
+	        	 FacesContext.getCurrentInstance().addMessage("", message);
+	         else
+	        	 FacesContext.getCurrentInstance().addMessage(null, message);
+	      }
+	   }
+	
 	public void pesquisarProdutos()
 	{
 		try
