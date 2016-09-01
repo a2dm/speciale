@@ -31,11 +31,19 @@
 				<div class="box-body">
                     <div class="form-group">
                    	   <label for="inputEmail3" class="col-sm-2 control-label">Data do Pedido *</label>
-	                   <div class="col-sm-2" style="width: 13% !important;">
-	                	  <rich:calendar value="#{crudBean.searchObject.datPedido}" buttonClass="glyphicon glyphicon-calendar" inputSize="9" buttonIcon="../images/calendar.png"  datePattern="dd/MM/yyyy" inputClass="form-control" showWeeksBar="false" enableManualInput="true" oninputkeypress="return formataData(event,this);" maxlength="10"/>
+	                   <div class="col-sm-2" style="width: 13% !important; padding-right: 30px;">
+	                	  <rich:calendar value="#{crudBean.searchObject.datPedido}" buttonClass="glyphicon glyphicon-calendar" inputSize="9" buttonIcon="../images/calendar.png"  datePattern="dd/MM/yyyy" inputClass="form-control" showWeeksBar="false" enableManualInput="true" oninputkeypress="return formataData(event,this);" maxlength="10">
+	                	  	<a4j:ajax event="change" listener="#{crudBean.atualizarStringDataSearch}" render="panelGroupDePesquisa"/>
+	                	  	<a4j:ajax event="inputchange" listener="#{crudBean.atualizarStringDataSearch}" render="panelGroupDePesquisa"/>
+	                	  </rich:calendar>
 	                   </div>
-                 	</div>                    
+	                   <label for="inputEmail3" class="col-sm-2 control-label" style="text-align: left; color: #800000">
+	                   	<h:outputText value="#{crudBean.stringData}"/>
+	                   	</label>  
+                 	</div> 
+                 	                 
             	</div>
+            	
 			</f:subview>
 		</h:panelGroup>	
 		
@@ -46,9 +54,15 @@
 					<h:panelGroup id="panelGroupDeInserir" rendered="#{crudBean.inserting}">
 						<div class="form-group">
 		                  <label for="inputEmail3" class="col-sm-2 control-label">Data do Pedido *</label>
-		                  <div class="col-sm-2" style="width: 13% !important;">
-		               	  <rich:calendar value="#{crudBean.entity.datPedido}" buttonClass="glyphicon glyphicon-calendar" inputSize="9" buttonIcon="../images/calendar.png"  datePattern="dd/MM/yyyy" inputClass="form-control" showWeeksBar="false" enableManualInput="true" oninputkeypress="return formataData(event,this);" maxlength="10"/>
+		                  <div class="col-sm-2" style="width: 13% !important; padding-right: 30px;">
+			               	  <rich:calendar value="#{crudBean.entity.datPedido}" buttonClass="glyphicon glyphicon-calendar" inputSize="9" buttonIcon="../images/calendar.png"  datePattern="dd/MM/yyyy" inputClass="form-control" showWeeksBar="false" enableManualInput="true" oninputkeypress="return formataData(event,this);" maxlength="10">
+			               	  	<a4j:ajax event="change" listener="#{crudBean.atualizarStringDataInsert}" render="panelGroupDeInserir"/>
+		                	  	<a4j:ajax event="inputchange" listener="#{crudBean.atualizarStringDataInsert}" render="panelGroupDeInserir"/>
+			               	  </rich:calendar>
 		                  </div>
+		               	  <label for="inputEmail3" class="col-sm-2 control-label" style="text-align: left; color: #800000">
+		                   	<h:outputText value="#{crudBean.stringData}"/>
+		                  </label>
 		               	</div>
 	               	</h:panelGroup>
 	               	

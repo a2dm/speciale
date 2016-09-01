@@ -39,6 +39,7 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 	private Produto produto;
 	private BigInteger qtdSolicitada;
 	private BigInteger idProdutoRemover;
+	private String stringData;
 	private List<Produto> listaProduto;
 	private List<Produto> listaProdutoResult;
 	
@@ -61,7 +62,8 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 	@Override
 	protected void setValoresDefault() throws Exception
 	{
-		this.getSearchObject().setDatPedido(new Date());		
+		this.getSearchObject().setDatPedido(new Date());
+		this.atualizarStringData(this.getSearchObject().getDatPedido());
 		this.pesquisar(null);
 	}
 	
@@ -73,6 +75,7 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 		this.setProduto(new Produto());
 		this.setListaProdutoResult(new ArrayList<Produto>());
 		this.atualizarFiltroProduto();
+		this.atualizarStringData(this.getEntity().getDatPedido());
 	}
 	
 	@Override
@@ -508,6 +511,39 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 		}
 	}
 	
+	public void atualizarStringDataInsert()
+	{
+		this.atualizarStringData(this.getEntity().getDatPedido());
+	}
+	
+	public void atualizarStringDataSearch()
+	{
+		this.atualizarStringData(this.getSearchObject().getDatPedido());
+	}	
+	
+	public void atualizarStringData(Date data)
+	{
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(data);
+		
+		String nome = "";
+		
+		int dia = calendar.get(Calendar.DAY_OF_WEEK);
+		
+		switch(dia)
+		{
+		  case Calendar.SUNDAY: nome = "Domingo";break;
+		  case Calendar.MONDAY: nome = "Segunda-feira";break;
+		  case Calendar.TUESDAY: nome = "Terça-feira";break;
+		  case Calendar.WEDNESDAY: nome = "Quarta-feira";break;
+		  case Calendar.THURSDAY: nome = "Quinta-feira";break;
+		  case Calendar.FRIDAY: nome = "Sexta-feira";break;
+		  case Calendar.SATURDAY: nome = "Sábado";break;
+		}
+				
+		this.setStringData(nome);
+	}
+	
 	@Override
 	protected boolean validarAcesso(String acao)
 	{
@@ -533,6 +569,7 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 	@Override
 	public void cancelar(ActionEvent event)
 	{
+		this.atualizarStringData(this.getSearchObject().getDatPedido());
 		this.getSearchObject().setDatPedido(new Date());		
 		this.pesquisar(null);
 	}
@@ -627,5 +664,13 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 
 	public void setIdPedidoInativar(BigInteger idPedidoInativar) {
 		this.idPedidoInativar = idPedidoInativar;
+	}
+
+	public String getStringData() {
+		return stringData;
+	}
+
+	public void setStringData(String stringData) {
+		this.stringData = stringData;
 	}
 }
