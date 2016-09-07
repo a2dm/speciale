@@ -484,7 +484,7 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 			produto = ProdutoService.getInstancia().get(produto, 0);
 			produto.setQtdSolicitada(this.getQtdSolicitada());
 			
-			this.getListaProdutoResult().add(produto);
+			this.getListaProdutoResult().add(0, produto);
 			this.getProduto().setIdProduto(null);
 			this.setQtdSolicitada(null);
 		}

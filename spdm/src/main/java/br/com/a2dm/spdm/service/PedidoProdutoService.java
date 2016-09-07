@@ -21,6 +21,8 @@ public class PedidoProdutoService extends A2DMHbNgc<PedidoProduto>
 	
 	public static final int JOIN_PRODUTO = 4;
 	
+	public static final int JOIN_PEDIDO = 8;
+	
 	@SuppressWarnings("rawtypes")
 	private static Map filtroPropriedade = new HashMap();
 	
@@ -42,6 +44,9 @@ public class PedidoProdutoService extends A2DMHbNgc<PedidoProduto>
 		adicionarFiltro("idPedido", RestritorHb.RESTRITOR_EQ, "idPedido");
 		adicionarFiltro("idProduto", RestritorHb.RESTRITOR_EQ, "idProduto");
 		adicionarFiltro("flgAtivo", RestritorHb.RESTRITOR_EQ, "flgAtivo");
+		adicionarFiltro("pedido.flgAtivo", RestritorHb.RESTRITOR_EQ, "pedido.flgAtivo");
+		adicionarFiltro("pedido.idCliente", RestritorHb.RESTRITOR_EQ, "pedido.idCliente");
+		adicionarFiltro("pedido.datPedido", RestritorHb.RESTRITOR_EQ, "pedido.datPedido");
 	}
 	
 	@Override
@@ -62,6 +67,11 @@ public class PedidoProdutoService extends A2DMHbNgc<PedidoProduto>
 		if ((join & JOIN_PRODUTO) != 0)
 	    {
 			criteria.createAlias("produto", "produto");
+	    }
+		
+		if ((join & JOIN_PEDIDO) != 0)
+	    {
+			criteria.createAlias("pedido", "pedido");
 	    }
 		
 		return criteria;

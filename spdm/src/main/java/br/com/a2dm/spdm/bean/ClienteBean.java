@@ -415,7 +415,7 @@ public class ClienteBean extends AbstractBean<Cliente, ClienteService>
 			produto.setIdProduto(this.getProduto().getIdProduto());
 			produto = ProdutoService.getInstancia().get(produto, ProdutoService.JOIN_RECEITA);
 			
-			this.getListaProdutoResult().add(produto);
+			this.getListaProdutoResult().add(0, produto);
 			this.getProduto().setIdProduto(null);	
 		}
 		catch (Exception e)

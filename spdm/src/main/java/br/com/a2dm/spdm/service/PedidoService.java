@@ -1,6 +1,8 @@
 package br.com.a2dm.spdm.service;
 
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,6 +13,10 @@ import org.hibernate.Criteria;
 import org.hibernate.FlushMode;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
 
 import br.com.a2dm.brcmn.util.A2DMHbNgc;
@@ -318,6 +324,94 @@ public class PedidoService extends A2DMHbNgc<Pedido>
 		sessao.merge(pedido);
 		
 		return pedido;
+	}
+	
+	public List<Pedido> pesquisarLogisticaDia(Pedido vo) throws Exception
+	{
+		Session sessao = HibernateUtil.getSession();
+		sessao.setFlushMode(FlushMode.COMMIT);
+		try
+		{
+			return this.pesquisarLogisticaDia(sessao, vo);
+		}
+		catch (Exception e)
+		{
+			throw e;
+		}
+		finally
+		{
+			sessao.close();
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Pedido> pesquisarLogisticaDia(Session sessao, Pedido vo) throws Exception
+	{
+		Criteria criteria = sessao.createCriteria(Pedido.class);
+		
+		ProjectionList projection = Projections.projectionList();
+		projection.add(Projections.groupProperty("cliente.idCliente"));
+		projection.add(Projections.groupProperty("cliente.desCliente"));
+		
+		criteria.createAlias("cliente", "cliente");
+		criteria.createAlias("listaPedidoProduto", "listaPedidoProduto");
+		
+		criteria.add(Restrictions.eq("flgAtivo", "S"));
+		criteria.add(Restrictions.eq("listaPedidoProduto.flgAtivo", "S"));
+		criteria.add(Restrictions.eq("datPedido", vo.getDatPedido()));
+		
+		if(vo.getIdCliente() != null
+				&& vo.getIdCliente().intValue() > 0)
+		{
+			criteria.add(Restrictions.eq("idCliente", vo.getIdCliente()));
+		}
+		
+		criteria.addOrder(Order.asc("cliente.desCliente"));
+		
+		criteria.setProjection(projection);
+		List<Object[]> resultado = criteria.list();		
+		List<Pedido> retorno = new ArrayList<Pedido>(5);
+		
+		if (resultado != null && resultado.size() > 0)
+	    {
+	    	int j = 0;
+	    	for (int i = 0; i < resultado.size(); i++)
+	    	{
+	    		j = 0;
+	    		
+	    		Pedido pedidoResult = new Pedido();
+	    		pedidoResult.setCliente(new Cliente());
+	    		pedidoResult.getCliente().setIdCliente((BigInteger) resultado.get(i)[j++]);
+	    		pedidoResult.getCliente().setDesCliente((String) resultado.get(i)[j++]);
+	    		
+	            retorno.add(pedidoResult);
+	    	}
+	    }
+		
+		this.popularListaProdutos(sessao, retorno, vo.getDatPedido());
+	      
+	    return retorno;
+	}
+	
+	private void popularListaProdutos(Session sessao, List<Pedido> lista, Date datPedido) throws Exception
+	{
+		if(lista != null
+				&& lista.size() > 0)
+		{
+			for (Pedido pedido : lista)
+			{
+				PedidoProduto pedidoProduto = new PedidoProduto();
+				pedidoProduto.setPedido(new Pedido());
+				pedidoProduto.setFlgAtivo("S");
+				pedidoProduto.getPedido().setFlgAtivo("S");
+				pedidoProduto.getPedido().setIdCliente(pedido.getCliente().getIdCliente());
+				pedidoProduto.getPedido().setDatPedido(datPedido);
+				
+				List<PedidoProduto> listaPedidoProduto = PedidoProdutoService.getInstancia().pesquisar(sessao, pedidoProduto, PedidoProdutoService.JOIN_PEDIDO
+																															| PedidoProdutoService.JOIN_PRODUTO);
+				pedido.setListaPedidoProduto(listaPedidoProduto);
+			}
+		}
 	}
 	
 	@Override
