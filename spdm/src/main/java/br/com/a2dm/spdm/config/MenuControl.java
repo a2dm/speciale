@@ -21,6 +21,7 @@ public class MenuControl
 	{
 		util.getSession().removeAttribute("flgMenuRelPed");
 		util.getSession().removeAttribute("flgMenuRelLog");
+		util.getSession().removeAttribute("flgMenuRelObs");
 		util.getSession().removeAttribute("flgMenuManUsr");
 		util.getSession().removeAttribute("flgMenuManCli");
 		util.getSession().removeAttribute("flgMenuManRec");

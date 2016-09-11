@@ -1,5 +1,6 @@
 package br.com.a2dm.spdm.bean;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -7,8 +8,11 @@ import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletResponse;
 
 import br.com.a2dm.brcmn.util.jsf.AbstractBean;
+import br.com.a2dm.brcmn.util.validacoes.ValidaPermissao;
 import br.com.a2dm.spdm.config.MenuControl;
 import br.com.a2dm.spdm.entity.Cliente;
 import br.com.a2dm.spdm.entity.Pedido;
@@ -29,7 +33,7 @@ public class ObservacaoPedidoBean extends AbstractBean<Pedido, PedidoService>
 		this.pageTitle = "Observações dos Pedidos";
 		
 		MenuControl.ativarMenu("flgMenuRel");
-		MenuControl.ativarSubMenu("flgMenuRelLog");
+		MenuControl.ativarSubMenu("flgMenuRelObs");
 	}
 	
 	@Override
@@ -83,6 +87,28 @@ public class ObservacaoPedidoBean extends AbstractBean<Pedido, PedidoService>
 	protected int getJoinPesquisar()
 	{
 		return PedidoService.JOIN_CLIENTE;
+	}
+	
+	@Override
+	protected boolean validarAcesso(String acao)
+	{
+		boolean temAcesso = true;
+
+		if (!ValidaPermissao.getInstancia().verificaPermissao("observacaoPedido", acao))
+		{
+			temAcesso = false;
+			HttpServletResponse rp = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+			try
+			{
+				rp.sendRedirect("/spdm/pages/acessoNegado.jsf");
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
+		return temAcesso;
 	}
 		
 	public List<Cliente> getListaCliente() {

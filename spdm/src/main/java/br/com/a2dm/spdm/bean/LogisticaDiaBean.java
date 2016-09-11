@@ -1,5 +1,6 @@
 package br.com.a2dm.spdm.bean;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -9,9 +10,11 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.servlet.http.HttpServletResponse;
 
 import br.com.a2dm.brcmn.util.jsf.AbstractBean;
 import br.com.a2dm.brcmn.util.jsf.Variaveis;
+import br.com.a2dm.brcmn.util.validacoes.ValidaPermissao;
 import br.com.a2dm.spdm.config.MenuControl;
 import br.com.a2dm.spdm.entity.Cliente;
 import br.com.a2dm.spdm.entity.Pedido;
@@ -100,6 +103,28 @@ public class LogisticaDiaBean extends AbstractBean<Pedido, PedidoService>
 				FacesContext.getCurrentInstance().addMessage(null, message);
 			this.setSearchResult(new ArrayList<Pedido>());
 		}
+	}
+	
+	@Override
+	protected boolean validarAcesso(String acao)
+	{
+		boolean temAcesso = true;
+
+		if (!ValidaPermissao.getInstancia().verificaPermissao("logisticaDia", acao))
+		{
+			temAcesso = false;
+			HttpServletResponse rp = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+			try
+			{
+				rp.sendRedirect("/spdm/pages/acessoNegado.jsf");
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
+		return temAcesso;
 	}
 
 	public List<Cliente> getListaCliente() {
