@@ -66,6 +66,7 @@ public class PedidoService extends A2DMHbNgc<Pedido>
 		adicionarFiltro("datPedido", RestritorHb.RESTRITOR_EQ, "datPedido");
 		adicionarFiltro("flgAtivo", RestritorHb.RESTRITOR_EQ, "flgAtivo");
 		adicionarFiltro("listaPedidoProduto.flgAtivo", RestritorHb.RESTRITOR_EQ, "filtroMap.flgAtivoPedidoProduto");
+		adicionarFiltro("obsPedido", RestritorHb.RESTRITOR_IS_NOTNULL, "filtroMap.obsNotNull");
 	}
 	
 	@Override
