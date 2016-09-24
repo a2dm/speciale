@@ -1,16 +1,19 @@
 package br.com.a2dm.spdm.bean;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.a2dm.brcmn.util.jsf.AbstractBean;
@@ -24,7 +27,7 @@ import br.com.a2dm.spdm.service.ProdutoService;
 @RequestScoped
 @ManagedBean
 public class ProducaoDiaBean extends AbstractBean<Produto, ProdutoService>
-{
+{	
 	public ProducaoDiaBean()
 	{
 		super(ProdutoService.getInstancia());
@@ -90,11 +93,10 @@ public class ProducaoDiaBean extends AbstractBean<Produto, ProdutoService>
 			if(validarAcesso(Variaveis.ACAO_PESQUISAR))
 			{
 				validarPesquisar();
-				completarPesquisar();
-				validarCampoTexto();
-				List<Produto> lista = ProdutoService.getInstancia().pesquisarProducaoDia(this.getSearchObject());
+				
+				List<Produto> lista = ProdutoService.getInstancia().pesquisarProducaoDia(this.getSearchObject());								
 				this.setSearchResult(lista);
-				completarPosPesquisar();
+				
 				setCurrentState(STATE_SEARCH);
 			}
 		}
@@ -108,6 +110,16 @@ public class ProducaoDiaBean extends AbstractBean<Produto, ProdutoService>
 				FacesContext.getCurrentInstance().addMessage(null, message);
 			this.setSearchResult(new ArrayList<Produto>());
 		}
+	}
+	
+	@Override
+	@SuppressWarnings({ "unchecked", "deprecation", "rawtypes" })
+	public void configuraRelatorio(Map parameters, HttpServletRequest request)
+	{
+		this.REPORT_NAME = "producao-dia";
+		
+		parameters.put("IMG_LOGO", request.getRealPath("images/logo.png"));
+		parameters.put("DAT_PRODUCAO", new SimpleDateFormat("dd/MM/yyyy").format(((Produto)this.getListaReport().get(0)).getDatPedido()));
 	}
 	
 	@Override
