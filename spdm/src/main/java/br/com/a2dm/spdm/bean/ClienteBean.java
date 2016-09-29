@@ -139,7 +139,7 @@ public class ClienteBean extends AbstractBean<Cliente, ClienteService>
 						   										   | ClienteService.JOIN_USUARIO_CAD
 						   										   | ClienteService.JOIN_USUARIO_ALT);
 							
-				this.setListaProdutoResult(new ArrayList<Produto>());				
+				this.setListaProdutoResult(new ArrayList<Produto>());
 				List<Produto> listaProdutoSessao = new ArrayList<Produto>();
 				
 				for (ClienteProduto clienteProduto : cliente.getListaClienteProduto())
@@ -155,6 +155,15 @@ public class ClienteBean extends AbstractBean<Cliente, ClienteService>
 				this.atualizarFiltroProduto();
 				
 				util.getSession().setAttribute(LISTA_PRODUTOS_SESSAO, listaProdutoSessao);
+				
+				
+				//SETANDO LISTA DE PRODUTOS
+				Produto produto = new Produto();
+				produto.setFlgAtivo("S");
+				
+				List<Produto> listaProduto = ProdutoService.getInstancia().pesquisar(produto, 0);
+				this.iniciaListaProdutos();
+				this.getListaProduto().addAll(listaProduto);
 			}
 		}
 	    catch (Exception e)
