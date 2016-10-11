@@ -195,6 +195,7 @@ public class ProdutoService extends A2DMHbNgc<Produto>
 	@SuppressWarnings("unchecked")
 	public List<Produto> pesquisarProducaoDia(Session sessao, Produto produto) throws Exception
 	{
+		
 		Criteria criteria = sessao.createCriteria(Produto.class);
 		
 		ProjectionList projection = Projections.projectionList();
