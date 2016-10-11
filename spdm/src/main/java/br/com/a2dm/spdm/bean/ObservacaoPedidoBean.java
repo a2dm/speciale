@@ -79,9 +79,6 @@ public class ObservacaoPedidoBean extends AbstractBean<Pedido, PedidoService>
 	@Override
 	protected void completarPesquisar() throws Exception
 	{
-		if (getSearchObject().getIdCliente().compareTo(new BigInteger("0")) == 0) {
-			getSearchObject().setIdCliente(null);
-		}
 		this.getSearchObject().setFlgAtivo("S");
 		this.getSearchObject().setFiltroMap(new HashMap<String, Object>());
 		this.getSearchObject().getFiltroMap().put("obsNotNull", "NOTNULL");

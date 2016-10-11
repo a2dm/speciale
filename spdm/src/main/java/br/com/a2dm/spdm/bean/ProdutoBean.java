@@ -61,14 +61,6 @@ public class ProdutoBean extends AbstractBean<Produto, ProdutoService>
 	}
 	
 	@Override
-	public void pesquisar(ActionEvent event) {
-		if (getSearchObject().getIdReceita().compareTo(new BigInteger("0")) == 0) {
-			getSearchObject().setIdReceita(null);
-		}
-		super.pesquisar(event);
-	}
-	
-	@Override
 	protected void completarPesquisar() throws Exception
 	{
 		if(this.getSearchObject().getFlgAtivo() != null
