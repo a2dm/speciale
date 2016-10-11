@@ -105,7 +105,6 @@ public class Produto implements Serializable
 	
 	@Transient
 	private String obsPedido;
-
 	
 	public BigInteger getIdProduto() {
 		return idProduto;
