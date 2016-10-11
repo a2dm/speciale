@@ -1,7 +1,6 @@
 package br.com.a2dm.spdm.bean;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
