@@ -53,12 +53,15 @@
 								<rich:column style="width: 5%; text-align: center;">
 									Código
 								</rich:column>
-								<rich:column style="width: 50%; text-align: center;">
-									Descrição
-								</rich:column>
-								<rich:column style="width: 35%; text-align: center;">
+								<rich:column style="width: 25%; text-align: center;">
 									Receita
 								</rich:column>									
+								<rich:column style="width: 30%; text-align: center;">
+									Descrição
+								</rich:column>
+								<rich:column style="width: 30%; text-align: center;">
+									Observação
+								</rich:column>
 								<rich:column style="width: 10%; text-align: center;">
 									Quantidade
 								</rich:column>								
@@ -68,12 +71,15 @@
 							<h:outputText value="#{rst.idProduto}" />
 						</rich:column>
 						<rich:column style="text-align: left;">
-							<h:outputText value="#{rst.desProduto}" />
-						</rich:column>						
-						<rich:column style="text-align: left;">
 							<h:outputText value="#{rst.receita.desReceita}" />
 						</rich:column>
 						<rich:column style="text-align: left;">
+							<h:outputText value="#{rst.desProduto}" />
+						</rich:column>
+						<rich:column style="text-align: left;">
+							<h:outputText value="#{rst.obsPedido}" />
+						</rich:column>						
+						<rich:column style="text-align: center;">
 							<h:outputText value="#{rst.qtdSolicitada}" />
 						</rich:column>
 					</rich:dataTable>

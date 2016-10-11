@@ -1,6 +1,7 @@
 package br.com.a2dm.spdm.bean;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -57,6 +58,14 @@ public class ProdutoBean extends AbstractBean<Produto, ProdutoService>
 		listaReceita.addAll(resultRec);
 		
 		this.setListaReceita(listaReceita);
+	}
+	
+	@Override
+	public void pesquisar(ActionEvent event) {
+		if (getSearchObject().getIdReceita().compareTo(new BigInteger("0")) == 0) {
+			getSearchObject().setIdReceita(null);
+		}
+		super.pesquisar(event);
 	}
 	
 	@Override

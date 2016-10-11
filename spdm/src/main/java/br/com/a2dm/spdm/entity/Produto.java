@@ -102,6 +102,9 @@ public class Produto implements Serializable
 	
 	@Transient
 	private Date datPedido;
+	
+	@Transient
+	private String obsPedido;
 
 	
 	public BigInteger getIdProduto() {
@@ -246,5 +249,13 @@ public class Produto implements Serializable
 
 	public void setDatPedido(Date datPedido) {
 		this.datPedido = datPedido;
+	}
+
+	public String getObsPedido() {
+		return obsPedido;
+	}
+
+	public void setObsPedido(String obsPedido) {
+		this.obsPedido = obsPedido;
 	}
 }

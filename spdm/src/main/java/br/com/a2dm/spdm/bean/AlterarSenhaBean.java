@@ -12,7 +12,6 @@ import br.com.a2dm.brcmn.entity.Usuario;
 import br.com.a2dm.brcmn.service.UsuarioService;
 import br.com.a2dm.brcmn.util.jsf.AbstractBean;
 import br.com.a2dm.brcmn.util.jsf.JSFUtil;
-import br.com.a2dm.brcmn.util.jsf.Variaveis;
 
 
 @RequestScoped
