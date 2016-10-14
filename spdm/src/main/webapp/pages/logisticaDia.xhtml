@@ -45,6 +45,8 @@
 	<ui:define name="buttonItens" style="height:100%; width:100%;">		
 		<h:panelGroup rendered="#{crudBean.searching}">
 			<a4j:commandButton id="pesquisar" styleClass="btn btn-primary" value="Pesquisar (P)" accesskey="P" actionListener="#{crudBean.pesquisar}" render="tblResult"/>
+			<h:outputText value=" "/>
+			<t:commandLink target="_blank" id="imprimir" action="#{crudBean.imprimir}" styleClass="btn btn-primary" value="Imprimir (I)"/>
 		</h:panelGroup>		
 	</ui:define>
 					

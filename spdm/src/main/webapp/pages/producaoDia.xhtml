@@ -33,7 +33,7 @@
 		<h:panelGroup rendered="#{crudBean.searching}">
 			<a4j:commandButton id="pesquisar" styleClass="btn btn-primary" value="Pesquisar (P)" accesskey="P" actionListener="#{crudBean.pesquisar}" render="tblResult, formulario"/>
 			<h:outputText value=" "/>
-			<t:commandLink target="_blank" id="imprimir" action="#{crudBean.imprimir}" rendered="#{not empty crudBean.searchResult}" styleClass="btn btn-primary" value="Imprimir (I)"/>
+			<t:commandLink target="_blank" id="imprimir" action="#{crudBean.imprimir}" styleClass="btn btn-primary" value="Imprimir (I)"/>
 		</h:panelGroup>		
 	</ui:define>
 					
@@ -59,9 +59,6 @@
 								<rich:column style="width: 30%; text-align: center;">
 									Descrição
 								</rich:column>
-								<rich:column style="width: 30%; text-align: center;">
-									Observação
-								</rich:column>
 								<rich:column style="width: 10%; text-align: center;">
 									Quantidade
 								</rich:column>								
@@ -76,9 +73,6 @@
 						<rich:column style="text-align: left;">
 							<h:outputText value="#{rst.desProduto}" />
 						</rich:column>
-						<rich:column style="text-align: left;">
-							<h:outputText value="#{rst.obsPedido}" />
-						</rich:column>						
 						<rich:column style="text-align: center;">
 							<h:outputText value="#{rst.qtdSolicitada}" />
 						</rich:column>

@@ -1,15 +1,18 @@
 package br.com.a2dm.spdm.bean;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.a2dm.brcmn.util.jsf.AbstractBean;
@@ -103,6 +106,16 @@ public class LogisticaDiaBean extends AbstractBean<Pedido, PedidoService>
 				FacesContext.getCurrentInstance().addMessage(null, message);
 			this.setSearchResult(new ArrayList<Pedido>());
 		}
+	}
+	
+	@Override
+	@SuppressWarnings({ "unchecked", "deprecation", "rawtypes" })
+	public void configuraRelatorio(Map parameters, HttpServletRequest request)
+	{
+		this.REPORT_NAME = "logistica-dia";
+		
+		parameters.put("IMG_LOGO", request.getRealPath("images/logo.png"));
+		parameters.put("DAT_PEDIDO", new SimpleDateFormat("dd/MM/yyyy").format(((Pedido)this.getListaReport().get(0)).getListaPedidoProduto().get(0).getPedido().getDatPedido()));
 	}
 	
 	@Override

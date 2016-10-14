@@ -203,7 +203,6 @@ public class ProdutoService extends A2DMHbNgc<Produto>
 		projection.add(Projections.groupProperty("desProduto"));
 		projection.add(Projections.groupProperty("pedido.datPedido"));
 		projection.add(Projections.groupProperty("receita.desReceita"));
-		projection.add(Projections.groupProperty("pedido.obsPedido"));
 		projection.add(Projections.sum("listaPedidoProduto.qtdSolicitada"));
 		
 		criteria.createAlias("listaPedidoProduto", "listaPedidoProduto");
@@ -233,7 +232,6 @@ public class ProdutoService extends A2DMHbNgc<Produto>
 	    		produtoResult.setDesProduto((String) resultado.get(i)[j++]);
 	    		produtoResult.setDatPedido((Date) resultado.get(i)[j++]);
 	    		produtoResult.getReceita().setDesReceita((String) resultado.get(i)[j++]);
-	    		produtoResult.setObsPedido((String) resultado.get(i)[j++]);
 	    		produtoResult.setQtdSolicitada((BigInteger) resultado.get(i)[j++]);
 	    		
 	            retorno.add(produtoResult);

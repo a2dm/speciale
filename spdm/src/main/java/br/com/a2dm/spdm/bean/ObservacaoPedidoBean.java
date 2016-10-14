@@ -1,17 +1,23 @@
 package br.com.a2dm.spdm.bean;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.a2dm.brcmn.util.jsf.AbstractBean;
+import br.com.a2dm.brcmn.util.jsf.Variaveis;
 import br.com.a2dm.brcmn.util.validacoes.ValidaPermissao;
 import br.com.a2dm.spdm.config.MenuControl;
 import br.com.a2dm.spdm.entity.Cliente;
@@ -66,6 +72,28 @@ public class ObservacaoPedidoBean extends AbstractBean<Pedido, PedidoService>
 	}
 	
 	@Override
+	public String preparaPesquisar() {
+		try
+		{
+			if(validarAcesso(Variaveis.ACAO_PREPARA_PESQUISAR))
+			{
+				this.getSearchObject().setDatPedido(new Date());		
+				this.pesquisar(null);
+			}
+		}
+		catch (Exception e)
+		{
+			FacesMessage message = new FacesMessage(e.getMessage());
+			message.setSeverity(FacesMessage.SEVERITY_ERROR);
+			if(e.getMessage() == null)
+				FacesContext.getCurrentInstance().addMessage("", message);
+			else
+				FacesContext.getCurrentInstance().addMessage(null, message);
+		}
+		return ACTION_SEARCH;
+	}
+	
+	@Override
 	protected void validarPesquisar() throws Exception
 	{
 		if(this.getSearchObject().getDatPedido() == null
@@ -107,8 +135,16 @@ public class ObservacaoPedidoBean extends AbstractBean<Pedido, PedidoService>
 				e.printStackTrace();
 			}
 		}
-		
 		return temAcesso;
+	}
+	
+	@Override
+	@SuppressWarnings({ "unchecked", "deprecation", "rawtypes" })
+	public void configuraRelatorio(Map parameters, HttpServletRequest request) {
+		this.REPORT_NAME = "observacao";
+		
+		parameters.put("IMG_LOGO", request.getRealPath("images/logo.png"));
+		parameters.put("DAT_PEDIDO", new SimpleDateFormat("dd/MM/yyyy").format(((Pedido)this.getListaReport().get(0)).getDatPedido()));
 	}
 		
 	public List<Cliente> getListaCliente() {
