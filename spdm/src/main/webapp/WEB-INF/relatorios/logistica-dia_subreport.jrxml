@@ -14,7 +14,7 @@
 	</queryString>
 	<field name="produto.desProduto" class="java.lang.String"/>
 	<field name="qtdSolicitada" class="java.math.BigInteger"/>
-	<field name="produto.qtdLoteMinimo" class="java.math.BigInteger"/>
+	<field name="produto.qtdMultiplo" class="java.math.BigInteger"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -107,7 +107,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{qtdSolicitada}.intValue() / $F{produto.qtdLoteMinimo}.intValue()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{qtdSolicitada}.intValue() / $F{produto.qtdMultiplo}.intValue()]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
