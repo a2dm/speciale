@@ -34,7 +34,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[PCR]]></text>
+				<text><![CDATA[Pacote]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="6458618a-ece2-4b23-84a9-ed1dc78642e7" mode="Opaque" x="0" y="0" width="403" height="19" backcolor="#BFD8D9"/>
