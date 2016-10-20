@@ -77,6 +77,7 @@ public class ObservacaoPedidoBean extends AbstractBean<Pedido, PedidoService>
 		{
 			if(validarAcesso(Variaveis.ACAO_PREPARA_PESQUISAR))
 			{
+				this.setValoresDefault();
 				this.getSearchObject().setDatPedido(new Date());		
 				this.pesquisar(null);
 			}

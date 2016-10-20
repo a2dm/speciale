@@ -157,47 +157,12 @@ public class UsuarioBean extends AbstractBean<Usuario, UsuarioService>
 		
 		if(this.getEntity().getCpf() == null || this.getEntity().getCpf().trim().equals(""))
 		{
-			throw new Exception("O campo Cpf é obrigatório.");
+			throw new Exception("O campo CPF é obrigatório.");
 		}
 		
 		if(this.getEntity().getTelefone() == null || this.getEntity().getTelefone().trim().equals(""))
 		{
 			throw new Exception("O campo Telefone é obrigatório.");
-		}
-		
-		if(this.getEntity().getDataNascimento() == null || this.getEntity().getDataNascimento().toString().trim().equals(""))
-		{
-			throw new Exception("O campo Data de Nascimento é obrigatório.");
-		}
-		
-		if(this.getEntity().getCep() == null || this.getEntity().getCep().trim().equals(""))
-		{
-			throw new Exception("O campo Cep é obrigatório.");
-		}
-		
-		if(this.getEntity().getLogradouro() == null || this.getEntity().getLogradouro().trim().equals(""))
-		{
-			throw new Exception("O campo Logradouro é obrigatório.");
-		}
-		
-		if(this.getEntity().getNumEndereco() == null || this.getEntity().getNumEndereco().longValue() <= 0)
-		{
-			throw new Exception("O campo Número da Residência é obrigatório.");
-		}
-		
-		if(this.getEntity().getBairro() == null || this.getEntity().getBairro().trim().equals(""))
-		{
-			throw new Exception("O campo Bairro é obrigatório.");
-		}
-		
-		if(this.getEntity().getCidade() == null || this.getEntity().getCidade().trim().equals(""))
-		{
-			throw new Exception("O campo Cidade é obrigatório.");
-		}
-		
-		if(this.getSiglaEstado() == null || this.getSiglaEstado().trim().equals(""))
-		{
-			throw new Exception("O campo Estado é obrigatório.");
 		}
 		
 		if(this.getEntity().getIdGrupo() == null || this.getEntity().getIdGrupo().longValue() <= 0)
