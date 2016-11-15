@@ -187,11 +187,14 @@ public class UsuarioBean extends AbstractBean<Usuario, UsuarioService>
 		this.getEntity().setFlgSeguranca("N");
 		this.getEntity().setIdUsuarioCad(util.getUsuarioLogado().getIdUsuario());
 		
-		Estado estado = new Estado();
-		estado.setSigla(this.getSiglaEstado());
-		estado = EstadoService.getInstancia().get(estado, 0);
-		
-		this.getEntity().setIdEstado(estado.getIdEstado());
+		if (this.getSiglaEstado() != null && !this.getSiglaEstado().equalsIgnoreCase(""))  
+		{
+			Estado estado = new Estado();
+			estado.setSigla(this.getSiglaEstado());
+			estado = EstadoService.getInstancia().get(estado, 0);
+			
+			this.getEntity().setIdEstado(estado.getIdEstado());
+		}
 	}
 	
 	@Override
