@@ -212,9 +212,14 @@ public class UsuarioBean extends AbstractBean<Usuario, UsuarioService>
 																   | UsuarioService.JOIN_USUARIO_CAD
 																   | UsuarioService.JOIN_USUARIO_ALT);
 				
-				Estado estado = new Estado();
-				estado.setIdEstado(this.getEntity().getIdEstado());				
-				estado = EstadoService.getInstancia().get(estado, 0);
+				if (usuario.getIdEstado() != null
+						&& usuario.getIdEstado().intValue() > 0)  
+				{
+					Estado estado = new Estado();
+					estado.setIdEstado(usuario.getIdEstado());				
+					estado = EstadoService.getInstancia().get(estado, 0);
+					this.setSiglaEstado(estado.getSigla());
+				}
 				
 				if(usuario.getIdCliente() != null
 						&& usuario.getIdCliente().intValue() > 0)
@@ -225,8 +230,6 @@ public class UsuarioBean extends AbstractBean<Usuario, UsuarioService>
 				{
 					this.setFlgVisualizarCliente("N");
 				}
-				
-				this.setSiglaEstado(estado.getSigla());
 				setEntity(usuario);
 			}
 		}

@@ -111,7 +111,7 @@ public class PedidoService extends A2DMHbNgc<Pedido>
 		
 		if(dataAtual.after(dataLimite))
 		{
-			throw new Exception("O pedido não pode ser realizado, pois a hora do pedido ultrapassou a hora limite! Hora limite: " + new SimpleDateFormat("dd/MM/yyyy HH:mm").format(dataLimite));
+			throw new Exception("O pedido não pode ser realizado, pois a hora limite do pedido foi ultrapassada! Hora limite: " + new SimpleDateFormat("dd/MM/yyyy HH:mm").format(dataLimite));
 		}
 	}
 	
@@ -169,7 +169,7 @@ public class PedidoService extends A2DMHbNgc<Pedido>
 		
 		if(dataAtual.after(dataLimite))
 		{
-			throw new Exception("O pedido não pode ser realizado, pois a hora do pedido ultrapassou a hora limite! Hora limite: " + new SimpleDateFormat("dd/MM/yyyy HH:mm").format(dataLimite));
+			throw new Exception("O pedido não pode ser realizado, pois a hora limite do pedido foi ultrapassada! Hora limite: " + new SimpleDateFormat("dd/MM/yyyy HH:mm").format(dataLimite));
 		}
 	}
 	

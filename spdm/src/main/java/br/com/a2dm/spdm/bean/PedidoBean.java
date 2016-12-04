@@ -166,17 +166,17 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 			if(produto.getQtdSolicitada() == null
 					|| produto.getQtdSolicitada().intValue() <= 0)
 			{
-				throw new Exception("A Quantidade do produto: " + produto.getIdProduto() + " - " + produto.getDesProduto() + " não foi preenchida!");
+				throw new Exception("A Quantidade do produto " + produto.getDesProduto() + " não foi preenchida!");
 			}
 			
 			if(produto.getQtdLoteMinimo().intValue() > produto.getQtdSolicitada().intValue())
 			{
-				throw new Exception("O Lote Mínimo do produto: " + produto.getIdProduto() + " - " + produto.getDesProduto() + " não foi atingida! Quantidade de Lote Mínimo: " + produto.getQtdLoteMinimo());
+				throw new Exception("O Lote Mínimo do produto " + produto.getDesProduto() + " não foi atingida! Quantidade de Lote Mínimo: " + produto.getQtdLoteMinimo());
 			}
 			
 			if(produto.getQtdSolicitada().intValue() % produto.getQtdMultiplo().intValue() != 0)
 			{
-				throw new Exception("A Quantidade do produto: " + produto.getIdProduto() + " - " + produto.getDesProduto() + " deve ser solicitada em múltiplo de "+ produto.getQtdMultiplo() +"!");
+				throw new Exception("A Quantidade do produto " + produto.getDesProduto() + " deve ser solicitada em múltiplo de "+ produto.getQtdMultiplo() +"!");
 			}
 		}
 	}
