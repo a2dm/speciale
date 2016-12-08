@@ -152,6 +152,18 @@
 		            </li>
 		            </h:panelGroup>
 		            
+		            <h:panelGroup layout="block" rendered="#{sessionScope.loginUsuario.idGrupo == bundle.grupoGerente}">
+		            <li class="treeview #{sessionScope.flgMenuMsg}">
+		              <a href="#">
+		                <i class="fa fa-envelope"></i>
+		                <span>Mensagem</span>
+		                <i class="fa fa-angle-left pull-right"></i>
+		              </a>
+		              <ul class="treeview-menu">
+		                <li class="#{sessionScope.flgMenuMsgAgn}"><h:commandLink action="#{mensagemBean.preparaPesquisar}"><i class="fa fa-calendar-minus-o"></i> Agendar</h:commandLink></li>		                		                
+		              </ul>
+		            </li>
+		            </h:panelGroup>
 		            
 		          </ul>
 		        </section>

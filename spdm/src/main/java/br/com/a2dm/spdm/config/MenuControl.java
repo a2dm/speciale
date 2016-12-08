@@ -13,6 +13,7 @@ public class MenuControl
 		util.getSession().removeAttribute("flgMenuPed");
 		util.getSession().removeAttribute("flgMenuRel");		
 		util.getSession().removeAttribute("flgMenuMan");
+		util.getSession().removeAttribute("flgMenuMsg");
 		
 		util.getSession().setAttribute(desMenu, "active");
 	}
@@ -26,6 +27,7 @@ public class MenuControl
 		util.getSession().removeAttribute("flgMenuManCli");
 		util.getSession().removeAttribute("flgMenuManRec");
 		util.getSession().removeAttribute("flgMenuManPrd");
+		util.getSession().removeAttribute("flgMenuMsgAgn");
 		
 		util.getSession().setAttribute(desSubMenu, "active");
 	}

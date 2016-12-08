@@ -6,7 +6,7 @@
 <hibernate-configuration>
 	<session-factory>
 		<property name="connection.driver_class">org.postgresql.Driver</property>
-		<property name="connection.url">jdbc:postgresql://localhost:5432/spdm_custom</property>
+		<property name="connection.url">jdbc:postgresql://localhost:5432/spdm_prd</property>
 		<property name="connection.username">postgres</property>
 		<property name="connection.password">postgres</property>
 		<property name="hibernate.connection.pool_size">25</property>
@@ -38,6 +38,8 @@
 		<mapping class="br.com.a2dm.spdm.entity.Produto"/>
 		<mapping class="br.com.a2dm.spdm.entity.Pedido"/>
 		<mapping class="br.com.a2dm.spdm.entity.PedidoProduto"/>
+		<mapping class="br.com.a2dm.spdm.entity.Mensagem"/>
+		<mapping class="br.com.a2dm.spdm.entity.MensagemDestinatario"/>
 		
 	</session-factory>
 </hibernate-configuration>
