@@ -143,7 +143,7 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 		if(this.getListaProdutoResult() == null
 				|| this.getListaProdutoResult().size() <= 0)
 		{
-			throw new Exception("Pelo menos um produto deve ser adicionado ao pedido!");
+			throw new Exception("Pelo menos 1 produto deve ser adicionado ao pedido!");
 		}
 		
 		Calendar c = Calendar.getInstance();
