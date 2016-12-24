@@ -80,6 +80,9 @@ public class ClienteProduto implements Serializable
 	@Column(name = "flg_ativo")
 	private String flgAtivo;
 	
+	@Column(name = "flg_favorito")
+	private String flgfavorito;
+	
 	@Transient
 	private HashMap<String, Object> filtroMap;
 
@@ -161,6 +164,14 @@ public class ClienteProduto implements Serializable
 
 	public void setFlgAtivo(String flgAtivo) {
 		this.flgAtivo = flgAtivo;
+	}
+	
+	public String getFlgfavorito() {
+		return flgfavorito;
+	}
+
+	public void setFlgfavorito(String flgfavorito) {
+		this.flgfavorito = flgfavorito;
 	}
 
 	public HashMap<String, Object> getFiltroMap() {

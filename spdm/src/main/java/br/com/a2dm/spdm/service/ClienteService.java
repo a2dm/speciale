@@ -90,6 +90,7 @@ public class ClienteService extends A2DMHbNgc<Cliente>
 				clienteProduto.setIdCliente(vo.getIdCliente());
 				clienteProduto.setIdProduto(produto.getIdProduto());
 				clienteProduto.setFlgAtivo("S");
+				clienteProduto.setFlgfavorito("N");
 				clienteProduto.setDatCadastro(new Date());
 				clienteProduto.setIdUsuarioCad(util.getUsuarioLogado().getIdUsuario());
 				
@@ -134,6 +135,7 @@ public class ClienteService extends A2DMHbNgc<Cliente>
 					clienteProduto.setIdCliente(vo.getIdCliente());
 					clienteProduto.setIdProduto(produto.getIdProduto());
 					clienteProduto.setFlgAtivo("N");
+					clienteProduto.setFlgfavorito("N");
 					
 					clienteProduto = ClienteProdutoService.getInstancia().get(sessao, clienteProduto, 0);
 					
@@ -167,6 +169,7 @@ public class ClienteService extends A2DMHbNgc<Cliente>
 					clienteProduto = ClienteProdutoService.getInstancia().get(sessao, clienteProduto, 0);
 					
 					clienteProduto.setFlgAtivo("N");
+					clienteProduto.setFlgfavorito("N");
 					clienteProduto.setIdUsuarioAlt(util.getUsuarioLogado().getIdUsuario());
 					clienteProduto.setDatAlteracao(new Date());
 					
@@ -266,9 +269,9 @@ public class ClienteService extends A2DMHbNgc<Cliente>
 			
 			if ((join & JOIN_CLIENTE_PRODUTO_PRODUTO) != 0)
 		    {
-				criteria.createAlias("listaClienteProduto.produto", "produto", JoinType.LEFT_OUTER_JOIN);
+				criteria.createAlias("listaClienteProduto.produto", "produto", JoinType.INNER_JOIN);
 				
-				if ((join & JOIN_CLIENTE_PRODUTO_PRODUTO) != 0)
+				if ((join & JOIN_CLIENTE_PRODUTO_PRODUTO_RECEITA) != 0)
 			    {
 					criteria.createAlias("produto.receita", "receita", JoinType.LEFT_OUTER_JOIN);
 			    }
