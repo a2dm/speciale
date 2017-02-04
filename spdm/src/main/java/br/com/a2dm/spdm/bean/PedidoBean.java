@@ -37,6 +37,7 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 	private String filtroDescricaoProduto;	
 	private BigInteger codigoProduto;	
 	private Produto produto;
+	private Produto produtoSelecionado;
 	private BigInteger qtdSolicitada;
 	private BigInteger idProdutoRemover;
 	private String stringData;
@@ -487,6 +488,7 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 			this.getListaProdutoResult().add(0, produto);
 			this.getProduto().setIdProduto(null);
 			this.setQtdSolicitada(null);
+			this.setProdutoSelecionado(null);
 		}
 		catch (Exception e)
 		{
@@ -567,6 +569,16 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 		}
 				
 		this.setStringData(nome);
+	}
+	
+	public void buscarInformacoes() throws Exception {
+		if (this.getProduto().getIdProduto() != null && this.getProduto().getIdProduto().intValue() > 0) {
+			Produto produto = new Produto();
+			produto.setIdProduto(this.getProduto().getIdProduto());
+			produtoSelecionado = ProdutoService.getInstancia().get(produto, 0);
+		} else {
+			setProdutoSelecionado(null);
+		}
 	}
 	
 	@Override
@@ -697,5 +709,13 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 
 	public void setStringData(String stringData) {
 		this.stringData = stringData;
+	}
+
+	public Produto getProdutoSelecionado() {
+		return produtoSelecionado;
+	}
+
+	public void setProdutoSelecionado(Produto produtoSelecionado) {
+		this.produtoSelecionado = produtoSelecionado;
 	}
 }

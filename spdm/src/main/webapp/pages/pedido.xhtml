@@ -124,6 +124,7 @@
 		                   <div class="col-sm-10">			                	
 								<h:selectOneMenu value="#{crudBean.produto.idProduto}" converter="simpleIndexConverter" styleClass="form-control" style="width:700px; display: initial;">								
 									<t:selectItems var="o" itemValue="#{o.idProduto}" itemLabel="#{o.desProduto}" value="#{crudBean.listaProduto}" />
+									<f:ajax listener="#{crudBean.buscarInformacoes}" render="panelInformacoesProduto"/>
 								</h:selectOneMenu>
 							</div>
 						</div>
@@ -135,6 +136,22 @@
 		                     <a4j:commandButton image="/images/add.png" style="vertical-align: middle; border:white; width: 22px; height: 22px; margin-left:2em; margin-right:2em;" title="ADICIONAR PRODUTO" actionListener="#{crudBean.adicionarProduto}" render="panelListaProduto, panelPesquisaProduto"/>
 		                   </div>
 	                 	</div>
+	                 	
+	                 	<rich:panel id="panelInformacoesProduto">
+	                 		<f:facet name="header">
+			                    <i class="fa fa-info-circle" aria-hidden="true"></i> Informações
+			                </f:facet>
+			                
+			                <div>
+			               		<label>Quantidade Lote Mínimo: </label>
+			               		<h:outputText value=" #{crudBean.produtoSelecionado.qtdLoteMinimo}" />
+			               		
+			               		<br/>
+			               		
+			               		<label>Quantidade Múltiplo: </label>
+			               		<h:outputText value=" #{crudBean.produtoSelecionado.qtdMultiplo}" />
+			                </div>
+	                 	</rich:panel>
                  	
                 	</rich:panel>
                	
