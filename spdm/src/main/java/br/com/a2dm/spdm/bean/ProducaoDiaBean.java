@@ -118,7 +118,7 @@ public class ProducaoDiaBean extends AbstractBean<Produto, ProdutoService>
 	{
 		this.REPORT_NAME = "producao-dia";
 		
-		parameters.put("IMG_LOGO", request.getRealPath("images/logo.png"));
+		parameters.put("IMG_LOGO", request.getRealPath("images/logo-new2.jpg"));
 		parameters.put("DAT_PRODUCAO", new SimpleDateFormat("dd/MM/yyyy").format(((Produto)this.getListaReport().get(0)).getDatPedido()));
 	}
 	
