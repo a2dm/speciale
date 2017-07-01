@@ -78,6 +78,9 @@ public class Mensagem implements Serializable
 	
 	@Column(name = "flg_ativo")
 	private String flgAtivo;
+	
+	@Column(name = "flg_enviada")
+	private String flgEnviada;
 
 	@OneToMany(mappedBy="mensagem", fetch = FetchType.LAZY)
     @Cascade(CascadeType.ALL)	
@@ -188,5 +191,13 @@ public class Mensagem implements Serializable
 
 	public void setListaMensagemCliente(List<MensagemDestinatario> listaMensagemCliente) {
 		this.listaMensagemCliente = listaMensagemCliente;
+	}
+
+	public String getFlgEnviada() {
+		return flgEnviada;
+	}
+
+	public void setFlgEnviada(String flgEnviada) {
+		this.flgEnviada = flgEnviada;
 	}
 }

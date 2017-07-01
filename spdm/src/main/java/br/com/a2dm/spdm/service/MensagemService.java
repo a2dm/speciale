@@ -1,5 +1,6 @@
 package br.com.a2dm.spdm.service;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +14,9 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.sql.JoinType;
 
+import br.com.a2dm.brcmn.entity.Usuario;
+import br.com.a2dm.brcmn.entity.UsuarioDevice;
+import br.com.a2dm.brcmn.service.UsuarioService;
 import br.com.a2dm.brcmn.util.A2DMHbNgc;
 import br.com.a2dm.brcmn.util.HibernateUtil;
 import br.com.a2dm.brcmn.util.RestritorHb;
@@ -20,6 +24,7 @@ import br.com.a2dm.brcmn.util.jsf.JSFUtil;
 import br.com.a2dm.spdm.entity.Cliente;
 import br.com.a2dm.spdm.entity.Mensagem;
 import br.com.a2dm.spdm.entity.MensagemDestinatario;
+import br.com.a2dm.spdm.notification.PushNotification;
 
 public class MensagemService extends A2DMHbNgc<Mensagem>
 {
@@ -56,6 +61,8 @@ public class MensagemService extends A2DMHbNgc<Mensagem>
 		adicionarFiltro("desReceita", RestritorHb.RESTRITOR_LIKE, "desReceita");
 		adicionarFiltro("desReceita", RestritorHb.RESTRITOR_EQ, "filtroMap.desReceita");
 		adicionarFiltro("flgAtivo", RestritorHb.RESTRITOR_EQ, "flgAtivo");
+		adicionarFiltro("flgEnviada", RestritorHb.RESTRITOR_EQ, "flgEnviada");
+		adicionarFiltro("datMensagem", RestritorHb.RESTRITOR_EQ, "datMensagem");
 	}
 	
 	@Override
@@ -233,5 +240,81 @@ public class MensagemService extends A2DMHbNgc<Mensagem>
 	protected Map filtroPropriedade() 
 	{
 		return filtroPropriedade;
+	}
+	
+	public void processJob() throws Exception
+	{
+		Session sessao = HibernateUtil.getSession();
+		sessao.setFlushMode(FlushMode.COMMIT);
+		try
+		{
+			this.processJob(sessao);
+		}
+		catch (Exception e)
+		{
+			throw e;
+		}
+		finally
+		{
+			sessao.close();
+		}
+	}
+
+	public void processJob(Session sessao) throws Exception {
+		
+		try {
+			Mensagem mensagem = new Mensagem();
+			mensagem.setFlgAtivo("S");
+			mensagem.setFlgEnviada("N");
+			mensagem.setDatMensagem(new Date());
+			
+			List<Mensagem> listMensagem = this.pesquisar(sessao, mensagem, JOIN_MENSAGEM_CLIENTE);
+			
+			if (listMensagem != null && listMensagem.size() > 0) {
+				for (Mensagem element : listMensagem) {
+					String horMensagem = element.getHorMensagem();
+					String[] array = horMensagem.split(":");
+					
+					int horasMensagem = Integer.parseInt(array[0]);
+					int minutosMensagem = Integer.parseInt(array[1]);
+					
+					Calendar c = Calendar.getInstance();
+					c.setTime(new Date());
+					c.set(Calendar.HOUR_OF_DAY, horasMensagem);
+					c.set(Calendar.MINUTE, minutosMensagem);
+					c.set(Calendar.SECOND, 0);
+					c.set(Calendar.MILLISECOND, 0);
+
+					Date dataMensagem = c.getTime();
+					Date dataAtual = new Date();
+					
+					if (dataAtual.after(dataMensagem)) {
+						if (element.getListaMensagemCliente() != null && element.getListaMensagemCliente().size() > 0) {
+							for (MensagemDestinatario elementMensagemDestinatario : element.getListaMensagemCliente()) {
+								Usuario usuario = new Usuario();
+								usuario.setIdCliente(elementMensagemDestinatario.getIdCliente());
+								usuario.setFlgAtivo("S");
+								
+								List<Usuario> listUsuario = UsuarioService.getInstancia().pesquisar(sessao, usuario, UsuarioService.JOIN_DEVICE);
+								
+								if (listUsuario != null && listUsuario.size() > 0) {
+									for (Usuario elementUsuario : listUsuario) {
+										if (elementUsuario.getListaUsuarioDevice() != null && elementUsuario.getListaUsuarioDevice().size() > 0) {
+											for (UsuarioDevice elementUsuarioDevice : elementUsuario.getListaUsuarioDevice()) {
+												PushNotification.send(elementUsuarioDevice.getIdDevice(), element.getDesMensagem(), null);
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			throw e;
+		}
 	}
 }

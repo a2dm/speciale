@@ -6,7 +6,7 @@
 <hibernate-configuration>
 	<session-factory>
 		<property name="connection.driver_class">org.postgresql.Driver</property>
-		<property name="connection.url">jdbc:postgresql://ped.postgres.uhserver.com:5432/ped</property>
+		<property name="connection.url">jdbc:postgresql://ped.postgres.uhserver.com:5432/ped?autoReconnect=true</property>
 		<property name="connection.username">ped</property>
 		<property name="connection.password">@Socio2016</property>
 		<property name="hibernate.connection.pool_size">25</property>
@@ -14,8 +14,17 @@
 		<property name="hibernate.default_schema">ped</property>
 		<property name="connection.pool_size">1</property>
 		<property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>
-		<property name="show_sql">true</property>		
-
+		<property name="show_sql">true</property>
+		
+		<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
+		<property name="hibernate.c3p0.acquire_increment">5</property>
+		<property name="hibernate.c3p0.min_size">3</property>
+	    <property name="hibernate.c3p0.max_size">100</property>
+	    <property name="hibernate.c3p0.timeout">0</property>
+	    <property name="hibernate.c3p0.max_statements">50</property>
+	    <property name="hibernate.c3p0.idle_test_period">3000</property>
+	    <property name="hibernate.c3p0.preferredTestQuery">SELECT 1;</property>
+    	
 		<mapping class="br.com.a2dm.brcmn.entity.Usuario"/>
 		<mapping class="br.com.a2dm.brcmn.entity.log.UsuarioLog"/>
 		<mapping class="br.com.a2dm.brcmn.entity.Grupo"/>
@@ -31,6 +40,7 @@
 		<mapping class="br.com.a2dm.brcmn.entity.Estado"/>
 		<mapping class="br.com.a2dm.brcmn.entity.Parametro"/>
 		<mapping class="br.com.a2dm.brcmn.entity.RecuperarSenha"/>
+		<mapping class="br.com.a2dm.brcmn.entity.UsuarioDevice"/>
 		
 		<mapping class="br.com.a2dm.spdm.entity.Cliente"/>
 		<mapping class="br.com.a2dm.spdm.entity.ClienteProduto"/>
@@ -40,6 +50,7 @@
 		<mapping class="br.com.a2dm.spdm.entity.PedidoProduto"/>
 		<mapping class="br.com.a2dm.spdm.entity.Mensagem"/>
 		<mapping class="br.com.a2dm.spdm.entity.MensagemDestinatario"/>
+		<mapping class="br.com.a2dm.spdm.entity.Task"/>
 		
 	</session-factory>
 </hibernate-configuration>

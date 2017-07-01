@@ -342,12 +342,3 @@
 	border-bottom: 1px solid #e5e5e5 !important;
 	border-bottom-color: #f4f4f4 !important;
 } 
-
-
-.rf-insp-dec, .rf-insp-inc, .rf-insp-dec-dis, .rf-insp-inc-dis {
-    background-position: 50% 40%;
-    background-repeat: no-repeat;
-    display: block;
-    height: 17px !important;
-    width: 16px;
-}
