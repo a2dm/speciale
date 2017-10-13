@@ -13,7 +13,7 @@ import org.apache.http.impl.client.HttpClients;
 public class PushNotification {
 	
 	private static final String URL_PUSH = "https://api.ionic.io/push/notifications";
-	private static final String TOKEN_PUSH = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkOWMzZmU4NS03MjU5LTRlMDMtOTNjNC04MTlmMjU3MWI5OTUifQ.Ov8R-RmKBviqVr3fNs-tnRZ-Kjaf1jKUzFX_3Lhm_ok";
+	private static final String TOKEN_PUSH = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIwNzVkYzk3OS00MzA1LTRlYmUtOWI3My02OGY3YjM1YTg5ZDYifQ.HiQeSqOV6L5JpW9RAEgu7Q0GBVPDJpw0SRhHhZg4H4M";
 	private static final String PROFILE_PUSH = "producao";
 	
 	private PushNotification() {

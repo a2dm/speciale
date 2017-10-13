@@ -114,7 +114,7 @@ public class LogisticaDiaBean extends AbstractBean<Pedido, PedidoService>
 	{
 		this.REPORT_NAME = "logistica-dia";
 		
-		parameters.put("IMG_LOGO", request.getRealPath("images/logo-new2.jpg"));
+		parameters.put("IMG_LOGO", request.getRealPath("images/logo-new3.jpg"));
 		parameters.put("DAT_PEDIDO", new SimpleDateFormat("dd/MM/yyyy").format(((Pedido)this.getListaReport().get(0)).getListaPedidoProduto().get(0).getPedido().getDatPedido()));
 	}
 	

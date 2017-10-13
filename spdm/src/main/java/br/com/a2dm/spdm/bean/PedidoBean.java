@@ -138,7 +138,7 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 				|| this.getEntity().getDatPedido() == null
 				|| this.getEntity().getDatPedido().toString().trim().equals(""))
 		{
-			throw new Exception("O campo Data do Pedido é obrigatório!");
+			throw new Exception("O campo Data da Produção é obrigatório!");
 		}
 		
 		if(this.getListaProdutoResult() == null
@@ -159,7 +159,7 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 		
 		if(this.getEntity().getDatPedido().before(dataHoje))
 		{
-			throw new Exception("O campo Data do Pedido não pode ser menor que a Data Atual!");
+			throw new Exception("O campo Data da Produção não pode ser menor que a Data Atual!");
 		}
 		
 		for (Produto produto : this.getListaProdutoResult())
@@ -319,7 +319,7 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 		if(this.getSearchObject().getDatPedido() == null
 				|| this.getSearchObject().getDatPedido().toString().trim().equals(""))
 		{
-			throw new Exception("O campo Data do Pedido é obrigatório");
+			throw new Exception("O campo Data da Produção é obrigatório");
 		}
 	}
 	

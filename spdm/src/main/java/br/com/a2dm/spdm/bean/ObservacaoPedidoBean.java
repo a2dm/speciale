@@ -134,7 +134,7 @@ public class ObservacaoPedidoBean extends AbstractBean<Pedido, PedidoService>
 			catch (IOException e)
 			{
 				e.printStackTrace();
-			}
+			}	
 		}
 		return temAcesso;
 	}
@@ -144,7 +144,12 @@ public class ObservacaoPedidoBean extends AbstractBean<Pedido, PedidoService>
 	public void configuraRelatorio(Map parameters, HttpServletRequest request) {
 		this.REPORT_NAME = "observacao";
 		
-		parameters.put("IMG_LOGO", request.getRealPath("images/logo-new2.jpg"));
+		for (Object element : this.getListaReport()) {
+			Pedido elementPedido = (Pedido) element;
+			elementPedido.setObsPedido(elementPedido.getObsPedido().replace("\n", ""));
+		}
+		
+		parameters.put("IMG_LOGO", request.getRealPath("images/logo-new3.jpg"));
 		parameters.put("DAT_PEDIDO", new SimpleDateFormat("dd/MM/yyyy").format(((Pedido)this.getListaReport().get(0)).getDatPedido()));
 	}
 		

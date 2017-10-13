@@ -35,7 +35,7 @@ import br.com.a2dm.brcmn.entity.Usuario;
 @Table(name = "tb_mensagem", schema="ped")
 @SequenceGenerator(name = "SQ_MENSAGEM", sequenceName = "SQ_MENSAGEM", allocationSize = 1)
 @Proxy(lazy = true)
-public class Mensagem implements Serializable
+public class Mensagem implements Serializable, Cloneable
 {
 	private static final long serialVersionUID = 1L;
 	
@@ -88,6 +88,9 @@ public class Mensagem implements Serializable
 	
 	@Transient
 	private List<Cliente> listaCliente;
+	
+	@Transient
+	private List<Date> listaData;
 	
 	public BigInteger getIdMensagem() {
 		return idMensagem;
@@ -200,4 +203,16 @@ public class Mensagem implements Serializable
 	public void setFlgEnviada(String flgEnviada) {
 		this.flgEnviada = flgEnviada;
 	}
+	
+    public List<Date> getListaData() {
+		return listaData;
+	}
+
+	public void setListaData(List<Date> listaData) {
+		this.listaData = listaData;
+	}
+
+	public Mensagem clone() throws CloneNotSupportedException {
+        return (Mensagem) super.clone();
+    }
 }

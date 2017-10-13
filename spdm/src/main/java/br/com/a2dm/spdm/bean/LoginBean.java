@@ -84,8 +84,8 @@ public class LoginBean extends AbstractBean<Usuario, UsuarioService>
 		}
 		catch (Exception e) 
 		{
-			FacesMessage message = new FacesMessage("A conexão foi restabelecida!");
-	        message.setSeverity(FacesMessage.SEVERITY_INFO);
+			FacesMessage message = new FacesMessage("Ocorreu um erro inesperado, favor contactar o administrador do sistema!");
+	        message.setSeverity(FacesMessage.SEVERITY_ERROR);
 	        FacesContext.getCurrentInstance().addMessage(null, message);
 			return null;
 		}		

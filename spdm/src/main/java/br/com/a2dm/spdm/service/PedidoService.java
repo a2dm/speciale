@@ -80,17 +80,17 @@ public class PedidoService extends A2DMHbNgc<Pedido>
 		
 		List<Pedido> listaPedido = this.pesquisar(sessao, pedido, 0);
 		
-		if(listaPedido != null
-				&& listaPedido.size() > 0)
-		{
-			throw new Exception("Já existe um pedido aberto para o dia " + new SimpleDateFormat("dd/MM/yyyy HH:mm").format(vo.getDatPedido()));
-		}
-		
-		//VERIFICAR SE O PEDIDO ESTA DENTRO DO PRAZO DE PEDIDO
+		//VERIFICAR SE O PEDIDO ESTÁ DENTRO DO PRAZO DE PEDIDO
 		Cliente cliente = new Cliente();
 		cliente.setIdCliente(util.getUsuarioLogado().getIdCliente());
 		
 		cliente = ClienteService.getInstancia().get(sessao, cliente, 0);
+		
+		if(listaPedido != null
+				&& listaPedido.size() > 0)
+		{
+			throw new Exception("Para o cliente "+ cliente.getDesCliente() + ", já existe um pedido aberto para o dia " + new SimpleDateFormat("dd/MM/yyyy HH:mm").format(vo.getDatPedido()));
+		}
 		
 		//DATA LIMITE
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");		
@@ -111,7 +111,7 @@ public class PedidoService extends A2DMHbNgc<Pedido>
 		
 		if(dataAtual.after(dataLimite))
 		{
-			throw new Exception("O pedido não pode ser realizado, pois a hora limite do pedido foi ultrapassada! Hora limite: " + new SimpleDateFormat("dd/MM/yyyy HH:mm").format(dataLimite));
+			throw new Exception("Para o cliente "+ cliente.getDesCliente() + ", o pedido não pode ser realizado, pois a hora limite do pedido foi ultrapassada! Hora limite: " + new SimpleDateFormat("dd/MM/yyyy HH:mm").format(dataLimite));
 		}
 	}
 	
@@ -351,6 +351,7 @@ public class PedidoService extends A2DMHbNgc<Pedido>
 		Criteria criteria = sessao.createCriteria(Pedido.class);
 		
 		ProjectionList projection = Projections.projectionList();
+		projection.add(Projections.groupProperty("idPedido"));
 		projection.add(Projections.groupProperty("cliente.idCliente"));
 		projection.add(Projections.groupProperty("cliente.desCliente"));
 		
@@ -381,6 +382,7 @@ public class PedidoService extends A2DMHbNgc<Pedido>
 	    		j = 0;
 	    		
 	    		Pedido pedidoResult = new Pedido();
+	    		pedidoResult.setIdPedido((BigInteger) resultado.get(i)[j++]);
 	    		pedidoResult.setCliente(new Cliente());
 	    		pedidoResult.getCliente().setIdCliente((BigInteger) resultado.get(i)[j++]);
 	    		pedidoResult.getCliente().setDesCliente((String) resultado.get(i)[j++]);
@@ -460,5 +462,109 @@ public class PedidoService extends A2DMHbNgc<Pedido>
 	protected Map filtroPropriedade() 
 	{
 		return filtroPropriedade;
+	}
+	
+	public void inserirGeradorPedido(List<Pedido> listaPedidoResult) throws Exception {
+		Session sessao = HibernateUtil.getSession();
+		sessao.setFlushMode(FlushMode.COMMIT);
+		Transaction tx = sessao.beginTransaction();
+		try
+		{
+			inserirGeradorPedido(sessao, listaPedidoResult);
+			tx.commit();
+		}
+		catch (Exception e)
+		{
+			tx.rollback();
+			throw e;
+		}
+		finally
+		{
+			sessao.close();
+		}
+	}
+
+	private void inserirGeradorPedido(Session sessao, List<Pedido> listaPedidoResult) throws Exception {
+		for (Pedido element : listaPedidoResult) {
+			util.getUsuarioLogado().setIdCliente(element.getCliente().getIdCliente());
+			element.setIdCliente(element.getCliente().getIdCliente());
+			element.setListaProduto(element.getCliente().getListaProduto());
+			this.inserir(sessao, element);
+		}
+	}
+
+	public void alterarGeradorPedido(List<Pedido> listaPedidoResult) throws Exception {
+		Session sessao = HibernateUtil.getSession();
+		sessao.setFlushMode(FlushMode.COMMIT);
+		Transaction tx = sessao.beginTransaction();
+		try
+		{
+			alterarGeradorPedido(sessao, listaPedidoResult);
+			tx.commit();
+		}
+		catch (Exception e)
+		{
+			tx.rollback();
+			throw e;
+		}
+		finally
+		{
+			sessao.close();
+		}
+	}
+
+	private void alterarGeradorPedido(Session sessao, List<Pedido> listaPedidoResult) throws Exception {
+		for (Pedido element : listaPedidoResult) {
+			util.getUsuarioLogado().setIdCliente(element.getCliente().getIdCliente());
+			element.setIdCliente(element.getCliente().getIdCliente());
+			
+			validarAlterar(sessao, element);
+			
+			Pedido pedido = new Pedido();
+			pedido.setIdPedido(element.getIdPedido());
+			
+			pedido = this.get(sessao, pedido, 0);
+			
+			pedido.setDatPedido(element.getDatPedido());
+			pedido.setDatAlteracao(element.getDatAlteracao());
+			pedido.setIdUsuarioAlt(util.getUsuarioLogado().getIdUsuario());
+			pedido.setObsPedido(element.getObsPedido());
+			
+			sessao.merge(pedido);
+			
+			// INATIVANDO TODOS OS PRODUTOS DA BASE DE DADOS 
+			PedidoProduto pedidoProduto = new PedidoProduto();
+			pedidoProduto.setIdPedido(element.getIdPedido());
+			pedidoProduto.setFlgAtivo("S");
+			
+			List<PedidoProduto> listaPedidoProduto = PedidoProdutoService.getInstancia().pesquisar(sessao, pedidoProduto, 0);
+			
+			if (listaPedidoProduto != null && listaPedidoProduto.size() > 0) {
+				for (PedidoProduto elementPedidoProduto : listaPedidoProduto) {
+					PedidoProduto pedidoProdutoAlt = new PedidoProduto();
+					pedidoProdutoAlt.setIdPedidoProduto(elementPedidoProduto.getIdPedidoProduto());
+					
+					pedidoProdutoAlt = PedidoProdutoService.getInstancia().get(sessao, pedidoProdutoAlt, 0);
+					pedidoProdutoAlt.setFlgAtivo("N");
+					
+					PedidoProdutoService.getInstancia().alterar(sessao, pedidoProdutoAlt);
+				}
+			}
+			
+			// INSERINDO OS NOVOS PRODUTOS
+			for (Produto produto : element.getCliente().getListaProduto()) {
+				PedidoProduto pedidoProdutoInserir = new PedidoProduto();
+				pedidoProdutoInserir.setIdPedido(element.getIdPedido());
+				pedidoProdutoInserir.setIdProduto(produto.getIdProduto());
+				pedidoProdutoInserir.setQtdSolicitada(produto.getQtdSolicitada());
+				pedidoProdutoInserir.setDatCadastro(new Date());
+				pedidoProdutoInserir.setDatAlteracao(new Date());
+				pedidoProdutoInserir.setFlgAtivo("S");
+				pedidoProdutoInserir.setIdUsuarioCad(util.getUsuarioLogado().getIdUsuario());
+				pedidoProdutoInserir.setIdUsuarioAlt(util.getUsuarioLogado().getIdUsuario());
+				
+				PedidoProdutoService.getInstancia().inserir(sessao, pedidoProdutoInserir);
+			}
+		}
 	}
 }

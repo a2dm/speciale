@@ -49,52 +49,93 @@
 			<f:subview id="viewEdicao">			
 				<rich:tabPanel switchType="client">
 					 <rich:tab header="Mensagem">
-						<div class="box-body">
-		                	<div class="form-group">
-		                   	   <label for="inputEmail3" class="col-sm-2 control-label">Data *</label>
-			                   <div class="col-sm-2">
-			                     <rich:calendar value="#{crudBean.entity.datMensagem}" buttonClass="glyphicon glyphicon-calendar" inputSize="9" buttonIcon="../images/calendar.png"  datePattern="dd/MM/yyyy" inputClass="form-control" showWeeksBar="false" enableManualInput="true" oninputkeypress="return formataData(event,this);" maxlength="10"/>
-			                   </div>
-		                 	</div>
-		                 	
-		                 	<div class="form-group">
-		                   	   <label for="inputEmail3" class="col-sm-2 control-label">Hora *</label>
-			                   <div class="col-sm-2">
-			                     <h:inputText value="#{crudBean.entity.horMensagem}" styleClass="form-control" maxlength="5" id="hrMsg" onkeypress="javascript: mascara(this, mhor);"/>
-			                   </div>
-		                 	</div>
+					 	<h:panelGroup id="panelPesquisaData" layout="block">
+							<div class="box-body">
+								<div class="form-group">
+			                   	   <label for="inputEmail3" class="col-sm-2 control-label">Data *</label>
+				                   <div class="col-sm-2">
+				                     <rich:calendar value="#{crudBean.entity.datMensagem}" buttonClass="glyphicon glyphicon-calendar" inputSize="9" buttonIcon="../images/calendar.png"  datePattern="dd/MM/yyyy" inputClass="form-control" showWeeksBar="false" enableManualInput="true" oninputkeypress="return formataData(event,this);" maxlength="10"/>
+				                   </div>
+				                 	<a4j:commandButton image="/images/add.png" style="vertical-align: middle; border:white; width: 22px; height: 22px; margin-left:2em; margin-right:2em;" title="ADICIONAR" actionListener="#{crudBean.adicionarData}" render="panelDataResult, panelPesquisaData" rendered="#{crudBean.inserting}"/>
+			                 	</div>
+							
+								<div class="form-group">
+			                   	   <label for="inputEmail3" class="col-sm-2 control-label">Hora *</label>
+				                   <div class="col-sm-2">
+				                     <h:inputText value="#{crudBean.entity.horMensagem}" styleClass="form-control" maxlength="5" id="hrMsg" onkeypress="javascript: mascara(this, mhor);"/>
+				                   </div>
+			                 	</div>
+			                 	
+				                <div class="form-group">
+				                	<label for="inputEmail3" class="col-sm-2 control-label">Mensagem *</label>
+				                	<div class="col-sm-10">
+				             	  		<h:inputTextarea cols="60" rows="3" id="desMensagem" onkeyup="verificaTamanho(this, 100, 'lblMsg');" value="#{crudBean.entity.desMensagem}" />
+										<label id="lblMsg" style="font-size: 12px;">(100 caracteres restantes)</label>
+				                	</div>
+				               	</div>
+			                </div>
+		                </h:panelGroup>
 		                
-			                <div class="form-group">
-			                	<label for="inputEmail3" class="col-sm-2 control-label">Mensagem *</label>
-			                	<div class="col-sm-10">
-			             	  		<h:inputTextarea cols="60" rows="3" id="desMensagem" onkeyup="verificaTamanho(this, 100, 'lblMsg');" value="#{crudBean.entity.desMensagem}" />
-									<label id="lblMsg" style="font-size: 12px;">(100 caracteres restantes)</label>
-			                	</div>
-			               	</div>
-		                </div>
+		                <h:panelGroup id="panelDataResult" layout="block">
+		                	<div class="box-content">
+								<rich:dataTable id="tblDataProduto" 
+											 value="#{crudBean.entity.listaData}" 
+										       var="rst" rows="10"
+										styleClass="table table-bordered table-striped dataTable"
+								    onrowmouseover="this.style.cursor='default';this.style.backgroundColor='#FFF8DC';" 
+								  	 onrowmouseout="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+										  rendered="#{not empty crudBean.entity.listaData}">						     
+									<f:facet name="header">
+										<rich:columnGroup>
+											<rich:column style="width: 5%; text-align: center;">
+												Data
+											</rich:column>
+											<rich:column style="width: 3%; text-align: center;" />
+										</rich:columnGroup>
+									</f:facet>
+									<rich:column style="text-align: center;">
+										<h:outputText value="#{rst}" />
+									</rich:column>
+									<rich:column style="text-align: center; vertical-align: middle;">
+										<a4j:commandButton image="../images/inativar.png" style="border:none; width: 18px; height: 18px;" title="EXCLUIR" action="#{crudBean.removerData}" render="panelDataResult">
+											<f:setPropertyActionListener target="#{crudBean.dataSel}" value="#{rst}" />
+										</a4j:commandButton>																						
+									</rich:column>
+								</rich:dataTable>
+							</div>
+		                </h:panelGroup>
 	                </rich:tab>
 	                
 	                <rich:tab header="Clientes">
-	                	<h:panelGroup id="panelPesquisaCliente" layout="block">
-		                	<div class="box-body">
-			                	<div class="form-group">
-			                   	   <label for="inputEmail3" class="col-sm-2 control-label">Cliente *</label>
-				                   <div>					                	
-									<h:selectOneMenu value="#{crudBean.cliente.idCliente}" converter="simpleIndexConverter" styleClass="form-control" style="width:700px; display: initial;">								
-										<t:selectItems var="o" itemValue="#{o.idCliente}" itemLabel="#{o.desCliente}" value="#{crudBean.listaCliente}" />
-									</h:selectOneMenu>
-									
-									<a4j:commandButton image="/images/add.png" style="vertical-align: middle; border:white; width: 22px; height: 22px; margin-left:2em; margin-right:2em;" title="ADICIONAR CLIENTE" actionListener="#{crudBean.adicionarCliente}" render="panelClienteResult, panelPesquisaCliente"/>
-									</div>
-								</div>			                	
-			                </div>
-		                </h:panelGroup>
+	                	<rich:panel id="panelButtons">
+	                		<f:facet name="header">
+	                			<div style="text-align: center">
+			                		<a4j:commandButton style="vertical-align: middle; border:white; margin-left:2em; margin-right:2em;" value="Adicionar Todos" actionListener="#{crudBean.adicionarTodosClientes}" render="panelClienteResult, panelPesquisaCliente"/>
+				                	<a4j:commandButton style="vertical-align: middle; border:white; margin-left:2em; margin-right:2em;" value="Remover Todos" actionListener="#{crudBean.removerTodosClientes}" render="panelClienteResult, panelPesquisaCliente" />
+			                	</div>
+			                </f:facet>
+			                
+		                	<h:panelGroup id="panelPesquisaCliente" layout="block">
+			                	<div class="box-body">
+				                	<div class="form-group">
+				                   	   <label for="inputEmail3" class="col-sm-2 control-label">Cliente *</label>
+					                   <div>				                   		
+											<h:selectOneMenu value="#{crudBean.cliente.idCliente}" converter="simpleIndexConverter" styleClass="form-control" style="width:700px; display: initial;">								
+												<t:selectItems var="o" itemValue="#{o.idCliente}" itemLabel="#{o.desCliente}" value="#{crudBean.listaCliente}" />
+											</h:selectOneMenu>
+											
+											<a4j:commandButton image="/images/add.png" style="vertical-align: middle; border:white; width: 22px; height: 22px; margin-left:2em; margin-right:2em;" title="ADICIONAR CLIENTE" actionListener="#{crudBean.adicionarCliente}" render="panelClienteResult, panelPesquisaCliente"/>
+										</div>
+									</div>			                	
+				                </div>
+			                </h:panelGroup>
+	                	</rich:panel>
 		                
 		                <h:panelGroup id="panelClienteResult" layout="block">
 		                	<div class="box-content">
 								<rich:dataTable id="tblDataCliente" 
 											 value="#{crudBean.listaClienteResult}" 
-										       var="rst" rows="10"
+										       var="rst" rows="999"
 										styleClass="table table-bordered table-striped dataTable"
 								    onrowmouseover="this.style.cursor='default';this.style.backgroundColor='#FFF8DC';" 
 								  	 onrowmouseout="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
@@ -178,15 +219,15 @@
 							</a4j:commandButton>
 						</rich:column>
 						<rich:column style="text-align: center; vertical-align: middle;">
-							<a4j:commandButton image="../images/edit.png" style="border:none; width: 18px; height: 18px;" title="ALTERAR" action="#{crudBean.preparaAlterar}" rendered="#{rst.flgAtivo == 'S'}" render="formulario, panelTitle" >
+							<a4j:commandButton image="../images/edit.png" style="border:none; width: 18px; height: 18px;" title="ALTERAR" action="#{crudBean.preparaAlterar}" rendered="#{rst.flgAtivo == 'S' and rst.flgEnviada == 'N'}" render="formulario, panelTitle">
 								<f:setPropertyActionListener target="#{crudBean.entity}" value="#{rst}" />
 							</a4j:commandButton>
 						</rich:column>
 						<rich:column style="text-align: center; vertical-align: middle;">
-							<a4j:commandButton image="../images/inativar.png" style="border:none; width: 18px; height: 18px;" title="INATIVAR" action="#{crudBean.inativar}" rendered="#{rst.flgAtivo == 'S'}" render="formulario, panelTitle" onclick="if (!confirm('Deseja realmente inativar este registro?')) return false">
+							<a4j:commandButton image="../images/inativar.png" style="border:none; width: 18px; height: 18px;" title="INATIVAR" action="#{crudBean.inativar}" rendered="#{rst.flgAtivo == 'S' and rst.flgEnviada == 'N'}" render="formulario, panelTitle" onclick="if (!confirm('Deseja realmente inativar este registro?')) return false">
 								<f:setPropertyActionListener target="#{crudBean.entity}" value="#{rst}" />
 							</a4j:commandButton>
-							<a4j:commandButton image="../images/ativar.png" style="border:none; width: 18px; height: 18px;" title="ATIVAR" action="#{crudBean.ativar}" rendered="#{rst.flgAtivo == 'N'}" render="formulario, panelTitle" onclick="if (!confirm('Deseja realmente ativar este registro?')) return false">
+							<a4j:commandButton image="../images/ativar.png" style="border:none; width: 18px; height: 18px;" title="ATIVAR" action="#{crudBean.ativar}" rendered="#{rst.flgAtivo == 'N' and rst.flgEnviada == 'N'}" render="formulario, panelTitle" onclick="if (!confirm('Deseja realmente ativar este registro?')) return false">
 								<f:setPropertyActionListener target="#{crudBean.entity}" value="#{rst}" />
 							</a4j:commandButton>												
 						</rich:column>

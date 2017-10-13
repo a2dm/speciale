@@ -16,6 +16,7 @@ import org.hibernate.sql.JoinType;
 
 import br.com.a2dm.brcmn.entity.Usuario;
 import br.com.a2dm.brcmn.entity.UsuarioDevice;
+import br.com.a2dm.brcmn.service.UsuarioDeviceService;
 import br.com.a2dm.brcmn.service.UsuarioService;
 import br.com.a2dm.brcmn.util.A2DMHbNgc;
 import br.com.a2dm.brcmn.util.HibernateUtil;
@@ -66,30 +67,37 @@ public class MensagemService extends A2DMHbNgc<Mensagem>
 	}
 	
 	@Override
-	public Mensagem inserir(Session sessao, Mensagem vo) throws Exception
+	public Mensagem inserir(Session sessao, Mensagem mensagem) throws Exception
 	{
-		validarInserir(sessao, vo);
-		sessao.save(vo);
-		
-		if(vo.getListaCliente() != null
-				&& vo.getListaCliente().size() >= 0)
-		{
-			for (Cliente cliente : vo.getListaCliente())
+		for (Date data : mensagem.getListaData()) {
+			Mensagem vo = new Mensagem();
+			vo = mensagem.clone();
+			vo.setDatMensagem(data);
+			
+			validarInserir(sessao, vo);
+			sessao.save(vo);
+			
+			
+			if(vo.getListaCliente() != null
+					&& vo.getListaCliente().size() >= 0)
 			{
-				MensagemDestinatario mensagemDestinatario = new MensagemDestinatario();
-				mensagemDestinatario.setIdMensagem(vo.getIdMensagem());
-				mensagemDestinatario.setIdCliente(cliente.getIdCliente());				
-				
-				MensagemDestinatarioService.getInstancia().inserir(sessao, mensagemDestinatario);
+				for (Cliente cliente : vo.getListaCliente())
+				{
+					MensagemDestinatario mensagemDestinatario = new MensagemDestinatario();
+					mensagemDestinatario.setIdMensagem(vo.getIdMensagem());
+					mensagemDestinatario.setIdCliente(cliente.getIdCliente());				
+					
+					MensagemDestinatarioService.getInstancia().inserir(sessao, mensagemDestinatario);
+				}
 			}
 		}
 		
-		return vo;
+		return mensagem;
 	}
 	
 	@Override
 	public Mensagem alterar(Session sessao, Mensagem vo) throws Exception
-	{		
+	{
 		sessao.merge(vo);
 		
 		MensagemDestinatario mensagemDestinatario = new MensagemDestinatario();
@@ -246,9 +254,12 @@ public class MensagemService extends A2DMHbNgc<Mensagem>
 	{
 		Session sessao = HibernateUtil.getSession();
 		sessao.setFlushMode(FlushMode.COMMIT);
+		Transaction tx = sessao.beginTransaction();
+		
 		try
 		{
 			this.processJob(sessao);
+			tx.commit();
 		}
 		catch (Exception e)
 		{
@@ -287,6 +298,7 @@ public class MensagemService extends A2DMHbNgc<Mensagem>
 
 					Date dataMensagem = c.getTime();
 					Date dataAtual = new Date();
+					Boolean enviado = false;
 					
 					if (dataAtual.after(dataMensagem)) {
 						if (element.getListaMensagemCliente() != null && element.getListaMensagemCliente().size() > 0) {
@@ -295,19 +307,31 @@ public class MensagemService extends A2DMHbNgc<Mensagem>
 								usuario.setIdCliente(elementMensagemDestinatario.getIdCliente());
 								usuario.setFlgAtivo("S");
 								
-								List<Usuario> listUsuario = UsuarioService.getInstancia().pesquisar(sessao, usuario, UsuarioService.JOIN_DEVICE);
+								List<Usuario> listUsuario = UsuarioService.getInstancia().pesquisar(sessao, usuario, 0);
 								
 								if (listUsuario != null && listUsuario.size() > 0) {
 									for (Usuario elementUsuario : listUsuario) {
-										if (elementUsuario.getListaUsuarioDevice() != null && elementUsuario.getListaUsuarioDevice().size() > 0) {
-											for (UsuarioDevice elementUsuarioDevice : elementUsuario.getListaUsuarioDevice()) {
-												PushNotification.send(elementUsuarioDevice.getIdDevice(), element.getDesMensagem(), null);
-											}
+										
+										UsuarioDevice usuarioDevice = new UsuarioDevice();
+										usuarioDevice.setIdUsuario(elementUsuario.getIdUsuario());
+										
+										List<UsuarioDevice> listUsuarioDevice = UsuarioDeviceService.getInstancia().pesquisar(sessao, usuarioDevice, 0);
+										
+										if (listUsuarioDevice != null && listUsuarioDevice.size() > 0) {
+											PushNotification.send(listUsuarioDevice.get(0).getIdDevice(), element.getDesMensagem(), null);
+											enviado = true;
 										}
 									}
+									
 								}
 							}
 						}
+					}
+					if (enviado) 
+					{
+						element.setFlgEnviada("S");
+						super.alterar(sessao, element);
+						sessao.flush();
 					}
 				}
 			}

@@ -11,6 +11,7 @@
 	</queryString>
 	<field name="obsPedido" class="java.lang.String"/>
 	<field name="idPedido" class="java.math.BigInteger"/>
+	<field name="cliente.desCliente" class="java.lang.String"/>
 	<group name="ReceitaGroup">
 		<groupExpression><![CDATA[]]></groupExpression>
 		<groupHeader>
@@ -26,7 +27,7 @@
 	<title>
 		<band height="94" splitType="Stretch">
 			<image hAlign="Center">
-				<reportElement uuid="ad31f889-4e69-46cd-bd00-b831da105772" x="0" y="0" width="555" height="60">
+				<reportElement x="0" y="0" width="555" height="60" uuid="ad31f889-4e69-46cd-bd00-b831da105772">
 					<property name="local_mesure_unitx" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="local_mesure_unitwidth" value="pixel"/>
@@ -35,35 +36,35 @@
 				<imageExpression><![CDATA[$P{IMG_LOGO}]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement uuid="f87ad0a6-0118-418d-bde2-46703ad9bfbc" x="440" y="5" width="37" height="15"/>
+				<reportElement x="440" y="5" width="37" height="15" uuid="f87ad0a6-0118-418d-bde2-46703ad9bfbc"/>
 				<textElement textAlignment="Right">
 					<font size="7"/>
 				</textElement>
 				<text><![CDATA[Emissão:]]></text>
 			</staticText>
 			<textField pattern="dd/MM/yyyy HH.mm.ss">
-				<reportElement uuid="9c687269-581f-4f97-bde4-66315eec200a" x="467" y="5" width="77" height="15"/>
+				<reportElement x="467" y="5" width="77" height="15" uuid="9c687269-581f-4f97-bde4-66315eec200a"/>
 				<textElement textAlignment="Right">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(new Date())]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="ae332449-b6e5-4aea-9e40-4b8dce0c6961" x="0" y="67" width="555" height="18"/>
+				<reportElement x="0" y="67" width="555" height="18" uuid="ae332449-b6e5-4aea-9e40-4b8dce0c6961"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Observações do dia: " + $P{DAT_PEDIDO}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="b3c9d3ce-c977-41db-b3cb-8e53fed7eed6" x="444" y="20" width="36" height="17"/>
+				<reportElement x="444" y="20" width="36" height="17" uuid="b3c9d3ce-c977-41db-b3cb-8e53fed7eed6"/>
 				<textElement textAlignment="Right">
 					<font size="7"/>
 				</textElement>
 				<text><![CDATA[Página(s):]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="103e8f35-7651-4590-9631-7f5a979558ab" x="483" y="20" width="24" height="17"/>
+				<reportElement x="483" y="20" width="24" height="17" uuid="103e8f35-7651-4590-9631-7f5a979558ab"/>
 				<textElement textAlignment="Left">
 					<font size="7"/>
 				</textElement>
@@ -74,7 +75,7 @@
 	<columnHeader>
 		<band height="19" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="6458618a-ece2-4b23-84a9-ed1dc78642e7" mode="Opaque" x="0" y="0" width="92" height="19" backcolor="#BFD8D9"/>
+				<reportElement mode="Opaque" x="0" y="0" width="66" height="19" backcolor="#BFD8D9" uuid="6458618a-ece2-4b23-84a9-ed1dc78642e7"/>
 				<box padding="3" topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -87,7 +88,7 @@
 				<text><![CDATA[Pedido]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="7e135c35-b8f2-43bc-974e-5a2c728c4c4b" mode="Opaque" x="92" y="0" width="463" height="19" backcolor="#BFD8D9"/>
+				<reportElement mode="Opaque" x="188" y="0" width="367" height="19" backcolor="#BFD8D9" uuid="7e135c35-b8f2-43bc-974e-5a2c728c4c4b"/>
 				<box padding="3" topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -99,35 +100,61 @@
 				</textElement>
 				<text><![CDATA[Observação]]></text>
 			</staticText>
-		</band>
-	</columnHeader>
-	<detail>
-		<band height="18" splitType="Stretch">
-			<textField>
-				<reportElement uuid="b5496c23-44be-4d19-b5e7-0c90038c3f37" x="92" y="0" width="463" height="18"/>
-				<box leftPadding="10">
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement verticalAlignment="Middle">
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{obsPedido}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="9ad8362d-54a8-4493-8bd4-1b889de6d113" x="0" y="0" width="92" height="18"/>
-				<box>
+			<staticText>
+				<reportElement mode="Opaque" x="66" y="0" width="122" height="19" backcolor="#BFD8D9" uuid="829ca793-0dbb-4058-a3cb-56ff57d5d431"/>
+				<box padding="3" topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cliente]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="23" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="188" y="0" width="367" height="18" uuid="b5496c23-44be-4d19-b5e7-0c90038c3f37"/>
+				<box leftPadding="10">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{obsPedido}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="0" width="66" height="18" uuid="9ad8362d-54a8-4493-8bd4-1b889de6d113"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{idPedido}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="66" y="0" width="122" height="18" uuid="e7f62c99-0707-4504-83e8-9b603ea1289b"/>
+				<box leftPadding="10">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cliente.desCliente}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

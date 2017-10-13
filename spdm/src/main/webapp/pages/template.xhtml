@@ -118,7 +118,11 @@
 		            <li class="header">MENU PRINCIPAL</li>
 		      		
 		      		<h:panelGroup layout="block" rendered="#{sessionScope.loginUsuario.idGrupo == bundle.grupoCliente}">
-		            <li class="treeview #{sessionScope.flgMenuPed}"><h:commandLink action="#{pedidoBean.preparaPesquisar}"><i class="fa fa-paper-plane"></i> <span>Pedido</span></h:commandLink></li>
+		            	<li class="treeview #{sessionScope.flgMenuPed}"><h:commandLink action="#{pedidoBean.preparaPesquisar}"><i class="fa fa-paper-plane"></i> <span>Pedido</span></h:commandLink></li>
+		            </h:panelGroup>
+		            
+		            <h:panelGroup layout="block" rendered="#{sessionScope.loginUsuario.idGrupo == bundle.grupoGerente}">
+		            	<li class="treeview #{sessionScope.flgMenuGerPed}"><h:commandLink action="#{geradorPedidoBean.preparaPesquisar}"><i class="fa fa-paper-plane"></i> <span>Gerador de Pedido</span></h:commandLink></li>
 		            </h:panelGroup>
 		            
 		            <h:panelGroup layout="block" rendered="#{sessionScope.loginUsuario.idGrupo == bundle.grupoFuncionario or sessionScope.loginUsuario.idGrupo == bundle.grupoGerente}">

@@ -10,6 +10,7 @@ public class MenuControl
 	
 	public static void ativarMenu(String desMenu)
 	{
+		util.getSession().removeAttribute("flgMenuGerPed");
 		util.getSession().removeAttribute("flgMenuPed");
 		util.getSession().removeAttribute("flgMenuRel");		
 		util.getSession().removeAttribute("flgMenuMan");

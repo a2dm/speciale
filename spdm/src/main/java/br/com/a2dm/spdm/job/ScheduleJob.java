@@ -13,7 +13,7 @@ import br.com.a2dm.spdm.service.MensagemService;
 @EnableScheduling
 public class ScheduleJob
 {
-	@Scheduled(cron="*/50 * * * * *")
+	@Scheduled(fixedDelay = 100000, initialDelay = 100000)
 	public void carregarMensagens() {
 		try
 		{
