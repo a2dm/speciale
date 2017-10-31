@@ -213,7 +213,7 @@ public class ProdutoService extends A2DMHbNgc<Produto>
 		criteria.add(Restrictions.eq("listaPedidoProduto.flgAtivo", "S"));
 		criteria.add(Restrictions.eq("pedido.datPedido", produto.getDatPedido()));
 		
-		criteria.addOrder(Order.asc("desProduto"));
+		criteria.addOrder(Order.asc("receita.desReceita"));
 		
 		criteria.setProjection(projection);
 		List<Object[]> resultado = criteria.list();		
