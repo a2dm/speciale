@@ -55,6 +55,16 @@
 		               </div>
 		             </div>
 					</div>
+					
+					<div class="box-body">
+		             <div class="form-group">
+		               <label for="inputEmail3" class="col-sm-3 control-label">Prioridade:</label>
+		               <div class="col-sm-6" style="padding-top: 7px;">
+		               	 <h:outputText value="#{crudBean.entity.numPrioridade}" rendered="#{crudBean.entity.numPrioridade != null}"/>
+		               	 <h:outputText value=" - " rendered="#{crudBean.entity.numPrioridade == null}"/>
+		               </div>
+		             </div>
+					</div>
 		
 					<div class="box-body">
 		             <div class="form-group">

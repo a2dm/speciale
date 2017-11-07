@@ -14,6 +14,10 @@
 			
 	<ui:param name="crudBean" value="#{producaoDiaBean}" />	
 		
+	<ui:define name="saveStateObjectsDefined">
+		<t:saveState value="#{crudBean.qtdTotalMassa}" />
+	</ui:define>
+		
 	<ui:define name="content">
 		<h:panelGroup id="panelGroupDePesquisa" style="height:100%;width:100%;" rendered="#{crudBean.searching}">
 			<f:subview id="viewBusca">
@@ -50,22 +54,41 @@
 							  rendered="#{not empty crudBean.searchResult and crudBean.searching}">						     
 						<f:facet name="header">
 							<rich:columnGroup>
-								<rich:column style="width: 5%; text-align: center;">
+								<rich:column colspan="4" style="text-align: left; color: blue;">
+									<h:outputText value="Kg de MASSA: "/>
+									<h:outputText value="#{crudBean.qtdTotalMassa}"/>
+								</rich:column>
+								<rich:column colspan="4" style="text-align: center;">
+									Prioridade									
+								</rich:column>
+								<rich:column style="width: 5%; text-align: center;" breakRowBefore="true">
 									Código
 								</rich:column>
 								<rich:column style="width: 25%; text-align: center;">
 									Receita
-								</rich:column>									
-								<rich:column style="width: 30%; text-align: center;">
+								</rich:column>
+								<rich:column style="text-align: center;">
 									Descrição
 								</rich:column>
 								<rich:column style="width: 10%; text-align: center;">
 									Quantidade
-								</rich:column>								
+								</rich:column>
+								<rich:column style="width: 5%; text-align: center;">
+									1
+								</rich:column>
+								<rich:column style="width: 5%; text-align: center;">
+									2
+								</rich:column>
+								<rich:column style="width: 5%; text-align: center;">
+									3
+								</rich:column>
+								<rich:column style="width: 5%; text-align: center;">
+									4
+								</rich:column>									
 							</rich:columnGroup>
 						</f:facet>
 						<rich:column style="text-align: right;">
-							<h:outputText value="#{rst.idProduto}" />
+							<h:outputText value="#{rst.idProduto}"/>							
 						</rich:column>
 						<rich:column style="text-align: left;">
 							<h:outputText value="#{rst.receita.desReceita}" />
@@ -75,6 +98,18 @@
 						</rich:column>
 						<rich:column style="text-align: center;">
 							<h:outputText value="#{rst.qtdSolicitada}" />
+						</rich:column>
+						<rich:column style="text-align: center;">
+							<h:outputText value="#{rst.prioridade1}" />
+						</rich:column>
+						<rich:column style="text-align: center;">
+							<h:outputText value="#{rst.prioridade2}" />
+						</rich:column>
+						<rich:column style="text-align: center;">
+							<h:outputText value="#{rst.prioridade3}" />
+						</rich:column>
+						<rich:column style="text-align: center;">
+							<h:outputText value="#{rst.prioridade4}" />
 						</rich:column>
 					</rich:dataTable>
 				</div>

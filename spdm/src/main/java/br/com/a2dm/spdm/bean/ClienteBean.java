@@ -11,6 +11,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.a2dm.brcmn.util.jsf.AbstractBean;
@@ -37,6 +38,7 @@ public class ClienteBean extends AbstractBean<Cliente, ClienteService>
 	private Produto produto;
 	private List<Produto> listaProduto;
 	private List<Produto> listaProdutoResult;
+	private List<SelectItem> listaPrioridade;
 	
 	private final String LISTA_PRODUTOS_SESSAO = "produtos";
 	
@@ -62,6 +64,21 @@ public class ClienteBean extends AbstractBean<Cliente, ClienteService>
 		
 		List<Produto> lista = ProdutoService.getInstancia().pesquisar(produto, 0);	
 		this.getListaProduto().addAll(lista);
+		
+		SelectItem si0 = new SelectItem(null, " --- ");
+		SelectItem si1 = new SelectItem(1, "1");
+		SelectItem si2 = new SelectItem(2, "2");
+		SelectItem si3 = new SelectItem(3, "3");
+		SelectItem si4 = new SelectItem(4, "4");
+		
+		List<SelectItem> listaPrioridade = new ArrayList<SelectItem>();
+		listaPrioridade.add(si0);
+		listaPrioridade.add(si1);
+		listaPrioridade.add(si2);
+		listaPrioridade.add(si3);
+		listaPrioridade.add(si4);
+		
+		this.setListaPrioridade(listaPrioridade);		
 	}
 	
 	@Override
@@ -546,5 +563,13 @@ public class ClienteBean extends AbstractBean<Cliente, ClienteService>
 
 	public void setIdProdutoRemover(BigInteger idProdutoRemover) {
 		this.idProdutoRemover = idProdutoRemover;
+	}
+
+	public List<SelectItem> getListaPrioridade() {
+		return listaPrioridade;
+	}
+
+	public void setListaPrioridade(List<SelectItem> listaPrioridade) {
+		this.listaPrioridade = listaPrioridade;
 	}
 }

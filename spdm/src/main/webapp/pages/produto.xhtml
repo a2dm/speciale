@@ -105,6 +105,24 @@
 	                     </h:inputText>
 	                   </div>
                  	</div>
+                 	
+                 	<div class="form-group">
+                   	   <label for="inputEmail3" class="col-sm-2 control-label">Qtd Massa Crua *</label>
+	                   <div class="col-sm-2">
+	                     <h:inputText value="#{crudBean.entity.qtdMassaCrua}" styleClass="form-control" maxlength="5" id="crua" onkeypress="return soNumero(event, this);">
+	                     	<f:passThroughAttribute name="placeholder" value="Qtd Massa Crua"/>
+	                     </h:inputText>
+	                   </div>
+                 	</div>
+                 	
+                 	<div class="form-group">
+                   	   <label for="inputEmail3" class="col-sm-2 control-label">Qtd Massa Assada *</label>
+	                   <div class="col-sm-2">
+	                     <h:inputText value="#{crudBean.entity.qtdMassaAssada}" styleClass="form-control" maxlength="5" id="assada" onkeypress="return soNumero(event, this);">
+	                     	<f:passThroughAttribute name="placeholder" value="Qtd Massa Assada"/>
+	                     </h:inputText>
+	                   </div>
+                 	</div>
                 </div>
 			</f:subview>
 		</h:panelGroup>			

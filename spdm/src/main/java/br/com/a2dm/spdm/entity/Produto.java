@@ -86,6 +86,12 @@ public class Produto implements Serializable
 	@Column(name = "flg_ativo")
 	private String flgAtivo;
 	
+	@Column(name = "qtd_massa_crua")
+	private BigInteger qtdMassaCrua;
+	
+	@Column(name = "qtd_massa_assada")
+	private BigInteger qtdMassaAssada;
+	
 	@OneToMany(mappedBy="produto", fetch = FetchType.LAZY)
     @Cascade(CascadeType.ALL)
 	private List<ClienteProduto> listaClienteProduto;
@@ -102,6 +108,22 @@ public class Produto implements Serializable
 	
 	@Transient
 	private Date datPedido;
+	
+	@Transient
+	private BigInteger numPrioridade;
+	
+	@Transient
+	private BigInteger prioridade1;
+	
+	@Transient
+	private BigInteger prioridade2;
+	
+	@Transient
+	private BigInteger prioridade3;
+	
+	@Transient
+	private BigInteger prioridade4;
+	
 	
 	public BigInteger getIdProduto() {
 		return idProduto;
@@ -245,5 +267,61 @@ public class Produto implements Serializable
 
 	public void setDatPedido(Date datPedido) {
 		this.datPedido = datPedido;
+	}
+
+	public BigInteger getQtdMassaCrua() {
+		return qtdMassaCrua;
+	}
+
+	public void setQtdMassaCrua(BigInteger qtdMassaCrua) {
+		this.qtdMassaCrua = qtdMassaCrua;
+	}
+
+	public BigInteger getQtdMassaAssada() {
+		return qtdMassaAssada;
+	}
+
+	public void setQtdMassaAssada(BigInteger qtdMassaAssada) {
+		this.qtdMassaAssada = qtdMassaAssada;
+	}
+
+	public BigInteger getPrioridade1() {
+		return prioridade1;
+	}
+
+	public void setPrioridade1(BigInteger prioridade1) {
+		this.prioridade1 = prioridade1;
+	}
+
+	public BigInteger getPrioridade2() {
+		return prioridade2;
+	}
+
+	public void setPrioridade2(BigInteger prioridade2) {
+		this.prioridade2 = prioridade2;
+	}
+
+	public BigInteger getPrioridade3() {
+		return prioridade3;
+	}
+
+	public void setPrioridade3(BigInteger prioridade3) {
+		this.prioridade3 = prioridade3;
+	}
+
+	public BigInteger getPrioridade4() {
+		return prioridade4;
+	}
+
+	public void setPrioridade4(BigInteger prioridade4) {
+		this.prioridade4 = prioridade4;
+	}
+
+	public BigInteger getNumPrioridade() {
+		return numPrioridade;
+	}
+
+	public void setNumPrioridade(BigInteger numPrioridade) {
+		this.numPrioridade = numPrioridade;
 	}
 }

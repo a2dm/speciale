@@ -194,13 +194,13 @@ public class ProdutoService extends A2DMHbNgc<Produto>
 	
 	@SuppressWarnings("unchecked")
 	public List<Produto> pesquisarProducaoDia(Session sessao, Produto produto) throws Exception
-	{
-		
+	{		
 		Criteria criteria = sessao.createCriteria(Produto.class);
 		
 		ProjectionList projection = Projections.projectionList();
 		projection.add(Projections.groupProperty("idProduto"));
 		projection.add(Projections.groupProperty("desProduto"));
+		projection.add(Projections.groupProperty("qtdMassaCrua"));
 		projection.add(Projections.groupProperty("pedido.datPedido"));
 		projection.add(Projections.groupProperty("receita.desReceita"));
 		projection.add(Projections.sum("listaPedidoProduto.qtdSolicitada"));
@@ -230,6 +230,7 @@ public class ProdutoService extends A2DMHbNgc<Produto>
 	    		produtoResult.setReceita(new Receita());
 	    		produtoResult.setIdProduto((BigInteger) resultado.get(i)[j++]);
 	    		produtoResult.setDesProduto((String) resultado.get(i)[j++]);
+	    		produtoResult.setQtdMassaCrua((BigInteger) resultado.get(i)[j++]);
 	    		produtoResult.setDatPedido((Date) resultado.get(i)[j++]);
 	    		produtoResult.getReceita().setDesReceita((String) resultado.get(i)[j++]);
 	    		produtoResult.setQtdSolicitada((BigInteger) resultado.get(i)[j++]);
@@ -237,8 +238,88 @@ public class ProdutoService extends A2DMHbNgc<Produto>
 	            retorno.add(produtoResult);
 	    	}
 	    }
+		
+		this.atualizarPrioridadeProducaoDia(sessao, retorno, produto.getDatPedido());
 	      
 	    return retorno;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void atualizarPrioridadeProducaoDia(Session sessao, List<Produto> lista, Date dataPedido) throws Exception
+	{
+		Criteria criteria = sessao.createCriteria(Produto.class);
+		
+		ProjectionList projection = Projections.projectionList();
+		projection.add(Projections.groupProperty("idProduto"));		
+		projection.add(Projections.groupProperty("cliente.numPrioridade"));		
+		projection.add(Projections.sum("listaPedidoProduto.qtdSolicitada"));
+		
+		criteria.createAlias("listaPedidoProduto", "listaPedidoProduto");
+		criteria.createAlias("listaPedidoProduto.pedido", "pedido");
+		criteria.createAlias("pedido.cliente", "cliente");
+		
+		criteria.add(Restrictions.eq("pedido.flgAtivo", "S"));
+		criteria.add(Restrictions.eq("listaPedidoProduto.flgAtivo", "S"));
+		criteria.add(Restrictions.eq("pedido.datPedido", dataPedido));
+		
+		criteria.addOrder(Order.asc("idProduto"));
+		criteria.addOrder(Order.asc("cliente.numPrioridade"));
+		
+		criteria.setProjection(projection);
+		List<Object[]> resultado = criteria.list();		
+		List<Produto> retorno = new ArrayList<Produto>(5);
+		
+		if (resultado != null && resultado.size() > 0)
+	    {
+	    	int j = 0;
+	    	for (int i = 0; i < resultado.size(); i++)
+	    	{
+	    		j = 0;
+	    		
+	    		Produto produtoResult = new Produto();
+	    		
+	    		produtoResult.setIdProduto((BigInteger) resultado.get(i)[j++]);
+	    		produtoResult.setNumPrioridade((BigInteger) resultado.get(i)[j++]);
+	    		produtoResult.setQtdSolicitada((BigInteger) resultado.get(i)[j++]);
+	    		
+	            retorno.add(produtoResult);
+	    	}
+	    }
+		
+		//MESCLANDO AS LISTAS PARA ATUALIZAR AS PRIORIDADES DE CADA PRODUTO
+		for (Produto produto : lista)
+		{
+			produto.setPrioridade1(new BigInteger("0"));
+			produto.setPrioridade2(new BigInteger("0"));
+			produto.setPrioridade3(new BigInteger("0"));
+			produto.setPrioridade4(new BigInteger("0"));
+			
+			for (Produto objPrioridade : retorno)
+			{
+				if(produto.getIdProduto().intValue() == objPrioridade.getIdProduto().intValue())
+				{
+					if(objPrioridade.getNumPrioridade().intValue() == 1)
+					{
+						produto.setPrioridade1(objPrioridade.getQtdSolicitada());
+					}
+					
+					if(objPrioridade.getNumPrioridade().intValue() == 2)
+					{
+						produto.setPrioridade2(objPrioridade.getQtdSolicitada());
+					}
+					
+					if(objPrioridade.getNumPrioridade().intValue() == 3)
+					{
+						produto.setPrioridade3(objPrioridade.getQtdSolicitada());
+					}
+					
+					if(objPrioridade.getNumPrioridade().intValue() == 4)
+					{
+						produto.setPrioridade4(objPrioridade.getQtdSolicitada());
+					}
+				}
+			}
+		}
 	}
 	
 	@Override

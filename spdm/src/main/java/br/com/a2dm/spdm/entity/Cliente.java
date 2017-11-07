@@ -84,6 +84,9 @@ public class Cliente implements Serializable
 	@Column(name = "flg_ativo")
 	private String flgAtivo;
 	
+	@Column(name = "num_prioridade")
+	private BigInteger numPrioridade;
+	
 	@OneToMany(mappedBy="cliente", fetch = FetchType.LAZY)
     @Cascade(CascadeType.ALL)
 	@Filter(name = "filtroClienteProdutoAtivo", condition = ":flagAtivoClienteProduto = flg_ativo")
@@ -197,5 +200,13 @@ public class Cliente implements Serializable
 
 	public void setListaClienteProduto(List<ClienteProduto> listaClienteProduto) {
 		this.listaClienteProduto = listaClienteProduto;
+	}
+
+	public BigInteger getNumPrioridade() {
+		return numPrioridade;
+	}
+
+	public void setNumPrioridade(BigInteger numPrioridade) {
+		this.numPrioridade = numPrioridade;
 	}
 }

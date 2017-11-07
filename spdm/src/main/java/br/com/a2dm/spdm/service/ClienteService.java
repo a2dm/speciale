@@ -269,7 +269,7 @@ public class ClienteService extends A2DMHbNgc<Cliente>
 			
 			if ((join & JOIN_CLIENTE_PRODUTO_PRODUTO) != 0)
 		    {
-				criteria.createAlias("listaClienteProduto.produto", "produto", JoinType.INNER_JOIN);
+				criteria.createAlias("listaClienteProduto.produto", "produto", JoinType.LEFT_OUTER_JOIN);
 				
 				if ((join & JOIN_CLIENTE_PRODUTO_PRODUTO_RECEITA) != 0)
 			    {

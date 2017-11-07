@@ -113,6 +113,20 @@ public class ProdutoBean extends AbstractBean<Produto, ProdutoService>
 		{
 			throw new Exception("O campo Qtd Múltiplo é obrigatório!");
 		}
+		
+		if(this.getEntity() == null
+				|| this.getEntity().getQtdMassaCrua() == null
+				|| this.getEntity().getQtdMassaCrua().intValue() < 0)
+		{
+			throw new Exception("O campo Qtd Massa Crua é obrigatório!");
+		}
+		
+		if(this.getEntity() == null
+				|| this.getEntity().getQtdMassaAssada() == null
+				|| this.getEntity().getQtdMassaAssada().intValue() < 0)
+		{
+			throw new Exception("O campo Qtd Massa Assada é obrigatório!");
+		}
 	}
 
 	public void inativar() 
