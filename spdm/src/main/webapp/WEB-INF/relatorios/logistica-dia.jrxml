@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-11-08T09:25:22 -->
+<!-- 2017-11-08T17:42:47 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="producao-dia" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="70588910-0d8d-4606-9478-b0be29463ae0">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -14,6 +14,7 @@
 	<parameter name="QTD_CLIENTES" class="java.lang.Integer"/>
 	<parameter name="QTD_ESPECIAIS" class="java.lang.Integer"/>
 	<parameter name="QTD_TRADICIONAIS" class="java.lang.Integer"/>
+	<parameter name="OBSERVACAO" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -26,7 +27,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="120" splitType="Stretch">
+		<band height="145" splitType="Stretch">
 			<image hAlign="Center">
 				<reportElement x="0" y="0" width="555" height="60" uuid="ad31f889-4e69-46cd-bd00-b831da105772">
 					<property name="local_mesure_unitx" value="pixel"/>
@@ -134,6 +135,14 @@
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{QTD_TRADICIONAIS}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="0" y="125" width="555" height="14" isRemoveLineWhenBlank="true" uuid="d11abe96-6900-4fd3-8c9f-038f71acd2a0"/>
+				<box leftPadding="3"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{OBSERVACAO}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

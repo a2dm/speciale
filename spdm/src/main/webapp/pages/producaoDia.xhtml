@@ -16,6 +16,8 @@
 		
 	<ui:define name="saveStateObjectsDefined">
 		<t:saveState value="#{crudBean.qtdTotalMassa}" />
+		<t:saveState value="#{crudBean.obsProducao}" />
+		<t:saveState value="#{crudBean.msgObservacao}" />
 	</ui:define>
 		
 	<ui:define name="content">
@@ -38,6 +40,8 @@
 			<a4j:commandButton id="pesquisar" styleClass="btn btn-primary" value="Pesquisar (P)" accesskey="P" actionListener="#{crudBean.pesquisar}" render="tblResult, formulario"/>
 			<h:outputText value=" "/>
 			<t:commandLink target="_blank" id="imprimir" action="#{crudBean.imprimir}" styleClass="btn btn-primary" value="Imprimir (I)"/>
+			<h:outputText value=" "/>
+			<a4j:commandButton id="observacao" styleClass="btn btn-primary" value="+ Observacao (O)" accesskey="O" actionListener="#{crudBean.preparaObservacao}" oncomplete="#{rich:component('panObservacaoProducao')}.show();" rendered="#{not empty crudBean.searchResult and crudBean.searching}" render="panObservacaoProducao"/>
 		</h:panelGroup>		
 	</ui:define>
 					
@@ -54,7 +58,10 @@
 							  rendered="#{not empty crudBean.searchResult and crudBean.searching}">						     
 						<f:facet name="header">
 							<rich:columnGroup>
-								<rich:column colspan="4" style="text-align: left; color: blue;">
+								<rich:column colspan="8" style="text-align: left; font-size: small;" rendered="#{crudBean.msgObservacao != null}">
+									<h:outputText value="#{crudBean.msgObservacao}"/>
+								</rich:column>
+								<rich:column colspan="4" style="text-align: left; color: blue;"  breakRowBefore="true">
 									<h:outputText value="Kg de MASSA: "/>
 									<h:outputText value="#{crudBean.qtdTotalMassa}" converter="converterMoeda"/>
 								</rich:column>
@@ -119,5 +126,11 @@
 				</h:panelGroup>
 			</f:subview>
 		</h:panelGrid>
+	</ui:define>
+	
+	<ui:define name="modal">
+		<rich:popupPanel id="panObservacaoProducao" styleClass="modal-content" domElementAttachment="form" modal="true" width="800" height="280" resizeable="false" onmaskclick="#{rich:component('panObservacaoProducao')}.hide()">
+			<ui:include src="panelObservacaoProducao.xhtml" />
+		</rich:popupPanel>
 	</ui:define>
 </ui:composition>

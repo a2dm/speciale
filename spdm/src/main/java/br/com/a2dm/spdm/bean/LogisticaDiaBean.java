@@ -23,9 +23,11 @@ import br.com.a2dm.brcmn.util.jsf.Variaveis;
 import br.com.a2dm.brcmn.util.validacoes.ValidaPermissao;
 import br.com.a2dm.spdm.config.MenuControl;
 import br.com.a2dm.spdm.entity.Cliente;
+import br.com.a2dm.spdm.entity.ObservacaoLogistica;
 import br.com.a2dm.spdm.entity.Pedido;
 import br.com.a2dm.spdm.entity.PedidoProduto;
 import br.com.a2dm.spdm.service.ClienteService;
+import br.com.a2dm.spdm.service.ObservacaoLogisticaService;
 import br.com.a2dm.spdm.service.PedidoService;
 import br.com.a2dm.spdm.service.ReceitaService;
 
@@ -39,6 +41,9 @@ public class LogisticaDiaBean extends AbstractBean<Pedido, PedidoService>
 	private Integer qtdClientes;
 	private Integer qtdEspeciais;
 	private Integer qtdTradicionais;
+	
+	private String obsLogistica;	
+	private String msgObservacao;
 	
 	
 	public LogisticaDiaBean()
@@ -133,11 +138,95 @@ public class LogisticaDiaBean extends AbstractBean<Pedido, PedidoService>
 				this.setQtdClientes(listaClientes.size());
 				this.setQtdEspeciais(qtdEspecial);
 				this.setQtdTradicionais(qtdTradicional);
-				
+												
 				this.setSearchResult(lista);
 				completarPosPesquisar();
+				
+				//OBSERVACAO
+				ObservacaoLogistica observacaoLogistica = new ObservacaoLogistica();
+				observacaoLogistica.setDatRelatorio(this.getSearchObject().getDatPedido());
+				
+				observacaoLogistica = ObservacaoLogisticaService.getInstancia().get(observacaoLogistica, 0);
+				
+				if(observacaoLogistica == null
+						|| observacaoLogistica.getDesObservacao() == null
+						|| observacaoLogistica.getDesObservacao().trim().equals(""))
+				{
+					this.setMsgObservacao(null);
+				}
+				else
+				{
+					this.setMsgObservacao("Obs: " + observacaoLogistica.getDesObservacao());
+				}
+				
 				setCurrentState(STATE_SEARCH);
 			}
+		}
+		catch (Exception e)
+		{
+			FacesMessage message = new FacesMessage(e.getMessage());
+			message.setSeverity(FacesMessage.SEVERITY_ERROR);
+			if(e.getMessage() == null)
+				FacesContext.getCurrentInstance().addMessage("", message);
+			else
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			this.setSearchResult(new ArrayList<Pedido>());
+		}
+	}
+	
+	public void preparaObservacao(ActionEvent event)
+	{
+		try
+		{
+			ObservacaoLogistica observacaoLogistica = new ObservacaoLogistica();
+			observacaoLogistica.setDatRelatorio(this.getSearchObject().getDatPedido());
+			
+			observacaoLogistica = ObservacaoLogisticaService.getInstancia().get(observacaoLogistica, 0);
+			
+			if(observacaoLogistica == null)
+			{
+				this.setObsLogistica(null);
+			}
+			else
+			{
+				this.setObsLogistica(observacaoLogistica.getDesObservacao());
+			}
+			
+		}
+		catch (Exception e)
+		{
+			FacesMessage message = new FacesMessage(e.getMessage());
+			message.setSeverity(FacesMessage.SEVERITY_ERROR);
+			if(e.getMessage() == null)
+				FacesContext.getCurrentInstance().addMessage("", message);
+			else
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			this.setSearchResult(new ArrayList<Pedido>());
+		}
+	}
+	
+	public void salvarObservacao(ActionEvent event)
+	{
+		try
+		{
+			ObservacaoLogistica observacaoLogistica = new ObservacaoLogistica();
+			observacaoLogistica.setDatRelatorio(this.getSearchObject().getDatPedido());
+			observacaoLogistica.setDesObservacao(this.getObsLogistica());
+			
+			observacaoLogistica = ObservacaoLogisticaService.getInstancia().salvar(observacaoLogistica);
+			
+			if(observacaoLogistica == null
+					|| observacaoLogistica.getDesObservacao() == null
+					|| observacaoLogistica.getDesObservacao().trim().equals(""))
+			{
+				this.setMsgObservacao(null);
+			}
+			else
+			{
+				this.setMsgObservacao("Obs: " + observacaoLogistica.getDesObservacao());
+			}
+			
+			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "A observação foi salva com sucesso.", null));
 		}
 		catch (Exception e)
 		{
@@ -164,6 +253,7 @@ public class LogisticaDiaBean extends AbstractBean<Pedido, PedidoService>
 		parameters.put("QTD_ESPECIAIS", this.getQtdEspeciais());
 		parameters.put("QTD_TRADICIONAIS", this.getQtdTradicionais());
 		
+		parameters.put("OBSERVACAO", this.getMsgObservacao());		
 	}
 	
 	@Override
@@ -218,5 +308,21 @@ public class LogisticaDiaBean extends AbstractBean<Pedido, PedidoService>
 
 	public void setQtdTradicionais(Integer qtdTradicionais) {
 		this.qtdTradicionais = qtdTradicionais;
+	}
+
+	public String getObsLogistica() {
+		return obsLogistica;
+	}
+
+	public void setObsLogistica(String obsLogistica) {
+		this.obsLogistica = obsLogistica;
+	}
+
+	public String getMsgObservacao() {
+		return msgObservacao;
+	}
+
+	public void setMsgObservacao(String msgObservacao) {
+		this.msgObservacao = msgObservacao;
 	}
 }

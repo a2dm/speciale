@@ -20,7 +20,9 @@ import br.com.a2dm.brcmn.util.jsf.AbstractBean;
 import br.com.a2dm.brcmn.util.jsf.Variaveis;
 import br.com.a2dm.brcmn.util.validacoes.ValidaPermissao;
 import br.com.a2dm.spdm.config.MenuControl;
+import br.com.a2dm.spdm.entity.ObservacaoProducao;
 import br.com.a2dm.spdm.entity.Produto;
+import br.com.a2dm.spdm.service.ObservacaoProducaoService;
 import br.com.a2dm.spdm.service.ProdutoService;
 
 
@@ -29,6 +31,10 @@ import br.com.a2dm.spdm.service.ProdutoService;
 public class ProducaoDiaBean extends AbstractBean<Produto, ProdutoService>
 {	
 	private Double qtdTotalMassa;
+	
+	private String obsProducao;
+	
+	private String msgObservacao;
 	
 	public ProducaoDiaBean()
 	{
@@ -113,8 +119,92 @@ public class ProducaoDiaBean extends AbstractBean<Produto, ProdutoService>
 				
 				this.setQtdTotalMassa(qtdTotalMassa);
 				
+				//OBSERVACAO
+				ObservacaoProducao observacaoProducao = new ObservacaoProducao();
+				observacaoProducao.setDatRelatorio(this.getSearchObject().getDatPedido());
+				
+				observacaoProducao = ObservacaoProducaoService.getInstancia().get(observacaoProducao, 0);
+				
+				if(observacaoProducao == null
+						|| observacaoProducao.getDesObservacao() == null
+						|| observacaoProducao.getDesObservacao().trim().equals(""))
+				{
+					this.setMsgObservacao(null);
+				}
+				else
+				{
+					this.setMsgObservacao("Obs: " + observacaoProducao.getDesObservacao());
+				}
+				
+				
 				setCurrentState(STATE_SEARCH);
 			}
+		}
+		catch (Exception e)
+		{
+			FacesMessage message = new FacesMessage(e.getMessage());
+			message.setSeverity(FacesMessage.SEVERITY_ERROR);
+			if(e.getMessage() == null)
+				FacesContext.getCurrentInstance().addMessage("", message);
+			else
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			this.setSearchResult(new ArrayList<Produto>());
+		}
+	}
+	
+	public void preparaObservacao(ActionEvent event)
+	{
+		try
+		{
+			ObservacaoProducao observacaoProducao = new ObservacaoProducao();
+			observacaoProducao.setDatRelatorio(this.getSearchObject().getDatPedido());
+			
+			observacaoProducao = ObservacaoProducaoService.getInstancia().get(observacaoProducao, 0);
+			
+			if(observacaoProducao == null)
+			{
+				this.setObsProducao(null);
+			}
+			else
+			{
+				this.setObsProducao(observacaoProducao.getDesObservacao());
+			}
+			
+		}
+		catch (Exception e)
+		{
+			FacesMessage message = new FacesMessage(e.getMessage());
+			message.setSeverity(FacesMessage.SEVERITY_ERROR);
+			if(e.getMessage() == null)
+				FacesContext.getCurrentInstance().addMessage("", message);
+			else
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			this.setSearchResult(new ArrayList<Produto>());
+		}
+	}
+	
+	public void salvarObservacao(ActionEvent event)
+	{
+		try
+		{
+			ObservacaoProducao observacaoProducao = new ObservacaoProducao();
+			observacaoProducao.setDatRelatorio(this.getSearchObject().getDatPedido());
+			observacaoProducao.setDesObservacao(this.getObsProducao());
+			
+			observacaoProducao = ObservacaoProducaoService.getInstancia().salvar(observacaoProducao);
+			
+			if(observacaoProducao == null
+					|| observacaoProducao.getDesObservacao() == null
+					|| observacaoProducao.getDesObservacao().trim().equals(""))
+			{
+				this.setMsgObservacao(null);
+			}
+			else
+			{
+				this.setMsgObservacao("Obs: " + observacaoProducao.getDesObservacao());
+			}
+			
+			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "A observação foi salva com sucesso.", null));
 		}
 		catch (Exception e)
 		{
@@ -137,6 +227,7 @@ public class ProducaoDiaBean extends AbstractBean<Produto, ProdutoService>
 		parameters.put("IMG_LOGO", request.getRealPath("images/logo-new3.jpg"));
 		parameters.put("DAT_PRODUCAO", new SimpleDateFormat("dd/MM/yyyy").format(((Produto)this.getListaReport().get(0)).getDatPedido()));
 		parameters.put("STR_MASSA", "Kg de MASSA: " + this.getQtdTotalMassa());
+		parameters.put("OBSERVACAO", this.getMsgObservacao());
 	}
 	
 	@Override
@@ -167,5 +258,21 @@ public class ProducaoDiaBean extends AbstractBean<Produto, ProdutoService>
 
 	public void setQtdTotalMassa(Double qtdTotalMassa) {
 		this.qtdTotalMassa = qtdTotalMassa;
+	}
+
+	public String getObsProducao() {
+		return obsProducao;
+	}
+
+	public void setObsProducao(String obsProducao) {
+		this.obsProducao = obsProducao;
+	}
+
+	public String getMsgObservacao() {
+		return msgObservacao;
+	}
+
+	public void setMsgObservacao(String msgObservacao) {
+		this.msgObservacao = msgObservacao;
 	}
 }

@@ -18,7 +18,9 @@
 		<t:saveState value="#{crudBean.listaCliente}" />
 		<t:saveState value="#{crudBean.qtdClientes}" />
 		<t:saveState value="#{crudBean.qtdEspeciais}" />
-		<t:saveState value="#{crudBean.qtdTradicionais}" />		
+		<t:saveState value="#{crudBean.qtdTradicionais}" />	
+		<t:saveState value="#{crudBean.obsLogistica}" />
+		<t:saveState value="#{crudBean.msgObservacao}" />	
 	</ui:define>	
 		
 	<ui:define name="content">
@@ -75,9 +77,11 @@
              <label for="inputEmail3" class="col-sm-2 control-label"></label>
              <div class="col-sm-6">
                <h:panelGroup rendered="#{crudBean.searching}">
-					<a4j:commandButton id="pesquisar" styleClass="btn btn-primary" value="Pesquisar (P)" accesskey="P" actionListener="#{crudBean.pesquisar}" render="tblResult, pnlLegend"/>
+					<a4j:commandButton id="pesquisar" styleClass="btn btn-primary" value="Pesquisar (P)" accesskey="P" actionListener="#{crudBean.pesquisar}" render="tblResult, formulario, pnlLegend"/>
 					<h:outputText value=" "/>
 					<t:commandLink target="_blank" id="imprimir" action="#{crudBean.imprimir}" styleClass="btn btn-primary" value="Imprimir (I)"/>
+					<h:outputText value=" "/>
+					<a4j:commandButton id="observacao" styleClass="btn btn-primary" value="+ Observacao (O)" accesskey="O" actionListener="#{crudBean.preparaObservacao}" oncomplete="#{rich:component('panObservacaoLogistica')}.show();" rendered="#{not empty crudBean.searchResult and crudBean.searching}" render="panObservacaoLogistica"/>
 				</h:panelGroup>	
              </div>
         </div>
@@ -96,7 +100,10 @@
 							  rendered="#{not empty crudBean.searchResult and crudBean.searching}">						     
 						<f:facet name="header">
 							<rich:columnGroup>
-								<rich:column style="text-align: center; background-color: #f1f1f1" colspan="4">
+								<rich:column colspan="4" style="text-align: left; font-size: small; background-color: #ffffff" rendered="#{crudBean.msgObservacao != null}">
+									<h:outputText value="#{crudBean.msgObservacao}"/>
+								</rich:column>
+								<rich:column style="text-align: center; background-color: #f1f1f1" colspan="4" breakRowBefore="true">
 									Logística do dia: <h:outputText value="#{crudBean.searchObject.datPedido}" converter="converterData"/>
 								</rich:column>
 							</rich:columnGroup>
@@ -150,4 +157,11 @@
 			</f:subview>
 		</h:panelGrid>
 	</ui:define>
+	
+	<ui:define name="modal">
+		<rich:popupPanel id="panObservacaoLogistica" styleClass="modal-content" domElementAttachment="form" modal="true" width="800" height="280" resizeable="false" onmaskclick="#{rich:component('panObservacaoLogistica')}.hide()">
+			<ui:include src="panelObservacaoLogistica.xhtml" />
+		</rich:popupPanel>
+	</ui:define>
+	
 </ui:composition>
