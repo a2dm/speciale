@@ -1,7 +1,6 @@
 package br.com.a2dm.spdm.bean;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -29,7 +28,7 @@ import br.com.a2dm.spdm.service.ProdutoService;
 @ManagedBean
 public class ProducaoDiaBean extends AbstractBean<Produto, ProdutoService>
 {	
-	private BigInteger qtdTotalMassa;
+	private Double qtdTotalMassa;
 	
 	public ProducaoDiaBean()
 	{
@@ -100,14 +99,19 @@ public class ProducaoDiaBean extends AbstractBean<Produto, ProdutoService>
 				List<Produto> lista = ProdutoService.getInstancia().pesquisarProducaoDia(this.getSearchObject());								
 				this.setSearchResult(lista);
 				
-				int qtdTotalMassa = 0;
+				double qtdTotalMassa = 0;
 				
 				for (Produto produto : lista)
 				{
 					qtdTotalMassa += produto.getQtdMassaCrua().intValue();
 				}
 				
-				this.setQtdTotalMassa(new BigInteger(Integer.toString(qtdTotalMassa)));
+				if(qtdTotalMassa > 0)
+				{
+					qtdTotalMassa = qtdTotalMassa / 1000;
+				}
+				
+				this.setQtdTotalMassa(qtdTotalMassa);
 				
 				setCurrentState(STATE_SEARCH);
 			}
@@ -157,11 +161,11 @@ public class ProducaoDiaBean extends AbstractBean<Produto, ProdutoService>
 		return temAcesso;
 	}
 
-	public BigInteger getQtdTotalMassa() {
+	public Double getQtdTotalMassa() {
 		return qtdTotalMassa;
 	}
 
-	public void setQtdTotalMassa(BigInteger qtdTotalMassa) {
+	public void setQtdTotalMassa(Double qtdTotalMassa) {
 		this.qtdTotalMassa = qtdTotalMassa;
 	}
 }

@@ -1,11 +1,14 @@
 package br.com.a2dm.spdm.bean;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -21,8 +24,10 @@ import br.com.a2dm.brcmn.util.validacoes.ValidaPermissao;
 import br.com.a2dm.spdm.config.MenuControl;
 import br.com.a2dm.spdm.entity.Cliente;
 import br.com.a2dm.spdm.entity.Pedido;
+import br.com.a2dm.spdm.entity.PedidoProduto;
 import br.com.a2dm.spdm.service.ClienteService;
 import br.com.a2dm.spdm.service.PedidoService;
+import br.com.a2dm.spdm.service.ReceitaService;
 
 
 @RequestScoped
@@ -30,6 +35,11 @@ import br.com.a2dm.spdm.service.PedidoService;
 public class LogisticaDiaBean extends AbstractBean<Pedido, PedidoService>
 {
 	private List<Cliente> listaCliente;
+	
+	private Integer qtdClientes;
+	private Integer qtdEspeciais;
+	private Integer qtdTradicionais;
+	
 	
 	public LogisticaDiaBean()
 	{
@@ -68,6 +78,11 @@ public class LogisticaDiaBean extends AbstractBean<Pedido, PedidoService>
 		listaCliente.addAll(resultCli);
 		
 		this.setListaCliente(listaCliente);
+		
+		//INICIANDO A LEGENDA ZERADA
+		this.setQtdClientes(0);
+		this.setQtdEspeciais(0);
+		this.setQtdTradicionais(0);
 	}
 	
 	@Override
@@ -91,6 +106,34 @@ public class LogisticaDiaBean extends AbstractBean<Pedido, PedidoService>
 				completarPesquisar();
 				validarCampoTexto();
 				List<Pedido> lista = PedidoService.getInstancia().pesquisarLogisticaDia(this.getSearchObject());
+				
+				//FOI CRIADO O SET PARA GARANTIR QUE NAO CONTARA O CLIENTE 2X, CASO O MESMO REALIZE MAIS DE UM PEDIDO NO DIA
+				Set<BigInteger> listaClientes = new LinkedHashSet<BigInteger>();
+				
+				Integer qtdEspecial = 0;
+				Integer qtdTradicional = 0;
+				
+				for (Pedido pedido : lista)
+				{
+					listaClientes.add(pedido.getCliente().getIdCliente());
+					
+					for (PedidoProduto pedidoProduto : pedido.getListaPedidoProduto())
+					{
+						if(pedidoProduto.getProduto().getIdReceita().intValue() == ReceitaService.RECEITA_ESPECIAL)
+						{
+							qtdEspecial += pedidoProduto.getQtdSolicitada().intValue();
+						}
+						else
+						{
+							qtdTradicional += pedidoProduto.getQtdSolicitada().intValue();
+						}
+					}
+				}
+				
+				this.setQtdClientes(listaClientes.size());
+				this.setQtdEspeciais(qtdEspecial);
+				this.setQtdTradicionais(qtdTradicional);
+				
 				this.setSearchResult(lista);
 				completarPosPesquisar();
 				setCurrentState(STATE_SEARCH);
@@ -116,6 +159,11 @@ public class LogisticaDiaBean extends AbstractBean<Pedido, PedidoService>
 		
 		parameters.put("IMG_LOGO", request.getRealPath("images/logo-new3.jpg"));
 		parameters.put("DAT_PEDIDO", new SimpleDateFormat("dd/MM/yyyy").format(((Pedido)this.getListaReport().get(0)).getListaPedidoProduto().get(0).getPedido().getDatPedido()));
+		
+		parameters.put("QTD_CLIENTES", this.getQtdClientes());
+		parameters.put("QTD_ESPECIAIS", this.getQtdEspeciais());
+		parameters.put("QTD_TRADICIONAIS", this.getQtdTradicionais());
+		
 	}
 	
 	@Override
@@ -146,5 +194,29 @@ public class LogisticaDiaBean extends AbstractBean<Pedido, PedidoService>
 
 	public void setListaCliente(List<Cliente> listaCliente) {
 		this.listaCliente = listaCliente;
+	}
+
+	public Integer getQtdClientes() {
+		return qtdClientes;
+	}
+
+	public void setQtdClientes(Integer qtdClientes) {
+		this.qtdClientes = qtdClientes;
+	}
+
+	public Integer getQtdEspeciais() {
+		return qtdEspeciais;
+	}
+
+	public void setQtdEspeciais(Integer qtdEspeciais) {
+		this.qtdEspeciais = qtdEspeciais;
+	}
+
+	public Integer getQtdTradicionais() {
+		return qtdTradicionais;
+	}
+
+	public void setQtdTradicionais(Integer qtdTradicionais) {
+		this.qtdTradicionais = qtdTradicionais;
 	}
 }

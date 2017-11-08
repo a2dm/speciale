@@ -354,6 +354,7 @@ public class PedidoService extends A2DMHbNgc<Pedido>
 		projection.add(Projections.groupProperty("idPedido"));
 		projection.add(Projections.groupProperty("cliente.idCliente"));
 		projection.add(Projections.groupProperty("cliente.desCliente"));
+		projection.add(Projections.groupProperty("cliente.numPrioridade"));
 		
 		criteria.createAlias("cliente", "cliente");
 		criteria.createAlias("listaPedidoProduto", "listaPedidoProduto");
@@ -368,7 +369,7 @@ public class PedidoService extends A2DMHbNgc<Pedido>
 			criteria.add(Restrictions.eq("idCliente", vo.getIdCliente()));
 		}
 		
-		criteria.addOrder(Order.asc("cliente.desCliente"));
+		criteria.addOrder(Order.asc("cliente.numPrioridade"));
 		
 		criteria.setProjection(projection);
 		List<Object[]> resultado = criteria.list();		
@@ -386,6 +387,7 @@ public class PedidoService extends A2DMHbNgc<Pedido>
 	    		pedidoResult.setCliente(new Cliente());
 	    		pedidoResult.getCliente().setIdCliente((BigInteger) resultado.get(i)[j++]);
 	    		pedidoResult.getCliente().setDesCliente((String) resultado.get(i)[j++]);
+	    		pedidoResult.getCliente().setNumPrioridade((BigInteger) resultado.get(i)[j++]);
 	    		
 	            retorno.add(pedidoResult);
 	    	}

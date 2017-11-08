@@ -56,7 +56,7 @@
 							<rich:columnGroup>
 								<rich:column colspan="4" style="text-align: left; color: blue;">
 									<h:outputText value="Kg de MASSA: "/>
-									<h:outputText value="#{crudBean.qtdTotalMassa}"/>
+									<h:outputText value="#{crudBean.qtdTotalMassa}" converter="converterMoeda"/>
 								</rich:column>
 								<rich:column colspan="4" style="text-align: center;">
 									Prioridade									

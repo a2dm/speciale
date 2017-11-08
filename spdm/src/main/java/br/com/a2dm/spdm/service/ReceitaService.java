@@ -25,6 +25,8 @@ public class ReceitaService extends A2DMHbNgc<Receita>
 	
 	public static final int JOIN_USUARIO_ALT = 2;
 	
+	public static final int RECEITA_ESPECIAL = 5;
+	
 	private JSFUtil util = new JSFUtil();
 		
 	@SuppressWarnings("rawtypes")
