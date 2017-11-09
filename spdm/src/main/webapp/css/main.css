@@ -341,4 +341,103 @@
 	padding: 15px !important;
 	border-bottom: 1px solid #e5e5e5 !important;
 	border-bottom-color: #f4f4f4 !important;
+}
+
+.rf-cal-timepicker-cnt, .rf-cal-monthpicker-cnt, .rf-cal-timepicker-cnt input {
+    font-size: 11px !important;
+    font-family: Arial,Verdana,sans-serif !important;
+}
+
+.rf-cal-monthpicker-cnt {
+    background: #FFF !important;
+    border: 1px solid !important;
+    border-color: #BED6F8 !important;
+    position: relative !important;
+}
+
+.rf-cal-monthpicker-ok {
+    background: #ECF4FE !important;
+    border-top: 1px solid !important;
+    border-top-color: #BED6F8 !important;
+    padding: 5px 1px 5px 5px !important;
+}
+
+.rf-cal-monthpicker-cancel {
+    background: #ECF4FE !important;
+    border-top: 1px solid !important;
+    border-top-color: #BED6F8 !important; 
+    padding: 5px 1px 5px 5px !important;
+}
+
+.rf-cal-time-btn {
+    width: 45px !important;
+    border: 1px solid !important;
+    border-color: #FFF !important;
+    border-right-color: #BED6F8 !important;
+    border-bottom-color: #BED6F8 !important;
+    background: #ECF4FE !important;
+    text-align: center !important;
+    padding: 2px !important;
+    white-space: nowrap !important;
+    text-align: center !important;
+    cursor: pointer !important;
+}
+
+.rf-cal-monthpicker-split {
+    border-right: 1px solid !important;
+    border-right-color: #BED6F8 !important;
+}
+
+.rf-cal-edtr-btn {
+    width: 36px !important;
+    padding: 2px !important;
+    margin: 2px !important;
+    text-align: center !important;
+    cursor: pointer !important;
+}
+
+.rf-cal-edtr-btn-sel {
+    background-color: #FF7800 !important;
+    padding: 2px !important;
+    border: 0 !important;
+    color: #FFEBDA !important;
+    font-weight: bold !important;
+    cursor: default !important;
+}
+
+.rf-cal-edtr-btn-over {    
+    padding: 1px !important;
+    border: 1px solid !important;
+    border-color: #BED6F8 !important;
+    background: E4F5E2 !important;
+}
+.rf-cal-extr {
+    border: 1px solid !important;
+    border-color: #BED6F8 !important;
+    outline: none !important;
+}
+
+.rf-cal-edtr-tl-over {
+    padding: 1px !important;
+    border: 1px solid !important;
+    background: #ECF4FE !important;
+    border-color: #FFF !important;
+    border-right-color: #BED6F8 !important;
+    border-bottom-color: #BED6F8 !important;
+}
+
+.rf-cal-tl-btn {
+    cursor: pointer !important;
+    padding: 2px 3px 2px 3px !important;
+    white-space: nowrap !important;
+}
+
+.rf-cal-tl-btn-hov {
+    background-color: #F5F5F5 !important;
+    color: #000 !important;
+    border: 1px solid !important;
+    border-color: #FFF !important;
+    border-right-color: #BED6F8 !important;
+    border-bottom-color: #BED6F8 !important;
+    padding: 1px 2px 1px 2px !important;
 } 
