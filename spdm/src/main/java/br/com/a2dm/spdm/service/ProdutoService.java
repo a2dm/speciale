@@ -298,24 +298,27 @@ public class ProdutoService extends A2DMHbNgc<Produto>
 			{
 				if(produto.getIdProduto().intValue() == objPrioridade.getIdProduto().intValue())
 				{
-					if(objPrioridade.getNumPrioridade().intValue() == 1)
+					if (objPrioridade.getNumPrioridade() != null && objPrioridade.getNumPrioridade().intValue() > 0)
 					{
-						produto.setPrioridade1(objPrioridade.getQtdSolicitada());
-					}
-					
-					if(objPrioridade.getNumPrioridade().intValue() == 2)
-					{
-						produto.setPrioridade2(objPrioridade.getQtdSolicitada());
-					}
-					
-					if(objPrioridade.getNumPrioridade().intValue() == 3)
-					{
-						produto.setPrioridade3(objPrioridade.getQtdSolicitada());
-					}
-					
-					if(objPrioridade.getNumPrioridade().intValue() == 4)
-					{
-						produto.setPrioridade4(objPrioridade.getQtdSolicitada());
+						if(objPrioridade.getNumPrioridade().intValue() == 1)
+						{
+							produto.setPrioridade1(objPrioridade.getQtdSolicitada());
+						}
+						
+						if(objPrioridade.getNumPrioridade().intValue() == 2)
+						{
+							produto.setPrioridade2(objPrioridade.getQtdSolicitada());
+						}
+						
+						if(objPrioridade.getNumPrioridade().intValue() == 3)
+						{
+							produto.setPrioridade3(objPrioridade.getQtdSolicitada());
+						}
+						
+						if(objPrioridade.getNumPrioridade().intValue() == 4)
+						{
+							produto.setPrioridade4(objPrioridade.getQtdSolicitada());
+						}
 					}
 				}
 			}
