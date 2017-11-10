@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-11-08T17:42:47 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="producao-dia" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="70588910-0d8d-4606-9478-b0be29463ae0">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -27,9 +25,9 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="145" splitType="Stretch">
-			<image hAlign="Center">
-				<reportElement x="0" y="0" width="555" height="60" uuid="ad31f889-4e69-46cd-bd00-b831da105772">
+		<band height="119" splitType="Stretch">
+			<image hAlign="Left">
+				<reportElement x="0" y="0" width="110" height="41" uuid="ad31f889-4e69-46cd-bd00-b831da105772">
 					<property name="local_mesure_unitx" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="local_mesure_unitwidth" value="pixel"/>
@@ -52,7 +50,7 @@
 				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(new Date())]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="180" y="67" width="200" height="53" uuid="ae332449-b6e5-4aea-9e40-4b8dce0c6961"/>
+				<reportElement x="0" y="41" width="554" height="18" uuid="ae332449-b6e5-4aea-9e40-4b8dce0c6961"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
@@ -73,7 +71,7 @@
 				<textFieldExpression><![CDATA[$V{PAGE_COUNT}+1]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="520" y="60" width="25" height="20" uuid="8636b0f5-8c3e-4649-8c46-2a25e152af77"/>
+				<reportElement x="520" y="41" width="25" height="20" uuid="8636b0f5-8c3e-4649-8c46-2a25e152af77"/>
 				<box leftPadding="3" rightPadding="3">
 					<topPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
@@ -84,7 +82,7 @@
 				<textFieldExpression><![CDATA[$P{QTD_CLIENTES}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="444" y="60" width="76" height="20" uuid="ad694fa0-2f59-4e98-be35-f9dabb92e80e"/>
+				<reportElement x="444" y="41" width="76" height="20" uuid="ad694fa0-2f59-4e98-be35-f9dabb92e80e"/>
 				<box leftPadding="3" rightPadding="3">
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -95,7 +93,7 @@
 				<text><![CDATA[Clientes:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="444" y="80" width="76" height="20" uuid="edc22d8b-d234-46e7-b073-2ee7ec6649a0"/>
+				<reportElement x="444" y="61" width="76" height="20" uuid="edc22d8b-d234-46e7-b073-2ee7ec6649a0"/>
 				<box leftPadding="3" rightPadding="3">
 					<leftPen lineWidth="1.0"/>
 				</box>
@@ -105,7 +103,7 @@
 				<text><![CDATA[Pães Especiais:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="444" y="100" width="76" height="20" uuid="f3dccb24-4513-42f0-b337-9a2d15d67f09"/>
+				<reportElement x="444" y="81" width="76" height="20" uuid="f3dccb24-4513-42f0-b337-9a2d15d67f09"/>
 				<box leftPadding="3" rightPadding="3">
 					<leftPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0"/>
@@ -116,7 +114,7 @@
 				<text><![CDATA[Pães Tradicionais:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="520" y="80" width="25" height="20" uuid="ca4da926-8b6e-468b-a123-19a2962259fb"/>
+				<reportElement x="520" y="61" width="25" height="20" uuid="ca4da926-8b6e-468b-a123-19a2962259fb"/>
 				<box leftPadding="3" rightPadding="3">
 					<rightPen lineWidth="1.0"/>
 				</box>
@@ -126,7 +124,7 @@
 				<textFieldExpression><![CDATA[$P{QTD_ESPECIAIS}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="520" y="100" width="25" height="20" uuid="8ec4ffef-ff1a-4312-88f5-1f55506348b8"/>
+				<reportElement x="520" y="81" width="25" height="20" uuid="8ec4ffef-ff1a-4312-88f5-1f55506348b8"/>
 				<box leftPadding="3" rightPadding="3">
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
@@ -137,7 +135,7 @@
 				<textFieldExpression><![CDATA[$P{QTD_TRADICIONAIS}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="0" y="125" width="555" height="14" isRemoveLineWhenBlank="true" uuid="d11abe96-6900-4fd3-8c9f-038f71acd2a0"/>
+				<reportElement x="0" y="105" width="555" height="14" isRemoveLineWhenBlank="true" uuid="d11abe96-6900-4fd3-8c9f-038f71acd2a0"/>
 				<box leftPadding="3"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="8"/>
@@ -150,7 +148,7 @@
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="40" splitType="Stretch">
+		<band height="43" splitType="Stretch">
 			<subreport>
 				<reportElement x="0" y="22" width="555" height="18" uuid="20faae46-04dc-4461-9698-ae5965c91bb7"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource((java.util.Collection)$F{listaPedidoProduto})]]></dataSourceExpression>

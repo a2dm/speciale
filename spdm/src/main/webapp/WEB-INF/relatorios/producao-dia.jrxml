@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-11-08T17:07:29 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="producao-dia" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="70588910-0d8d-4606-9478-b0be29463ae0">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
@@ -28,12 +26,15 @@
 	<field name="prioridade4" class="java.math.BigInteger">
 		<fieldDescription><![CDATA[prioridade4]]></fieldDescription>
 	</field>
+	<field name="qtdMassaCrua" class="java.math.BigInteger">
+		<fieldDescription><![CDATA[qtdMassaCrua]]></fieldDescription>
+	</field>
 	<group name="ReceitaGroup">
 		<groupExpression><![CDATA[$F{receita.desReceita}]]></groupExpression>
 		<groupHeader>
-			<band height="50">
+			<band height="41">
 				<textField>
-					<reportElement x="62" y="9" width="493" height="18" isPrintWhenDetailOverflows="true" uuid="8bcad615-cfe5-4287-a3d6-6ad1c47ac1ed">
+					<reportElement x="61" y="2" width="493" height="18" isPrintWhenDetailOverflows="true" uuid="8bcad615-cfe5-4287-a3d6-6ad1c47ac1ed">
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
 					<box leftPadding="2"/>
@@ -43,7 +44,7 @@
 					<textFieldExpression><![CDATA[$F{receita.desReceita}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement mode="Opaque" x="0" y="31" width="364" height="19" backcolor="#BFD8D9" uuid="6458618a-ece2-4b23-84a9-ed1dc78642e7"/>
+					<reportElement mode="Opaque" x="0" y="22" width="364" height="19" backcolor="#BFD8D9" uuid="6458618a-ece2-4b23-84a9-ed1dc78642e7"/>
 					<box padding="3" topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
 						<topPen lineWidth="1.0"/>
 						<leftPen lineWidth="1.0"/>
@@ -56,15 +57,15 @@
 					<text><![CDATA[Produto]]></text>
 				</staticText>
 				<staticText>
-					<reportElement mode="Opaque" x="0" y="9" width="62" height="18" uuid="3e408d3c-9362-4304-a1da-11923e1b93d2"/>
-					<box padding="3" topPadding="1" leftPadding="2" bottomPadding="1" rightPadding="1"/>
+					<reportElement mode="Opaque" x="0" y="2" width="61" height="18" uuid="3e408d3c-9362-4304-a1da-11923e1b93d2"/>
+					<box padding="3" topPadding="0" leftPadding="2" bottomPadding="0" rightPadding="0"/>
 					<textElement verticalAlignment="Middle">
 						<font size="10" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Receita:]]></text>
 				</staticText>
 				<staticText>
-					<reportElement mode="Opaque" x="364" y="31" width="55" height="19" backcolor="#BFD8D9" uuid="7e135c35-b8f2-43bc-974e-5a2c728c4c4b"/>
+					<reportElement mode="Opaque" x="364" y="22" width="55" height="19" backcolor="#BFD8D9" uuid="7e135c35-b8f2-43bc-974e-5a2c728c4c4b"/>
 					<box padding="3" topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
 						<topPen lineWidth="1.0"/>
 						<leftPen lineWidth="1.0"/>
@@ -77,7 +78,7 @@
 					<text><![CDATA[Quantidade]]></text>
 				</staticText>
 				<staticText>
-					<reportElement mode="Opaque" x="419" y="31" width="34" height="19" backcolor="#BFD8D9" uuid="36f33d67-4358-42d0-9fe0-91568d544c1f"/>
+					<reportElement mode="Opaque" x="419" y="22" width="34" height="19" backcolor="#BFD8D9" uuid="36f33d67-4358-42d0-9fe0-91568d544c1f"/>
 					<box padding="3" topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
 						<topPen lineWidth="1.0"/>
 						<leftPen lineWidth="1.0"/>
@@ -90,7 +91,7 @@
 					<text><![CDATA[P1]]></text>
 				</staticText>
 				<staticText>
-					<reportElement mode="Opaque" x="453" y="31" width="34" height="19" backcolor="#BFD8D9" uuid="a495f946-a70e-4035-9555-737ad4468d0e"/>
+					<reportElement mode="Opaque" x="453" y="22" width="34" height="19" backcolor="#BFD8D9" uuid="a495f946-a70e-4035-9555-737ad4468d0e"/>
 					<box padding="3" topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
 						<topPen lineWidth="1.0"/>
 						<leftPen lineWidth="1.0"/>
@@ -103,7 +104,7 @@
 					<text><![CDATA[P2]]></text>
 				</staticText>
 				<staticText>
-					<reportElement mode="Opaque" x="487" y="31" width="34" height="19" backcolor="#BFD8D9" uuid="67767f62-6545-4b1e-bf5d-58c01841e318"/>
+					<reportElement mode="Opaque" x="487" y="22" width="34" height="19" backcolor="#BFD8D9" uuid="67767f62-6545-4b1e-bf5d-58c01841e318"/>
 					<box padding="3" topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
 						<topPen lineWidth="1.0"/>
 						<leftPen lineWidth="1.0"/>
@@ -116,7 +117,7 @@
 					<text><![CDATA[P3]]></text>
 				</staticText>
 				<staticText>
-					<reportElement mode="Opaque" x="521" y="31" width="34" height="19" backcolor="#BFD8D9" uuid="bcce9c15-648b-4f8e-a6ee-29d2571d0141"/>
+					<reportElement mode="Opaque" x="521" y="22" width="34" height="19" backcolor="#BFD8D9" uuid="bcce9c15-648b-4f8e-a6ee-29d2571d0141"/>
 					<box padding="3" topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
 						<topPen lineWidth="1.0"/>
 						<leftPen lineWidth="1.0"/>
@@ -138,9 +139,9 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="103" splitType="Stretch">
-			<image hAlign="Center">
-				<reportElement x="0" y="0" width="555" height="60" uuid="ad31f889-4e69-46cd-bd00-b831da105772">
+		<band height="82" splitType="Stretch">
+			<image hAlign="Left">
+				<reportElement x="0" y="0" width="110" height="41" uuid="ad31f889-4e69-46cd-bd00-b831da105772">
 					<property name="local_mesure_unitx" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="local_mesure_unitwidth" value="pixel"/>
@@ -163,7 +164,7 @@
 				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(new Date())]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="130" y="67" width="290" height="18" uuid="ae332449-b6e5-4aea-9e40-4b8dce0c6961"/>
+				<reportElement x="0" y="41" width="554" height="18" uuid="ae332449-b6e5-4aea-9e40-4b8dce0c6961"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
@@ -184,14 +185,14 @@
 				<textFieldExpression><![CDATA[$V{PAGE_COUNT}+1]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="420" y="67" width="134" height="18" uuid="3434b344-1d5a-4221-b136-a1818ae8de64"/>
+				<reportElement x="410" y="41" width="134" height="18" uuid="3434b344-1d5a-4221-b136-a1818ae8de64"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{STR_MASSA}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="0" y="88" width="555" height="15" isRemoveLineWhenBlank="true" uuid="325913ea-cf30-4a49-a52e-424f29645f88"/>
+				<reportElement x="0" y="62" width="555" height="15" isRemoveLineWhenBlank="true" uuid="325913ea-cf30-4a49-a52e-424f29645f88"/>
 				<box leftPadding="3"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="8"/>
@@ -220,7 +221,7 @@
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{desProduto}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{desProduto} + " - " + $F{qtdMassaCrua} + "g"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement stretchType="RelativeToBandHeight" x="364" y="0" width="55" height="18" isPrintWhenDetailOverflows="true" uuid="959ff760-f0e0-48d0-a215-a9f621699674">
@@ -268,21 +269,6 @@
 				<textFieldExpression><![CDATA[$F{prioridade2}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement stretchType="RelativeToBandHeight" x="487" y="0" width="34" height="18" isPrintWhenDetailOverflows="true" uuid="4441bfc5-0d83-48fe-889a-de29d517e840">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<box padding="3">
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{prioridade3}]]></textFieldExpression>
-			</textField>
-			<textField>
 				<reportElement stretchType="RelativeToBandHeight" x="521" y="0" width="34" height="18" isPrintWhenDetailOverflows="true" uuid="9900ad89-dd42-42e7-9913-7e02ebc70fa7">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -296,6 +282,21 @@
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{prioridade4}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToBandHeight" x="487" y="0" width="34" height="18" isPrintWhenDetailOverflows="true" uuid="4441bfc5-0d83-48fe-889a-de29d517e840">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="3">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{prioridade3}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

@@ -226,7 +226,7 @@ public class ProducaoDiaBean extends AbstractBean<Produto, ProdutoService>
 		
 		parameters.put("IMG_LOGO", request.getRealPath("images/logo-new3.jpg"));
 		parameters.put("DAT_PRODUCAO", new SimpleDateFormat("dd/MM/yyyy").format(((Produto)this.getListaReport().get(0)).getDatPedido()));
-		parameters.put("STR_MASSA", "Kg de MASSA: " + this.getQtdTotalMassa());
+		parameters.put("STR_MASSA", "MASSA: " + this.getQtdTotalMassa() + "kg");
 		parameters.put("OBSERVACAO", this.getMsgObservacao());
 	}
 	
