@@ -62,8 +62,9 @@
 									<h:outputText value="#{crudBean.msgObservacao}"/>
 								</rich:column>
 								<rich:column colspan="4" style="text-align: left; color: blue;"  breakRowBefore="true">
-									<h:outputText value="Kg de MASSA: "/>
+									<h:outputText value="MASSA: "/>
 									<h:outputText value="#{crudBean.qtdTotalMassa}" converter="converterMoeda"/>
+									<h:outputText value="kg"/>
 								</rich:column>
 								<rich:column colspan="4" style="text-align: center;">
 									Prioridade									
@@ -102,6 +103,9 @@
 						</rich:column>
 						<rich:column style="text-align: left;">
 							<h:outputText value="#{rst.desProduto}" />
+							<h:outputText value=" - "/>
+							<h:outputText value="#{rst.qtdMassaCrua}"/>
+							<h:outputText value="g"/>
 						</rich:column>
 						<rich:column style="text-align: center;">
 							<h:outputText value="#{rst.qtdSolicitada}" />
