@@ -27,104 +27,108 @@ import org.hibernate.annotations.Proxy;
 
 import br.com.a2dm.brcmn.entity.Usuario;
 
-/** 
+/**
  * @author Carlos Diego
  * @since 07/08/2016
  */
 
 @Entity
-@Table(name = "tb_produto", schema="ped")
+@Table(name = "tb_produto", schema = "ped")
 @SequenceGenerator(name = "SQ_PRODUTO", sequenceName = "SQ_PRODUTO", allocationSize = 1)
 @Proxy(lazy = true)
-public class Produto implements Serializable
-{
+public class Produto implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SQ_PRODUTO")
 	@Column(name = "id_produto")
 	private BigInteger idProduto;
-	
+
 	@Column(name = "des_produto")
 	private String desProduto;
-	
+
 	@Column(name = "id_receita")
 	private BigInteger idReceita;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_receita", insertable = false, updatable = false)
 	private Receita receita;
-	
+
 	@Column(name = "qtd_lot_minimo")
 	private BigInteger qtdLoteMinimo;
-	
+
 	@Column(name = "qtd_multiplo")
 	private BigInteger qtdMultiplo;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "dat_cadastro")
 	private Date datCadastro;
-	
+
 	@Column(name = "id_usuario_cad")
 	private BigInteger idUsuarioCad;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_usuario_cad", insertable = false, updatable = false)
 	private Usuario usuarioCad;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "dat_alteracao")
 	private Date datAlteracao;
-	
+
 	@Column(name = "id_usuario_alt")
 	private BigInteger idUsuarioAlt;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_usuario_alt", insertable = false, updatable = false)
 	private Usuario usuarioAlt;
-	
+
 	@Column(name = "flg_ativo")
 	private String flgAtivo;
-	
+
 	@Column(name = "qtd_massa_crua")
 	private BigInteger qtdMassaCrua;
-	
+
 	@Column(name = "qtd_massa_assada")
 	private BigInteger qtdMassaAssada;
-	
-	@OneToMany(mappedBy="produto", fetch = FetchType.LAZY)
-    @Cascade(CascadeType.ALL)
+
+	@OneToMany(mappedBy = "produto", fetch = FetchType.LAZY)
+	@Cascade(CascadeType.ALL)
 	private List<ClienteProduto> listaClienteProduto;
-	
-	@OneToMany(mappedBy="produto", fetch = FetchType.LAZY)
-    @Cascade(CascadeType.ALL)
+
+	@OneToMany(mappedBy = "produto", fetch = FetchType.LAZY)
+	@Cascade(CascadeType.ALL)
 	private List<PedidoProduto> listaPedidoProduto;
-	
+
 	@Transient
 	private HashMap<String, Object> filtroMap;
-	
+
 	@Transient
 	private BigInteger qtdSolicitada;
-	
+
 	@Transient
 	private Date datPedido;
-	
+
 	@Transient
 	private BigInteger numPrioridade;
-	
+
 	@Transient
 	private BigInteger prioridade1;
-	
+
 	@Transient
 	private BigInteger prioridade2;
-	
+
 	@Transient
 	private BigInteger prioridade3;
-	
+
 	@Transient
 	private BigInteger prioridade4;
+
+	@Transient
+	private double qtdMassa;
 	
-	
+	@Transient
+	private Integer qtdMassaInt;
+
 	public BigInteger getIdProduto() {
 		return idProduto;
 	}
@@ -323,5 +327,21 @@ public class Produto implements Serializable
 
 	public void setNumPrioridade(BigInteger numPrioridade) {
 		this.numPrioridade = numPrioridade;
+	}
+
+	public double getQtdMassa() {
+		return qtdMassa;
+	}
+
+	public void setQtdMassa(double qtdMassa) {
+		this.qtdMassa = qtdMassa;
+	}
+
+	public Integer getQtdMassaInt() {
+		return qtdMassaInt;
+	}
+
+	public void setQtdMassaInt(Integer qtdMassaInt) {
+		this.qtdMassaInt = qtdMassaInt;
 	}
 }

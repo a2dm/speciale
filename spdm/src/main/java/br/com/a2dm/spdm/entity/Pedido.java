@@ -84,6 +84,9 @@ public class Pedido implements Serializable
 	@Column(name = "obs_pedido")
 	private String obsPedido;
 	
+	@Column(name = "plataforma")
+	private String plataforma;
+	
 	@OneToMany(mappedBy="pedido", fetch = FetchType.LAZY)
     @Cascade(CascadeType.ALL)	
 	private List<PedidoProduto> listaPedidoProduto;
@@ -212,5 +215,13 @@ public class Pedido implements Serializable
 
 	public void setObsPedido(String obsPedido) {
 		this.obsPedido = obsPedido;
+	}
+
+	public String getPlataforma() {
+		return plataforma;
+	}
+
+	public void setPlataforma(String plataforma) {
+		this.plataforma = plataforma;
 	}
 }

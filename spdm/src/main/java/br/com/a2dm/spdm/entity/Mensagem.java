@@ -90,6 +90,9 @@ public class Mensagem implements Serializable, Cloneable
 	private List<Cliente> listaCliente;
 	
 	@Transient
+	private BigInteger idCliente;
+	
+	@Transient
 	private List<Date> listaData;
 	
 	public BigInteger getIdMensagem() {
@@ -215,4 +218,12 @@ public class Mensagem implements Serializable, Cloneable
 	public Mensagem clone() throws CloneNotSupportedException {
         return (Mensagem) super.clone();
     }
+
+	public BigInteger getIdCliente() {
+		return idCliente;
+	}
+
+	public void setIdCliente(BigInteger idCliente) {
+		this.idCliente = idCliente;
+	}
 }

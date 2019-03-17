@@ -22,6 +22,7 @@ import br.com.a2dm.brcmn.util.A2DMHbNgc;
 import br.com.a2dm.brcmn.util.HibernateUtil;
 import br.com.a2dm.brcmn.util.RestritorHb;
 import br.com.a2dm.brcmn.util.jsf.JSFUtil;
+import br.com.a2dm.brcmn.util.outros.Email;
 import br.com.a2dm.spdm.entity.Cliente;
 import br.com.a2dm.spdm.entity.Mensagem;
 import br.com.a2dm.spdm.entity.MensagemDestinatario;
@@ -64,35 +65,91 @@ public class MensagemService extends A2DMHbNgc<Mensagem>
 		adicionarFiltro("flgAtivo", RestritorHb.RESTRITOR_EQ, "flgAtivo");
 		adicionarFiltro("flgEnviada", RestritorHb.RESTRITOR_EQ, "flgEnviada");
 		adicionarFiltro("datMensagem", RestritorHb.RESTRITOR_EQ, "datMensagem");
+		adicionarFiltro("datCadastro", RestritorHb.RESTRITOR_EQ, "datCadastro");
+		adicionarFiltro("listaMensagemCliente.cliente.idCliente", RestritorHb.RESTRITOR_EQ, "idCliente");
 	}
+	
+//	@Override
+//	public Mensagem inserir(Session sessao, Mensagem mensagem) throws Exception
+//	{
+//		for (Date data : mensagem.getListaData()) {
+//			Mensagem vo = new Mensagem();
+//			vo = mensagem.clone();
+//			vo.setDatMensagem(data);
+//			
+//			validarInserir(sessao, vo);
+//			sessao.save(vo);
+//			
+//			
+//			if(vo.getListaCliente() != null
+//					&& vo.getListaCliente().size() >= 0)
+//			{
+//				for (Cliente cliente : vo.getListaCliente())
+//				{
+//					MensagemDestinatario mensagemDestinatario = new MensagemDestinatario();
+//					mensagemDestinatario.setIdMensagem(vo.getIdMensagem());
+//					mensagemDestinatario.setIdCliente(cliente.getIdCliente());				
+//					
+//					MensagemDestinatarioService.getInstancia().inserir(sessao, mensagemDestinatario);
+//				}
+//			}
+//		}
+//		
+//		return mensagem;
+//	}
 	
 	@Override
 	public Mensagem inserir(Session sessao, Mensagem mensagem) throws Exception
 	{
-		for (Date data : mensagem.getListaData()) {
-			Mensagem vo = new Mensagem();
-			vo = mensagem.clone();
-			vo.setDatMensagem(data);
-			
-			validarInserir(sessao, vo);
-			sessao.save(vo);
-			
-			
-			if(vo.getListaCliente() != null
-					&& vo.getListaCliente().size() >= 0)
+		mensagem.setDatMensagem(new Date());
+		validarInserir(sessao, mensagem);
+		sessao.save(mensagem);
+		
+		if(mensagem.getListaCliente() != null
+				&& mensagem.getListaCliente().size() >= 0)
+		{
+			for (Cliente cliente : mensagem.getListaCliente())
 			{
-				for (Cliente cliente : vo.getListaCliente())
-				{
-					MensagemDestinatario mensagemDestinatario = new MensagemDestinatario();
-					mensagemDestinatario.setIdMensagem(vo.getIdMensagem());
-					mensagemDestinatario.setIdCliente(cliente.getIdCliente());				
-					
-					MensagemDestinatarioService.getInstancia().inserir(sessao, mensagemDestinatario);
-				}
+				MensagemDestinatario mensagemDestinatario = new MensagemDestinatario();
+				mensagemDestinatario.setIdMensagem(mensagem.getIdMensagem());
+				mensagemDestinatario.setIdCliente(cliente.getIdCliente());				
+				
+				MensagemDestinatarioService.getInstancia().inserir(sessao, mensagemDestinatario);
+				
+				enviarEmail(sessao, mensagem, mensagemDestinatario);
 			}
 		}
 		
 		return mensagem;
+	}
+
+	private void enviarEmail(Session sessao, Mensagem mensagem, MensagemDestinatario mensagemDestinatario) throws Exception {
+		Usuario usuario = new Usuario();
+		usuario.setIdCliente(mensagemDestinatario.getIdCliente());
+		usuario.setFlgAtivo("S");
+		
+		List<Usuario> listUsuario = UsuarioService.getInstancia().pesquisar(sessao, usuario, 0);
+		
+		if (listUsuario != null && listUsuario.size() > 0)
+		{
+			for (Usuario element : listUsuario) 
+			{
+				this.enviarEmail(sessao, element, mensagem);
+			}
+		}
+	}
+	
+	private void enviarEmail(Session sessao, Usuario vo, Mensagem mensagem) throws Exception
+	{
+		Email email = new Email();
+
+		String assunto = "Speciale - Notificação";
+		String texto = "Prezado (a): "+ vo.getNome() +", \n\n\n" 
+		             + mensagem.getDesMensagem();
+		
+		String to = vo.getEmail();
+		
+		email.enviar(to, assunto, texto);
 	}
 	
 	@Override
@@ -119,6 +176,8 @@ public class MensagemService extends A2DMHbNgc<Mensagem>
 				objInsert.setIdCliente(cliente.getIdCliente());				
 				
 				MensagemDestinatarioService.getInstancia().inserir(sessao, objInsert);
+				
+				enviarEmail(sessao, vo, mensagemDestinatario);
 			}
 		}
 		

@@ -30,7 +30,9 @@ import br.com.a2dm.spdm.service.ProdutoService;
 @ManagedBean
 public class ProducaoDiaBean extends AbstractBean<Produto, ProdutoService>
 {	
-	private Double qtdTotalMassa;
+	private double qtdTotalMassa;
+	
+	private String qtdTotalMassaStr;
 	
 	private String obsProducao;
 	
@@ -109,15 +111,18 @@ public class ProducaoDiaBean extends AbstractBean<Produto, ProdutoService>
 				
 				for (Produto produto : lista)
 				{
-					qtdTotalMassa += produto.getQtdMassaCrua().intValue();
+					produto.setQtdMassa(produto.getQtdMassaCrua().doubleValue() * produto.getQtdSolicitada().doubleValue());
+					qtdTotalMassa += produto.getQtdMassa();
+					produto.setQtdMassaInt((int) produto.getQtdMassa());
 				}
 				
-				if(qtdTotalMassa > 0)
+				if (qtdTotalMassa > 0)
 				{
 					qtdTotalMassa = qtdTotalMassa / 1000;
 				}
 				
 				this.setQtdTotalMassa(qtdTotalMassa);
+				this.setQtdTotalMassaStr(Double.toString(qtdTotalMassa).replace(".", ",")); 
 				
 				//OBSERVACAO
 				ObservacaoProducao observacaoProducao = new ObservacaoProducao();
@@ -182,8 +187,7 @@ public class ProducaoDiaBean extends AbstractBean<Produto, ProdutoService>
 			this.setSearchResult(new ArrayList<Produto>());
 		}
 	}
-	
-	public void salvarObservacao(ActionEvent event)
+		public void salvarObservacao(ActionEvent event)
 	{
 		try
 		{
@@ -226,7 +230,7 @@ public class ProducaoDiaBean extends AbstractBean<Produto, ProdutoService>
 		
 		parameters.put("IMG_LOGO", request.getRealPath("images/logo-new3.jpg"));
 		parameters.put("DAT_PRODUCAO", new SimpleDateFormat("dd/MM/yyyy").format(((Produto)this.getListaReport().get(0)).getDatPedido()));
-		parameters.put("STR_MASSA", "MASSA: " + this.getQtdTotalMassa() + "kg");
+		parameters.put("STR_MASSA", "MASSA: " + this.getQtdTotalMassaStr() + "kg");
 		parameters.put("OBSERVACAO", this.getMsgObservacao());
 	}
 	
@@ -252,11 +256,11 @@ public class ProducaoDiaBean extends AbstractBean<Produto, ProdutoService>
 		return temAcesso;
 	}
 
-	public Double getQtdTotalMassa() {
+	public double getQtdTotalMassa() {
 		return qtdTotalMassa;
 	}
 
-	public void setQtdTotalMassa(Double qtdTotalMassa) {
+	public void setQtdTotalMassa(double qtdTotalMassa) {
 		this.qtdTotalMassa = qtdTotalMassa;
 	}
 
@@ -274,5 +278,13 @@ public class ProducaoDiaBean extends AbstractBean<Produto, ProdutoService>
 
 	public void setMsgObservacao(String msgObservacao) {
 		this.msgObservacao = msgObservacao;
+	}
+
+	public String getQtdTotalMassaStr() {
+		return qtdTotalMassaStr;
+	}
+
+	public void setQtdTotalMassaStr(String qtdTotalMassaStr) {
+		this.qtdTotalMassaStr = qtdTotalMassaStr;
 	}
 }

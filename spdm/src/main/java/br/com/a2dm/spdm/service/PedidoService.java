@@ -32,6 +32,9 @@ public class PedidoService extends A2DMHbNgc<Pedido>
 {
 	private static PedidoService instancia = null;
 
+	public static final String PLATAFORMA_APP = "A";
+	public static final String PLATAFORMA_WEB = "W";
+	
 	public static final int JOIN_USUARIO_CAD = 1;
 	
 	public static final int JOIN_USUARIO_ALT = 2;
@@ -67,6 +70,15 @@ public class PedidoService extends A2DMHbNgc<Pedido>
 		adicionarFiltro("flgAtivo", RestritorHb.RESTRITOR_EQ, "flgAtivo");
 		adicionarFiltro("listaPedidoProduto.flgAtivo", RestritorHb.RESTRITOR_EQ, "filtroMap.flgAtivoPedidoProduto");
 		adicionarFiltro("obsPedido", RestritorHb.RESTRITOR_IS_NOTNULL, "filtroMap.obsNotNull");
+	}
+	
+	@Override
+	protected void setarOrdenacao(Criteria criteria, Pedido vo, int join)
+	{
+		if ((join & JOIN_CLIENTE) != 0)
+	    {
+			criteria.addOrder(Order.asc("cliente.desCliente"));
+	    }
 	}
 	
 	@Override
@@ -369,6 +381,12 @@ public class PedidoService extends A2DMHbNgc<Pedido>
 			criteria.add(Restrictions.eq("idCliente", vo.getIdCliente()));
 		}
 		
+		if (vo.getIdPedido() != null
+				&& vo.getIdPedido().intValue() > 0) 
+		{
+			criteria.add(Restrictions.eq("idPedido", vo.getIdPedido()));
+		}
+		
 		criteria.addOrder(Order.asc("cliente.numPrioridade"));
 		
 		criteria.setProjection(projection);
@@ -393,12 +411,101 @@ public class PedidoService extends A2DMHbNgc<Pedido>
 	    	}
 	    }
 		
-		this.popularListaProdutos(sessao, retorno, vo.getDatPedido());
+		this.popularListaProdutos(sessao, retorno, vo.getDatPedido(), vo.getFlgAtivo());
+	      
+	    return retorno;
+	}
+
+	public List<Pedido> pesquisarGeradorPedido(Pedido vo) throws Exception
+	{
+		Session sessao = HibernateUtil.getSession();
+		sessao.setFlushMode(FlushMode.COMMIT);
+		try
+		{
+			return this.pesquisarGeradorPedido(sessao, vo);
+		}
+		catch (Exception e)
+		{
+			throw e;
+		}
+		finally
+		{
+			sessao.close();
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Pedido> pesquisarGeradorPedido(Session sessao, Pedido vo) throws Exception
+	{
+		Criteria criteria = sessao.createCriteria(Pedido.class);
+		
+		ProjectionList projection = Projections.projectionList();
+		projection.add(Projections.groupProperty("idPedido"));
+		projection.add(Projections.groupProperty("flgAtivo"));
+		projection.add(Projections.groupProperty("cliente.idCliente"));
+		projection.add(Projections.groupProperty("cliente.desCliente"));
+		projection.add(Projections.groupProperty("cliente.numPrioridade"));
+		
+		criteria.createAlias("cliente", "cliente");
+		criteria.createAlias("listaPedidoProduto", "listaPedidoProduto");
+		
+		if (vo.getFlgAtivo() != null
+				&& !vo.getFlgAtivo().equalsIgnoreCase(""))
+		{
+			criteria.add(Restrictions.eq("listaPedidoProduto.flgAtivo", vo.getFlgAtivo()));
+		}
+		criteria.add(Restrictions.eq("datPedido", vo.getDatPedido()));
+		
+		if(vo.getIdCliente() != null
+				&& vo.getIdCliente().intValue() > 0)
+		{
+			criteria.add(Restrictions.eq("idCliente", vo.getIdCliente()));
+		}
+		
+		if (vo.getIdPedido() != null
+				&& vo.getIdPedido().intValue() > 0) 
+		{
+			criteria.add(Restrictions.eq("idPedido", vo.getIdPedido()));
+		}
+		
+		if (vo.getFlgAtivo() != null
+				&& !vo.getFlgAtivo().equalsIgnoreCase("")) 
+		{
+			criteria.add(Restrictions.eq("flgAtivo", vo.getFlgAtivo()));
+		}
+		
+		criteria.addOrder(Order.asc("cliente.numPrioridade"));
+		
+		criteria.setProjection(projection);
+		List<Object[]> resultado = criteria.list();		
+		List<Pedido> retorno = new ArrayList<Pedido>(5);
+		
+		if (resultado != null && resultado.size() > 0)
+	    {
+	    	int j = 0;
+	    	for (int i = 0; i < resultado.size(); i++)
+	    	{
+	    		j = 0;
+	    		
+	    		Pedido pedidoResult = new Pedido();
+	    		pedidoResult.setIdPedido((BigInteger) resultado.get(i)[j++]);
+	    		pedidoResult.setFlgAtivo((String) resultado.get(i)[j++]);
+	    		
+	    		pedidoResult.setCliente(new Cliente());
+	    		pedidoResult.getCliente().setIdCliente((BigInteger) resultado.get(i)[j++]);
+	    		pedidoResult.getCliente().setDesCliente((String) resultado.get(i)[j++]);
+	    		pedidoResult.getCliente().setNumPrioridade((BigInteger) resultado.get(i)[j++]);
+	    		
+	            retorno.add(pedidoResult);
+	    	}
+	    }
+		
+		this.popularListaProdutos(sessao, retorno, vo.getDatPedido(), vo.getFlgAtivo());
 	      
 	    return retorno;
 	}
 	
-	private void popularListaProdutos(Session sessao, List<Pedido> lista, Date datPedido) throws Exception
+	private void popularListaProdutos(Session sessao, List<Pedido> lista, Date datPedido, String flgAtivo) throws Exception
 	{
 		if(lista != null
 				&& lista.size() > 0)
@@ -407,8 +514,12 @@ public class PedidoService extends A2DMHbNgc<Pedido>
 			{
 				PedidoProduto pedidoProduto = new PedidoProduto();
 				pedidoProduto.setPedido(new Pedido());
-				pedidoProduto.setFlgAtivo("S");
-				pedidoProduto.getPedido().setFlgAtivo("S");
+				
+				if (flgAtivo != null && !flgAtivo.equalsIgnoreCase("")) {
+					pedidoProduto.setFlgAtivo("s");
+					pedidoProduto.getPedido().setFlgAtivo(flgAtivo.toLowerCase());
+				}
+				
 				pedidoProduto.getPedido().setIdCliente(pedido.getCliente().getIdCliente());
 				pedidoProduto.getPedido().setDatPedido(datPedido);
 				
@@ -491,6 +602,7 @@ public class PedidoService extends A2DMHbNgc<Pedido>
 			util.getUsuarioLogado().setIdCliente(element.getCliente().getIdCliente());
 			element.setIdCliente(element.getCliente().getIdCliente());
 			element.setListaProduto(element.getCliente().getListaProduto());
+			element.setPlataforma(PedidoService.PLATAFORMA_WEB);
 			this.inserir(sessao, element);
 		}
 	}
@@ -531,6 +643,7 @@ public class PedidoService extends A2DMHbNgc<Pedido>
 			pedido.setDatAlteracao(element.getDatAlteracao());
 			pedido.setIdUsuarioAlt(util.getUsuarioLogado().getIdUsuario());
 			pedido.setObsPedido(element.getObsPedido());
+			pedido.setPlataforma(PedidoService.PLATAFORMA_WEB);
 			
 			sessao.merge(pedido);
 			

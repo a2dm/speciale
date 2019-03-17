@@ -25,7 +25,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="119" splitType="Stretch">
+		<band height="129" splitType="Stretch">
 			<image hAlign="Left">
 				<reportElement x="0" y="0" width="110" height="41" uuid="ad31f889-4e69-46cd-bd00-b831da105772">
 					<property name="local_mesure_unitx" value="pixel"/>
@@ -135,10 +135,10 @@
 				<textFieldExpression><![CDATA[$P{QTD_TRADICIONAIS}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="0" y="105" width="555" height="14" isRemoveLineWhenBlank="true" uuid="d11abe96-6900-4fd3-8c9f-038f71acd2a0"/>
+				<reportElement x="0" y="105" width="555" height="24" isRemoveLineWhenBlank="true" uuid="d11abe96-6900-4fd3-8c9f-038f71acd2a0"/>
 				<box leftPadding="3"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="8"/>
+					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{OBSERVACAO}]]></textFieldExpression>
 			</textField>

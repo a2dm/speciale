@@ -16,6 +16,7 @@
 		
 	<ui:define name="saveStateObjectsDefined">
 		<t:saveState value="#{crudBean.qtdTotalMassa}" />
+		<t:saveState value="#{crudBean.qtdTotalMassaStr}" />
 		<t:saveState value="#{crudBean.obsProducao}" />
 		<t:saveState value="#{crudBean.msgObservacao}" />
 	</ui:define>
@@ -61,13 +62,13 @@
 								<rich:column colspan="8" style="text-align: left; font-size: small;" rendered="#{crudBean.msgObservacao != null}">
 									<h:outputText value="#{crudBean.msgObservacao}"/>
 								</rich:column>
-								<rich:column colspan="4" style="text-align: left; color: blue;"  breakRowBefore="true">
+								<rich:column colspan="5" style="text-align: left; color: blue;"  breakRowBefore="true">
 									<h:outputText value="MASSA: "/>
 									<h:outputText value="#{crudBean.qtdTotalMassa}" converter="converterMoeda"/>
 									<h:outputText value="kg"/>
 								</rich:column>
 								<rich:column colspan="4" style="text-align: center;">
-									Prioridade									
+									Prioridade						
 								</rich:column>
 								<rich:column style="width: 5%; text-align: center;" breakRowBefore="true">
 									Código
@@ -80,6 +81,9 @@
 								</rich:column>
 								<rich:column style="width: 10%; text-align: center;">
 									Quantidade
+								</rich:column>
+								<rich:column style="width: 10%; text-align: center;">
+									Massa (g)
 								</rich:column>
 								<rich:column style="width: 5%; text-align: center;">
 									1
@@ -109,6 +113,9 @@
 						</rich:column>
 						<rich:column style="text-align: center;">
 							<h:outputText value="#{rst.qtdSolicitada}" />
+						</rich:column>
+						<rich:column style="text-align: center;">
+							<h:outputText value="#{rst.qtdMassa}" converter="converterKg"/>
 						</rich:column>
 						<rich:column style="text-align: center;">
 							<h:outputText value="#{rst.prioridade1}" />

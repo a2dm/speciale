@@ -58,6 +58,15 @@ public class GeradorPedidoBean extends AbstractBean<Pedido, PedidoService>
 	}
 	
 	@Override
+	protected void completarPesquisar() throws Exception
+	{
+		if(this.getSearchObject().getFlgAtivo().equals("T"))
+		{
+			this.getSearchObject().setFlgAtivo(null);
+		}
+	}
+	
+	@Override
 	protected void setValoresDefault() throws Exception
 	{
 		//DATA DE HOJE
@@ -84,6 +93,7 @@ public class GeradorPedidoBean extends AbstractBean<Pedido, PedidoService>
 		listaCliente.addAll(resultCli);
 		
 		this.setListaCliente(listaCliente);
+		this.getSearchObject().setFlgAtivo("T");
 	}
 	
 	@Override
@@ -239,7 +249,7 @@ public class GeradorPedidoBean extends AbstractBean<Pedido, PedidoService>
 				validarPesquisar();
 				completarPesquisar();
 				validarCampoTexto();
-				List<Pedido> lista = PedidoService.getInstancia().pesquisarLogisticaDia(this.getSearchObject());
+				List<Pedido> lista = PedidoService.getInstancia().pesquisarGeradorPedido(this.getSearchObject());
 				this.setSearchResult(lista);
 				completarPosPesquisar();
 				setCurrentState(STATE_SEARCH);

@@ -83,13 +83,6 @@
 				                   </div>
 			                 	</div>
 			                 	
-			                 	<div class="form-group">
-			                   	   <label for="inputEmail3" class="col-sm-2 control-label">E-mail</label>
-				                   <div class="col-sm-6" style="padding-top: 5px;">
-				                     <h:outputText value="#{crudBean.entity.email}"/>
-				                   </div>
-			                 	</div>
-			             		
 			             		<div class="form-group">
 			                   	   <label for="inputEmail3" class="col-sm-2 control-label">Login</label>
 				                   <div class="col-sm-6" style="padding-top: 5px;">
@@ -107,7 +100,6 @@
 								
 						</h:panelGroup>
 					 	
-					 
 						<div class="box-body" style="padding: 1px;">
 		                	<div class="form-group">
 		                   	   <label for="inputEmail3" class="col-sm-2 control-label">Nome *</label>
@@ -119,16 +111,17 @@
 		                 	</div>
 		                 </div>
 		                 
+						<div class="form-group">
+	                   	   <label for="inputEmail3" class="col-sm-2 control-label">E-mail *</label>
+		                   <div class="col-sm-6">
+		                     <h:inputText value="#{crudBean.entity.email}" styleClass="form-control" size="100" maxlength="250" onblur="validarEmail(this);" id="email">
+			                     <f:passThroughAttribute name="placeholder" value="E-mail do Usuário"/>
+		                     </h:inputText>
+		                   </div>
+	                 	</div>
+	                 	
 		                 <h:panelGroup id="panelGroupDeInserir" style="height:100%;width:100%;" rendered="#{crudBean.inserting}">
 							<div class="box-body" style="padding: 1px;">
-								<div class="form-group">
-			                   	   <label for="inputEmail3" class="col-sm-2 control-label">E-mail *</label>
-				                   <div class="col-sm-6">
-				                     <h:inputText value="#{crudBean.entity.email}" styleClass="form-control" size="100" maxlength="250" onblur="validarEmail(this);" id="email">
-					                     <f:passThroughAttribute name="placeholder" value="E-mail do Usuário"/>
-				                     </h:inputText>
-				                   </div>
-			                 	</div>
 			                 	
 			                 	<div class="form-group">
 			                   	   <label for="inputEmail3" class="col-sm-2 control-label">Login *</label>

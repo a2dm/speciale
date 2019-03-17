@@ -27,20 +27,20 @@
 			<f:subview id="viewBusca">
 				<div class="box-body">
                     <div class="form-group">
-	                   <label for="inputEmail3" class="col-sm-2 control-label">Data *</label>
+	                   <label for="inputEmail3" class="col-sm-2 control-label">Data do Cadastro</label>
 	                   <div class="col-sm-2">
-	                     <rich:calendar value="#{crudBean.datInicio}" buttonClass="glyphicon glyphicon-calendar" inputSize="9" buttonIcon="../images/calendar.png"  datePattern="dd/MM/yyyy" inputClass="form-control" showWeeksBar="false" enableManualInput="true" oninputkeypress="return formataData(event,this);" maxlength="10"/>	                     
+	                     <rich:calendar value="#{crudBean.searchObject.datCadastro}" buttonClass="glyphicon glyphicon-calendar" inputSize="9" buttonIcon="../images/calendar.png"  datePattern="dd/MM/yyyy" inputClass="form-control" showWeeksBar="false" enableManualInput="true" oninputkeypress="return formataData(event,this);" maxlength="10"/>	                     
 	                   </div>
                    </div>
                    
                    <div class="form-group">
-	               	<label for="inputEmail3" class="col-sm-2 control-label">Cliente *</label>
-	                <div class="col-sm-6">		                	
-						<h:selectOneMenu value="#{crudBean.cliente.idCliente}" converter="simpleIndexConverter" styleClass="form-control" style="width:700px; display: initial;">								
-							<t:selectItems var="o" itemValue="#{o.idCliente}" itemLabel="#{o.desCliente}" value="#{crudBean.listaCliente}" />
-						</h:selectOneMenu>
-					</div>
-				   </div>
+                      <label for="inputEmail3" class="col-sm-2 control-label">Cliente</label>
+                      <div class="col-sm-3">
+                        <h:selectOneMenu value="#{crudBean.idCliente}" styleClass="form-control" converter="simpleIndexConverter">			                        								
+							<t:selectItems var="i" itemValue="#{i.idCliente}" itemLabel="#{i.desCliente}" value="#{crudBean.listaCliente}" />
+						 </h:selectOneMenu>
+                      </div>
+                    </div>
             	</div>
 			</f:subview>
 		</h:panelGroup>	
@@ -51,21 +51,6 @@
 					 <rich:tab header="Mensagem">
 					 	<h:panelGroup id="panelPesquisaData" layout="block">
 							<div class="box-body">
-								<div class="form-group">
-			                   	   <label for="inputEmail3" class="col-sm-2 control-label">Data *</label>
-				                   <div class="col-sm-2">
-				                     <rich:calendar value="#{crudBean.entity.datMensagem}" buttonClass="glyphicon glyphicon-calendar" inputSize="9" buttonIcon="../images/calendar.png"  datePattern="dd/MM/yyyy" inputClass="form-control" showWeeksBar="false" enableManualInput="true" oninputkeypress="return formataData(event,this);" maxlength="10"/>
-				                   </div>
-				                 	<a4j:commandButton image="/images/add.png" style="vertical-align: middle; border:white; width: 22px; height: 22px; margin-left:2em; margin-right:2em;" title="ADICIONAR" actionListener="#{crudBean.adicionarData}" render="panelDataResult, panelPesquisaData" rendered="#{crudBean.inserting}"/>
-			                 	</div>
-							
-								<div class="form-group">
-			                   	   <label for="inputEmail3" class="col-sm-2 control-label">Hora *</label>
-				                   <div class="col-sm-2">
-				                     <h:inputText value="#{crudBean.entity.horMensagem}" styleClass="form-control" maxlength="5" id="hrMsg" onkeypress="javascript: mascara(this, mhor);"/>
-				                   </div>
-			                 	</div>
-			                 	
 				                <div class="form-group">
 				                	<label for="inputEmail3" class="col-sm-2 control-label">Mensagem *</label>
 				                	<div class="col-sm-10">
@@ -74,35 +59,6 @@
 				                	</div>
 				               	</div>
 			                </div>
-		                </h:panelGroup>
-		                
-		                <h:panelGroup id="panelDataResult" layout="block">
-		                	<div class="box-content">
-								<rich:dataTable id="tblDataProduto" 
-											 value="#{crudBean.entity.listaData}" 
-										       var="rst" rows="10"
-										styleClass="table table-bordered table-striped dataTable"
-								    onrowmouseover="this.style.cursor='default';this.style.backgroundColor='#FFF8DC';" 
-								  	 onrowmouseout="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-										  rendered="#{not empty crudBean.entity.listaData}">						     
-									<f:facet name="header">
-										<rich:columnGroup>
-											<rich:column style="width: 5%; text-align: center;">
-												Data
-											</rich:column>
-											<rich:column style="width: 3%; text-align: center;" />
-										</rich:columnGroup>
-									</f:facet>
-									<rich:column style="text-align: center;">
-										<h:outputText value="#{rst}" />
-									</rich:column>
-									<rich:column style="text-align: center; vertical-align: middle;">
-										<a4j:commandButton image="../images/inativar.png" style="border:none; width: 18px; height: 18px;" title="EXCLUIR" action="#{crudBean.removerData}" render="panelDataResult">
-											<f:setPropertyActionListener target="#{crudBean.dataSel}" value="#{rst}" />
-										</a4j:commandButton>																						
-									</rich:column>
-								</rich:dataTable>
-							</div>
 		                </h:panelGroup>
 	                </rich:tab>
 	                
@@ -188,48 +144,27 @@
 									Código
 								</rich:column>
 								<rich:column style="width: 12%; text-align: center;">
-									Data Agendada
-								</rich:column>
-								<rich:column style="width: 12%; text-align: center;">
-									Hora Agendada
+									Data do Cadastro
 								</rich:column>
 								<rich:column style="width: 64%; text-align: center;">
 									Mensagem
 								</rich:column>
-								<rich:column style="width: 3%; text-align: center;" />
-								<rich:column style="width: 3%; text-align: center;" />
 								<rich:column style="width: 3%; text-align: center;" />
 							</rich:columnGroup>
 						</f:facet>
 						<rich:column style="text-align: right;">
 							<h:outputText value="#{rst.idMensagem}" />
 						</rich:column>
-						<rich:column style="text-align: left;">
-							<h:outputText value="#{rst.datMensagem}" />
+						<rich:column style="text-align: center;">
+							<h:outputText value="#{rst.datCadastro}" />
 						</rich:column>
-						<rich:column style="text-align: center;" >
-							<h:outputText value="#{rst.horMensagem}" />
-						</rich:column>
-						<rich:column style="text-align: center;" >
+						<rich:column style="text-align: left;" >
 							<h:outputText value="#{rst.desMensagem}"/>
 						</rich:column>
 						<rich:column style="text-align: center;">
 							<a4j:commandButton image="../images/visualizar.png" style="border:none; width: 18px; height: 18px;" title="VISUALIZAR" action="#{crudBean.visualizar}" render="formulario" oncomplete="#{rich:component('panVisualizar')}.show();">
 								<f:setPropertyActionListener target="#{crudBean.entity}" value="#{rst}" />
 							</a4j:commandButton>
-						</rich:column>
-						<rich:column style="text-align: center; vertical-align: middle;">
-							<a4j:commandButton image="../images/edit.png" style="border:none; width: 18px; height: 18px;" title="ALTERAR" action="#{crudBean.preparaAlterar}" rendered="#{rst.flgAtivo == 'S' and rst.flgEnviada == 'N'}" render="formulario, panelTitle">
-								<f:setPropertyActionListener target="#{crudBean.entity}" value="#{rst}" />
-							</a4j:commandButton>
-						</rich:column>
-						<rich:column style="text-align: center; vertical-align: middle;">
-							<a4j:commandButton image="../images/inativar.png" style="border:none; width: 18px; height: 18px;" title="INATIVAR" action="#{crudBean.inativar}" rendered="#{rst.flgAtivo == 'S' and rst.flgEnviada == 'N'}" render="formulario, panelTitle" onclick="if (!confirm('Deseja realmente inativar este registro?')) return false">
-								<f:setPropertyActionListener target="#{crudBean.entity}" value="#{rst}" />
-							</a4j:commandButton>
-							<a4j:commandButton image="../images/ativar.png" style="border:none; width: 18px; height: 18px;" title="ATIVAR" action="#{crudBean.ativar}" rendered="#{rst.flgAtivo == 'N' and rst.flgEnviada == 'N'}" render="formulario, panelTitle" onclick="if (!confirm('Deseja realmente ativar este registro?')) return false">
-								<f:setPropertyActionListener target="#{crudBean.entity}" value="#{rst}" />
-							</a4j:commandButton>												
 						</rich:column>
 					</rich:dataTable>
 				</div>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="producao-dia" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="70588910-0d8d-4606-9478-b0be29463ae0">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
-	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="191"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="IMG_LOGO" class="java.lang.String"/>
 	<parameter name="DAT_PRODUCAO" class="java.lang.String"/>
@@ -29,12 +29,22 @@
 	<field name="qtdMassaCrua" class="java.math.BigInteger">
 		<fieldDescription><![CDATA[qtdMassaCrua]]></fieldDescription>
 	</field>
+	<field name="qtdMassa" class="java.lang.Double">
+		<fieldDescription><![CDATA[qtdMassa]]></fieldDescription>
+	</field>
+	<field name="qtdMassaInt" class="java.lang.Integer"/>
+	<variable name="RecetaGroup_SUM_Massa" class="java.lang.Integer" resetType="Group" resetGroup="ReceitaGroup" calculation="Sum">
+		<variableExpression><![CDATA[$F{qtdMassa}]]></variableExpression>
+	</variable>
+	<variable name="RecetaGroup_QTD_Massa" class="java.lang.Integer" resetType="Group" resetGroup="ReceitaGroup" calculation="Sum">
+		<variableExpression><![CDATA[$F{qtdSolicitada}]]></variableExpression>
+	</variable>
 	<group name="ReceitaGroup">
 		<groupExpression><![CDATA[$F{receita.desReceita}]]></groupExpression>
 		<groupHeader>
 			<band height="41">
 				<textField>
-					<reportElement x="61" y="2" width="493" height="18" isPrintWhenDetailOverflows="true" uuid="8bcad615-cfe5-4287-a3d6-6ad1c47ac1ed">
+					<reportElement x="61" y="2" width="494" height="18" isPrintWhenDetailOverflows="true" uuid="8bcad615-cfe5-4287-a3d6-6ad1c47ac1ed">
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
 					<box leftPadding="2"/>
@@ -44,7 +54,7 @@
 					<textFieldExpression><![CDATA[$F{receita.desReceita}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement mode="Opaque" x="0" y="22" width="364" height="19" backcolor="#BFD8D9" uuid="6458618a-ece2-4b23-84a9-ed1dc78642e7"/>
+					<reportElement mode="Opaque" x="0" y="22" width="298" height="19" backcolor="#BFD8D9" uuid="6458618a-ece2-4b23-84a9-ed1dc78642e7"/>
 					<box padding="3" topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
 						<topPen lineWidth="1.0"/>
 						<leftPen lineWidth="1.0"/>
@@ -65,7 +75,7 @@
 					<text><![CDATA[Receita:]]></text>
 				</staticText>
 				<staticText>
-					<reportElement mode="Opaque" x="364" y="22" width="55" height="19" backcolor="#BFD8D9" uuid="7e135c35-b8f2-43bc-974e-5a2c728c4c4b"/>
+					<reportElement mode="Opaque" x="298" y="22" width="55" height="19" backcolor="#BFD8D9" uuid="7e135c35-b8f2-43bc-974e-5a2c728c4c4b"/>
 					<box padding="3" topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
 						<topPen lineWidth="1.0"/>
 						<leftPen lineWidth="1.0"/>
@@ -129,9 +139,48 @@
 					</textElement>
 					<text><![CDATA[P4]]></text>
 				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="353" y="22" width="66" height="19" backcolor="#BFD8D9" uuid="bcf7e462-8bc4-4902-b9cd-c01f92068de7"/>
+					<box padding="3" topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Massa (g)]]></text>
+				</staticText>
+				<textField evaluationTime="Group" evaluationGroup="ReceitaGroup" pattern="">
+					<reportElement stretchType="RelativeToBandHeight" x="444" y="3" width="117" height="18" isPrintWhenDetailOverflows="true" uuid="b645a68b-67d7-4de0-8a3a-2e9093362d06">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box padding="3" topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="20">
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{RecetaGroup_SUM_Massa}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="545" y="3" width="27" height="18" isPrintWhenDetailOverflows="true" uuid="2afdf7df-9c45-46ef-b657-30e7b2bf6cbf">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box leftPadding="0"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA["g"]]></textFieldExpression>
+				</textField>
 			</band>
 		</groupHeader>
 		<groupFooter>
+			<band/>
 			<band/>
 		</groupFooter>
 	</group>
@@ -139,7 +188,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="82" splitType="Stretch">
+		<band height="93" splitType="Stretch">
 			<image hAlign="Left">
 				<reportElement x="0" y="0" width="110" height="41" uuid="ad31f889-4e69-46cd-bd00-b831da105772">
 					<property name="local_mesure_unitx" value="pixel"/>
@@ -164,7 +213,7 @@
 				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(new Date())]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="41" width="554" height="18" uuid="ae332449-b6e5-4aea-9e40-4b8dce0c6961"/>
+				<reportElement x="0" y="41" width="555" height="18" uuid="ae332449-b6e5-4aea-9e40-4b8dce0c6961"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
@@ -184,18 +233,18 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$V{PAGE_COUNT}+1]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="410" y="41" width="134" height="18" uuid="3434b344-1d5a-4221-b136-a1818ae8de64"/>
+			<textField pattern="">
+				<reportElement x="353" y="41" width="191" height="18" uuid="3434b344-1d5a-4221-b136-a1818ae8de64"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{STR_MASSA}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="0" y="62" width="555" height="15" isRemoveLineWhenBlank="true" uuid="325913ea-cf30-4a49-a52e-424f29645f88"/>
+				<reportElement x="0" y="62" width="555" height="27" isRemoveLineWhenBlank="true" uuid="325913ea-cf30-4a49-a52e-424f29645f88"/>
 				<box leftPadding="3"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="8"/>
+					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{OBSERVACAO}]]></textFieldExpression>
 			</textField>
@@ -207,7 +256,7 @@
 	<detail>
 		<band height="18" splitType="Stretch">
 			<textField>
-				<reportElement positionType="FixRelativeToBottom" x="0" y="0" width="364" height="18" isPrintWhenDetailOverflows="true" uuid="9b6b506b-d935-47c9-b5c4-4a0c4ce929b1">
+				<reportElement positionType="FixRelativeToBottom" x="0" y="0" width="298" height="18" isPrintWhenDetailOverflows="true" uuid="9b6b506b-d935-47c9-b5c4-4a0c4ce929b1">
 					<property name="local_mesure_unitwidth" value="pixel"/>
 					<property name="local_mesure_unitheight" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -224,7 +273,7 @@
 				<textFieldExpression><![CDATA[$F{desProduto} + " - " + $F{qtdMassaCrua} + "g"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement stretchType="RelativeToBandHeight" x="364" y="0" width="55" height="18" isPrintWhenDetailOverflows="true" uuid="959ff760-f0e0-48d0-a215-a9f621699674">
+				<reportElement stretchType="RelativeToBandHeight" x="298" y="0" width="55" height="18" isPrintWhenDetailOverflows="true" uuid="959ff760-f0e0-48d0-a215-a9f621699674">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<box padding="3">
@@ -297,6 +346,21 @@
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{prioridade3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement stretchType="RelativeToBandHeight" x="353" y="0" width="66" height="18" isPrintWhenDetailOverflows="true" uuid="9d3096e5-a768-4f31-8c98-14b8837d7770">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="3">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qtdMassaInt}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

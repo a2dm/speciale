@@ -125,6 +125,10 @@
 		            	<li class="treeview #{sessionScope.flgMenuGerPed}"><h:commandLink action="#{geradorPedidoBean.preparaPesquisar}"><i class="fa fa-paper-plane"></i> <span>Gerador de Pedido</span></h:commandLink></li>
 		            </h:panelGroup>
 		            
+		            <h:panelGroup layout="block" rendered="#{sessionScope.loginUsuario.idGrupo == bundle.grupoGerente}">
+		            	<li class="treeview #{sessionScope.flgMenuPla}"><h:commandLink action="#{plataformaBean.preparaPesquisar}"><i class="fa fa-tablet"></i> <span>Plataforma</span></h:commandLink></li>
+		            </h:panelGroup>
+		            
 		            <h:panelGroup layout="block" rendered="#{sessionScope.loginUsuario.idGrupo == bundle.grupoFuncionario or sessionScope.loginUsuario.idGrupo == bundle.grupoGerente}">
 		            <li class="treeview #{sessionScope.flgMenuRel}">
 		              <a href="#">

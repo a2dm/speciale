@@ -162,6 +162,16 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 			throw new Exception("O campo Data da Produção não pode ser menor que a Data Atual!");
 		}
 		
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(this.getEntity().getDatPedido());
+		
+		int dia = calendar.get(Calendar.DAY_OF_WEEK);
+		
+		if (dia == Calendar.SUNDAY) 
+		{
+			throw new Exception("Não é possível realizar pedido para o dia de Domingo!");
+		}
+				
 		for (Produto produto : this.getListaProdutoResult())
 		{
 			if(produto.getQtdSolicitada() == null
@@ -241,6 +251,7 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 		this.validarInserir();
 		this.getEntity().setDatAlteracao(new Date());
 		this.getEntity().setIdUsuarioAlt(util.getUsuarioLogado().getIdUsuario());
+		this.getEntity().setPlataforma(PedidoService.PLATAFORMA_WEB);
 		
 		List<Produto> listaSessao = (List<Produto>) util.getSession().getAttribute(LISTA_PRODUTOS_SESSAO);
 		List<Produto> listaRemovidos = new ArrayList<Produto>();
@@ -353,6 +364,7 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 		this.getEntity().setDatCadastro(new Date());
 		this.getEntity().setIdUsuarioCad(util.getUsuarioLogado().getIdUsuario());
 		this.getEntity().setListaProduto(this.getListaProdutoResult());
+		this.getEntity().setPlataforma(PedidoService.PLATAFORMA_WEB);
 	}
 	
 	   public void inserir(ActionEvent event) 

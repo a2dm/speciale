@@ -36,6 +36,8 @@ public class MensagemBean extends AbstractBean<Mensagem, MensagemService>
 	private Date datInicio;
 	private Date datFim;
 	
+	private BigInteger idCliente;
+	
 	private JSFUtil util = new JSFUtil();
 	
 	public MensagemBean()
@@ -53,6 +55,37 @@ public class MensagemBean extends AbstractBean<Mensagem, MensagemService>
 	{
 		this.iniciaListaClientes();
 	}
+	
+	@Override
+	public void pesquisar(ActionEvent event)
+    {	   
+		try
+		{
+			if (validarAcesso(Variaveis.ACAO_PESQUISAR))
+			{
+				validarPesquisar();
+				
+				Mensagem mensagem = new Mensagem();
+				mensagem.setFlgAtivo("S");
+				mensagem.setDatMensagem(this.getSearchObject().getDatCadastro());
+				mensagem.setIdCliente(this.getIdCliente());
+				
+				List<Mensagem> lista = MensagemService.getInstancia().pesquisar(mensagem, MensagemService.JOIN_MENSAGEM_CLIENTE);
+				
+				this.setSearchResult(lista);
+				setCurrentState(STATE_SEARCH);
+			}
+		}
+		catch (Exception e)
+		{
+			FacesMessage message = new FacesMessage(e.getMessage());
+			message.setSeverity(FacesMessage.SEVERITY_ERROR);
+			if(e.getMessage() == null)
+				FacesContext.getCurrentInstance().addMessage("", message);
+			else
+				FacesContext.getCurrentInstance().addMessage(null, message);
+		}
+    }
 	
 	@Override
 	protected void setValoresDefault() throws Exception
@@ -133,23 +166,23 @@ public class MensagemBean extends AbstractBean<Mensagem, MensagemService>
 	@Override
 	protected void validarInserir() throws Exception
 	{
-		if(this.getEntity().getListaData() == null
-				|| this.getEntity().getListaData().size() <= 0)
-		{
-			throw new Exception("Favor informar pelo menos uma data!");
-		}		
-		
-		if(this.getEntity() == null
-				|| this.getEntity().getHorMensagem() == null
-				|| this.getEntity().getHorMensagem().trim().equals(""))
-		{
-			throw new Exception("O campo Hora é obrigatório!");
-		}
-		
-		if(this.getEntity().getHorMensagem().trim().length() < 5)
-		{
-			throw new Exception("Favor informar a Hora no formato correto. Ex: 09:00.");
-		}
+//		if(this.getEntity().getListaData() == null
+//				|| this.getEntity().getListaData().size() <= 0)
+//		{
+//			throw new Exception("Favor informar pelo menos uma data!");
+//		}		
+//		
+//		if(this.getEntity() == null
+//				|| this.getEntity().getHorMensagem() == null
+//				|| this.getEntity().getHorMensagem().trim().equals(""))
+//		{
+//			throw new Exception("O campo Hora é obrigatório!");
+//		}
+//		
+//		if(this.getEntity().getHorMensagem().trim().length() < 5)
+//		{
+//			throw new Exception("Favor informar a Hora no formato correto. Ex: 09:00.");
+//		}
 		
 		if(this.getEntity().getDesMensagem().trim().length() < 5)
 		{
@@ -468,5 +501,13 @@ public class MensagemBean extends AbstractBean<Mensagem, MensagemService>
 
 	public void setDataSel(Date dataSel) {
 		this.dataSel = dataSel;
+	}
+
+	public BigInteger getIdCliente() {
+		return idCliente;
+	}
+
+	public void setIdCliente(BigInteger idCliente) {
+		this.idCliente = idCliente;
 	}
 }
