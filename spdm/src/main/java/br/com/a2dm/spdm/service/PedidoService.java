@@ -411,9 +411,96 @@ public class PedidoService extends A2DMHbNgc<Pedido>
 	    	}
 	    }
 		
-		this.popularListaProdutos(sessao, retorno, vo.getDatPedido(), vo.getFlgAtivo());
+		this.popularListaProdutos(sessao, retorno, vo);
 	      
 	    return retorno;
+	}
+	
+	public List<Pedido> pesquisarProducaoPeriodo(Pedido vo) throws Exception
+	{
+		Session sessao = HibernateUtil.getSession();
+		sessao.setFlushMode(FlushMode.COMMIT);
+		try
+		{
+			return this.pesquisarProducaoPeriodo(sessao, vo);
+		}
+		catch (Exception e)
+		{
+			throw e;
+		}
+		finally
+		{
+			sessao.close();
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Pedido> pesquisarProducaoPeriodo(Session sessao, Pedido vo) throws Exception
+	{
+		vo.setFlgAtivo("S");
+		Criteria criteria = sessao.createCriteria(Pedido.class);
+		
+		ProjectionList projection = Projections.projectionList();
+		projection.add(Projections.groupProperty("datPedido"));
+		projection.add(Projections.groupProperty("flgAtivo"));
+		
+		criteria.createAlias("listaPedidoProduto", "listaPedidoProduto");
+		
+		criteria.add(Restrictions.eq("listaPedidoProduto.flgAtivo", "S"));
+		criteria.add(Restrictions.eq("flgAtivo", vo.getFlgAtivo()));
+		criteria.add(Restrictions.ge("datPedido", vo.getDatPedidoInicio()));
+		criteria.add(Restrictions.le("datPedido", vo.getDatPedidoFim()));
+		
+		criteria.addOrder(Order.asc("datPedido"));
+		
+		criteria.setProjection(projection);
+		List<Object[]> resultado = criteria.list();		
+		List<Pedido> retorno = new ArrayList<Pedido>(2);
+		
+		if (resultado != null && resultado.size() > 0)
+	    {
+	    	int j = 0;
+	    	for (int i = 0; i < resultado.size(); i++)
+	    	{
+	    		j = 0;
+	    		
+	    		Pedido pedidoResult = new Pedido();
+	    		pedidoResult.setDatPedido((Date) resultado.get(i)[j++]);
+	    		pedidoResult.setFlgAtivo((String) resultado.get(i)[j++]);
+	    		pedidoResult.setStringData(atualizarStringData(pedidoResult.getDatPedido()));
+	    		pedidoResult.setDatPedidoInicio(vo.getDatPedidoInicio());
+	    		pedidoResult.setDatPedidoFim(vo.getDatPedidoFim());
+	    		
+	            retorno.add(pedidoResult);
+	    	}
+	    }
+		
+		this.popularListaProdutos(sessao, retorno, vo);
+	      
+	    return retorno;
+	}
+	
+	public String atualizarStringData(Date data)
+	{
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(data);
+		
+		String nome = "";
+		
+		int dia = calendar.get(Calendar.DAY_OF_WEEK);
+		
+		switch(dia)
+		{
+		  case Calendar.SUNDAY: nome = "Domingo";break;
+		  case Calendar.MONDAY: nome = "Segunda-feira";break;
+		  case Calendar.TUESDAY: nome = "Terça-feira";break;
+		  case Calendar.WEDNESDAY: nome = "Quarta-feira";break;
+		  case Calendar.THURSDAY: nome = "Quinta-feira";break;
+		  case Calendar.FRIDAY: nome = "Sexta-feira";break;
+		  case Calendar.SATURDAY: nome = "Sábado";break;
+		}
+		
+		return nome;
 	}
 
 	public List<Pedido> pesquisarGeradorPedido(Pedido vo) throws Exception
@@ -500,32 +587,49 @@ public class PedidoService extends A2DMHbNgc<Pedido>
 	    	}
 	    }
 		
-		this.popularListaProdutos(sessao, retorno, vo.getDatPedido(), vo.getFlgAtivo());
+		this.popularListaProdutos(sessao, retorno, vo);
 	      
 	    return retorno;
 	}
 	
-	private void popularListaProdutos(Session sessao, List<Pedido> lista, Date datPedido, String flgAtivo) throws Exception
+	private void popularListaProdutos(Session sessao, List<Pedido> lista, Pedido pedido) throws Exception
 	{
+		List<PedidoProduto> listaPedidoProduto = new ArrayList<>();
+		
 		if(lista != null
 				&& lista.size() > 0)
 		{
-			for (Pedido pedido : lista)
+			for (Pedido element : lista)
 			{
 				PedidoProduto pedidoProduto = new PedidoProduto();
 				pedidoProduto.setPedido(new Pedido());
 				
-				if (flgAtivo != null && !flgAtivo.equalsIgnoreCase("")) {
+				if (pedido.getFlgAtivo() != null && !pedido.getFlgAtivo().equalsIgnoreCase("")) {
 					pedidoProduto.setFlgAtivo("s");
-					pedidoProduto.getPedido().setFlgAtivo(flgAtivo.toLowerCase());
+					pedidoProduto.getPedido().setFlgAtivo(pedido.getFlgAtivo().toLowerCase());
 				}
 				
-				pedidoProduto.getPedido().setIdCliente(pedido.getCliente().getIdCliente());
-				pedidoProduto.getPedido().setDatPedido(datPedido);
+				if (element.getCliente() != null && element.getCliente().getIdCliente() != null)
+				{
+					pedidoProduto.getPedido().setIdCliente(element.getCliente().getIdCliente());
+				}
 				
-				List<PedidoProduto> listaPedidoProduto = PedidoProdutoService.getInstancia().pesquisar(sessao, pedidoProduto, PedidoProdutoService.JOIN_PEDIDO
-																															| PedidoProdutoService.JOIN_PRODUTO);
-				pedido.setListaPedidoProduto(listaPedidoProduto);
+				if (pedido.getDatPedido() != null)
+				{
+					pedidoProduto.getPedido().setDatPedido(pedido.getDatPedido());
+				}
+				
+				if (pedido.getDatPedidoInicio() != null && pedido.getDatPedidoFim() != null) 
+				{
+					pedidoProduto.getPedido().setDatPedido(element.getDatPedido());
+					
+					listaPedidoProduto = PedidoProdutoService.getInstancia().pesquisardoPedidoProdutos(sessao, pedidoProduto);
+				} else {
+					listaPedidoProduto = PedidoProdutoService.getInstancia().pesquisar(sessao, pedidoProduto, PedidoProdutoService.JOIN_PEDIDO
+																											| PedidoProdutoService.JOIN_PRODUTO);
+				}
+				
+				element.setListaPedidoProduto(listaPedidoProduto);
 			}
 		}
 	}

@@ -107,7 +107,7 @@ public class Produto implements Serializable {
 
 	@Transient
 	private Date datPedido;
-
+	
 	@Transient
 	private BigInteger numPrioridade;
 

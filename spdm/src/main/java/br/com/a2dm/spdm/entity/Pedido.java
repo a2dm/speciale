@@ -96,6 +96,15 @@ public class Pedido implements Serializable
 	
 	@Transient
 	private HashMap<String, Object> filtroMap;
+	
+	@Transient
+	private String stringData;
+	
+	@Transient
+	private Date datPedidoInicio;
+	
+	@Transient
+	private Date datPedidoFim;
 
 	public BigInteger getIdPedido() {
 		return idPedido;
@@ -223,5 +232,29 @@ public class Pedido implements Serializable
 
 	public void setPlataforma(String plataforma) {
 		this.plataforma = plataforma;
+	}
+	
+	public Date getDatPedidoInicio() {
+		return datPedidoInicio;
+	}
+
+	public void setDatPedidoInicio(Date datPedidoInicio) {
+		this.datPedidoInicio = datPedidoInicio;
+	}
+
+	public Date getDatPedidoFim() {
+		return datPedidoFim;
+	}
+
+	public void setDatPedidoFim(Date datPedidoFim) {
+		this.datPedidoFim = datPedidoFim;
+	}
+
+	public String getStringData() {
+		return stringData;
+	}
+
+	public void setStringData(String stringData) {
+		this.stringData = stringData;
 	}
 }

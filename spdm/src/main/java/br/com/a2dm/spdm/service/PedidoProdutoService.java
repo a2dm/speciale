@@ -1,15 +1,25 @@
 package br.com.a2dm.spdm.service;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
 
 import br.com.a2dm.brcmn.util.A2DMHbNgc;
 import br.com.a2dm.brcmn.util.RestritorHb;
 import br.com.a2dm.spdm.entity.PedidoProduto;
+import br.com.a2dm.spdm.entity.Produto;
+import br.com.a2dm.spdm.entity.Receita;
 
 public class PedidoProdutoService extends A2DMHbNgc<PedidoProduto>
 {
@@ -76,6 +86,51 @@ public class PedidoProdutoService extends A2DMHbNgc<PedidoProduto>
 		
 		return criteria;
 	}	
+	
+	@SuppressWarnings("unchecked")
+	public List<PedidoProduto> pesquisardoPedidoProdutos(Session sessao, PedidoProduto pedidoProduto) throws Exception
+	{		
+		Criteria criteria = sessao.createCriteria(PedidoProduto.class);
+		
+		ProjectionList projection = Projections.projectionList();
+		projection.add(Projections.groupProperty("idProduto"));
+		projection.add(Projections.groupProperty("produto.desProduto"));
+		projection.add(Projections.groupProperty("produto.qtdMassaCrua"));
+		projection.add(Projections.sum("qtdSolicitada"));
+		
+		criteria.createAlias("pedido", "pedido");
+		criteria.createAlias("produto", "produto");
+		
+		criteria.add(Restrictions.eq("pedido.flgAtivo", "S"));
+		criteria.add(Restrictions.eq("flgAtivo", "S"));
+		criteria.add(Restrictions.eq("pedido.datPedido", pedidoProduto.getPedido().getDatPedido()));
+		
+		criteria.addOrder(Order.asc("produto.desProduto"));
+		
+		criteria.setProjection(projection);
+		List<Object[]> resultado = criteria.list();		
+		List<PedidoProduto> retorno = new ArrayList<PedidoProduto>(3);
+		
+		if (resultado != null && resultado.size() > 0)
+	    {
+	    	int j = 0;
+	    	for (int i = 0; i < resultado.size(); i++)
+	    	{
+	    		j = 0;
+	    		
+	    		PedidoProduto produtoResult = new PedidoProduto();
+	    		produtoResult.setIdProduto((BigInteger) resultado.get(i)[j++]);
+	    		produtoResult.setProduto(new Produto());
+	    		produtoResult.getProduto().setDesProduto((String) resultado.get(i)[j++]);
+	    		produtoResult.getProduto().setQtdMassaCrua((BigInteger) resultado.get(i)[j++]);
+	    		produtoResult.setQtdSolicitada((BigInteger) resultado.get(i)[j++]);
+	    		
+	            retorno.add(produtoResult);
+	    	}
+	    }
+	      
+	    return retorno;
+	}
 
 	@Override
 	@SuppressWarnings("rawtypes")

@@ -27,13 +27,6 @@
 		<h:panelGroup id="panelGroupDePesquisa" style="height:100%;width:100%;" rendered="#{crudBean.searching}">
 			<f:subview id="viewBusca">
 				<div class="box-body">
-					<div class="form-group">
-	                  <label for="inputEmail3" class="col-sm-2 control-label">Protocolo</label>
-	                   <div class="col-sm-10">
-	                     <h:inputText value="#{crudBean.searchObject.idPedido}" style="width: 150px; display: initial;" styleClass="form-control" maxlength="5" onkeypress="return soNumero(event, this);"/>
-	                   </div>
-                	</div>
-				
                     <div class="form-group">
                       <label for="inputEmail3" class="col-sm-2 control-label">Cliente </label>
                       <div class="col-sm-2" style="width: 13% !important;">
@@ -48,19 +41,6 @@
                       <div class="col-sm-2" style="width: 13% !important;">
 	                	  <rich:calendar value="#{crudBean.searchObject.datPedido}" buttonClass="glyphicon glyphicon-calendar" inputSize="9" buttonIcon="../images/calendar.png"  datePattern="dd/MM/yyyy" inputClass="form-control" showWeeksBar="false" enableManualInput="true" oninputkeypress="return formataData(event,this);" maxlength="10"/>
 	                  </div>
-                    </div>
-                    
-                    <div class="form-group">
-                      <label for="inputEmail3" class="col-sm-2 control-label">Situação</label>
-                      <div class="col-sm-6">
-                        <div style="width: 300px;" class="radio">
-							<h:selectOneRadio value="#{crudBean.searchObject.flgAtivo}" style="width: 100%;" >
-								<f:selectItem itemValue="T" itemLabel="Todos" />
-								<f:selectItem itemValue="S" itemLabel="Ativos" />
-								<f:selectItem itemValue="N" itemLabel="Inativos"/>
-							</h:selectOneRadio>
-						</div>
-                      </div>
                     </div>
             	</div>
 			</f:subview>
