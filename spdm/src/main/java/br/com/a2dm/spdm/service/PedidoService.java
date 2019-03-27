@@ -603,11 +603,8 @@ public class PedidoService extends A2DMHbNgc<Pedido>
 			{
 				PedidoProduto pedidoProduto = new PedidoProduto();
 				pedidoProduto.setPedido(new Pedido());
-				
-				if (pedido.getFlgAtivo() != null && !pedido.getFlgAtivo().equalsIgnoreCase("")) {
-					pedidoProduto.setFlgAtivo("s");
-					pedidoProduto.getPedido().setFlgAtivo(pedido.getFlgAtivo().toLowerCase());
-				}
+				pedidoProduto.setFlgAtivo("s");
+				pedidoProduto.getPedido().setFlgAtivo("s");
 				
 				if (element.getCliente() != null && element.getCliente().getIdCliente() != null)
 				{
