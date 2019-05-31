@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+					  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:a4j="http://richfaces.org/a4j"
+				xmlns:rich="http://richfaces.org/rich"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:t="http://myfaces.apache.org/tomahawk"
+				xmlns:mj="http://mojarra.dev.java.net/mojarra_ext">
+	
+	
+		<f:facet name="header">
+			<h:panelGroup>
+				<h:outputText value="Cliente - Visualizar Preço / Produto" />
+			</h:panelGroup>
+		</f:facet>
+		
+		<f:facet name="controls">
+			<h:outputLink value="#" onclick="#{rich:component('panVisualizarPrecoProduto')}.hide(); return false;">
+		    	<h:graphicImage value="../images/closeModal.png" id="fechaPanelVisualizarPrecoProduto" style="width: 16px; height: 16px; vertical-align:middle;"/>
+	       	</h:outputLink>
+		</f:facet>
+
+	<div class="box-content">
+				<rich:dataTable id="tblDataProdutoPrecoProduto" 
+							 value="#{crudBean.entity.listaClienteProduto}" 
+						       var="rst"
+						styleClass="table table-bordered table-striped dataTable"
+				    onrowmouseover="this.style.cursor='default';this.style.backgroundColor='#FFF8DC';" 
+				  	 onrowmouseout="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+						  rendered="#{not empty crudBean.entity.listaClienteProduto}">						     
+					<f:facet name="header">
+						<rich:columnGroup>
+							<rich:column style="width: 5%; text-align: center;">
+								Código
+							</rich:column>
+							<rich:column style="width: 48%; text-align: center;">
+								Descrição
+							</rich:column>
+							<rich:column style="width: 9%; text-align: center;">
+								Receita
+							</rich:column>
+							<rich:column style="width: 9%; text-align: center;">
+								Lote Mín
+							</rich:column>
+							<rich:column style="width: 9%; text-align: center;">
+								Qtd Múlt
+							</rich:column>
+							<rich:column style="width: 10%; text-align: center;">
+								Vlr Und (R$)
+							</rich:column>
+							<rich:column style="width: 10%; text-align: center;">
+								Vlr Kg (R$)
+							</rich:column>
+						</rich:columnGroup>
+					</f:facet>
+					<rich:column style="text-align: right;">
+						<h:outputText value="#{rst.idProduto}" />
+					</rich:column>
+					<rich:column style="text-align: left;">
+						<h:outputText value="#{rst.produto.desProduto}" />
+					</rich:column>
+					<rich:column style="text-align: left;">
+						<h:outputText value="#{rst.produto.receita.desReceita}" />
+					</rich:column>
+					<rich:column style="text-align: right;">
+						<h:outputText value="#{rst.produto.qtdLoteMinimo}" />
+					</rich:column>
+					<rich:column style="text-align: right;">
+						<h:outputText value="#{rst.produto.qtdMultiplo}" />
+					</rich:column>
+					<rich:column style="text-align: right;">
+						<h:outputText value="#{rst.vlrUnidade}" converter="converterMoeda"/>
+					</rich:column>
+					<rich:column style="text-align: right;">
+						<h:outputText value="#{rst.vlrQuilo}" converter="converterMoeda"/>
+					</rich:column>
+				</rich:dataTable>
+			</div>
+	
+		<div class="modal-footer">			
+			<input type="button" onclick="#{rich:component('panVisualizarPrecoProduto')}.hide();" class="btn btn-default" value="Fechar (X)" accesskey="X"/>
+		</div>
+		
+</ui:composition>

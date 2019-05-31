@@ -18,6 +18,8 @@
 	<field name="produto.qtdMassaAssada" class="java.math.BigInteger">
 		<fieldDescription><![CDATA[produto.qtdMassaAssada]]></fieldDescription>
 	</field>
+	<field name="pedido.cliente.desCliente" class="java.lang.String"/>
+	<field name="pedido.obsPedido" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -40,19 +42,6 @@
 				<text><![CDATA[Pacote]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="0" width="403" height="19" backcolor="#BFD8D9" uuid="6458618a-ece2-4b23-84a9-ed1dc78642e7"/>
-				<box padding="3" topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Produto]]></text>
-			</staticText>
-			<staticText>
 				<reportElement mode="Opaque" x="403" y="0" width="76" height="19" backcolor="#BFD8D9" uuid="7e135c35-b8f2-43bc-974e-5a2c728c4c4b"/>
 				<box padding="3" topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
 					<topPen lineWidth="1.0"/>
@@ -65,6 +54,19 @@
 				</textElement>
 				<text><![CDATA[Quantidade]]></text>
 			</staticText>
+			<textField>
+				<reportElement mode="Opaque" x="0" y="0" width="403" height="19" backcolor="#BFD8D9" uuid="c173c8a0-d844-4709-93c2-59a2bb2d40ad"/>
+				<box leftPadding="10">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pedido.cliente.desCliente}]]></textFieldExpression>
+			</textField>
 		</band>
 	</columnHeader>
 	<detail>
@@ -115,7 +117,21 @@
 		</band>
 	</detail>
 	<columnFooter>
-		<band splitType="Stretch"/>
+		<band height="29" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" mode="Opaque" x="0" y="0" width="555" height="18" isRemoveLineWhenBlank="true" backcolor="#CCCCCC" uuid="d6d302c3-1dfe-487e-bcaa-4638ca7e6bd4"/>
+				<box leftPadding="10" rightPadding="10">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pedido.obsPedido}]]></textFieldExpression>
+			</textField>
+		</band>
 	</columnFooter>
 	<pageFooter>
 		<band splitType="Stretch"/>

@@ -41,6 +41,7 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 	private BigInteger qtdSolicitada;
 	private BigInteger idProdutoRemover;
 	private String stringData;
+	private String stringDataEntrega;
 	private List<Produto> listaProduto;
 	private List<Produto> listaProdutoResult;
 	
@@ -65,7 +66,6 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 	{
 		this.getSearchObject().setDatPedido(new Date());
 		this.atualizarStringData(this.getSearchObject().getDatPedido());
-		this.pesquisar(null);
 	}
 	
 	@Override
@@ -76,7 +76,7 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 		this.setProduto(new Produto());
 		this.setListaProdutoResult(new ArrayList<Produto>());
 		this.atualizarFiltroProduto();
-		this.atualizarStringData(this.getEntity().getDatPedido());
+		this.atualizarStringDataInsert();
 	}
 	
 	@Override
@@ -102,12 +102,23 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 			if(validarAcesso(Variaveis.ACAO_PESQUISAR))
 			{
 				validarPesquisar();
+				completarPesquisar();
 				
 				Pedido pedido = new Pedido();
 				pedido.setFiltroMap(new HashMap<String, Object>());
 				pedido.getFiltroMap().put("flgAtivoPedidoProduto", "S");
-				pedido.setFlgAtivo("S");
-				pedido.setDatPedido(this.getSearchObject().getDatPedido());
+				
+				if (this.getSearchObject().getIdPedido() != null
+						&& this.getSearchObject().getIdPedido().intValue() > 0) 
+				{
+					pedido.setIdPedido(this.getSearchObject().getIdPedido());
+				}
+				
+				if (this.getSearchObject().getDatPedido() != null) 
+				{
+					pedido.setDatPedido(this.getSearchObject().getDatPedido());
+				}
+				
 				pedido.setIdCliente(util.getUsuarioLogado().getIdCliente());
 				
 				pedido = PedidoService.getInstancia().get(pedido, PedidoService.JOIN_USUARIO_CAD
@@ -327,10 +338,12 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 	@Override
 	protected void validarPesquisar() throws Exception
 	{
-		if(this.getSearchObject().getDatPedido() == null
-				|| this.getSearchObject().getDatPedido().toString().trim().equals(""))
+		if((this.getSearchObject().getIdPedido() == null
+				|| this.getSearchObject().getIdPedido().intValue() <= 0)
+				&& (this.getSearchObject().getDatPedido() == null
+					|| this.getSearchObject().getDatPedido().toString().trim().equals("")))
 		{
-			throw new Exception("O campo Data da Produção é obrigatório");
+			throw new Exception("Pelo menos um campo com * é obrigatório!");
 		}
 	}
 	
@@ -552,15 +565,42 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 	
 	public void atualizarStringDataInsert()
 	{
-		this.atualizarStringData(this.getEntity().getDatPedido());
+		String nome = this.atualizarStringData(this.getEntity().getDatPedido());
+		this.atualizarStringDataEntrega(this.getEntity().getDatPedido(), nome);
 	}
 	
 	public void atualizarStringDataSearch()
 	{
 		this.atualizarStringData(this.getSearchObject().getDatPedido());
-	}	
+	}
 	
-	public void atualizarStringData(Date data)
+	public void atualizarStringDataEntrega(Date data, String nome) {
+		Calendar c = Calendar.getInstance(); 
+		c.setTime(data);
+		
+		if (nome.equalsIgnoreCase("Sábado")) {
+			c.add(Calendar.DATE, 2);
+		} else {
+			c.add(Calendar.DATE, 1);
+		}
+		
+		int dia = c.get(Calendar.DAY_OF_WEEK);
+		
+		switch(dia)
+		{
+		  case Calendar.SUNDAY: nome = "Domingo";break;
+		  case Calendar.MONDAY: nome = "Segunda-feira";break;
+		  case Calendar.TUESDAY: nome = "Terça-feira";break;
+		  case Calendar.WEDNESDAY: nome = "Quarta-feira";break;
+		  case Calendar.THURSDAY: nome = "Quinta-feira";break;
+		  case Calendar.FRIDAY: nome = "Sexta-feira";break;
+		  case Calendar.SATURDAY: nome = "Sábado";break;
+		}
+		
+		this.setStringDataEntrega(nome);
+	}
+	
+	public String atualizarStringData(Date data)
 	{
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(data);
@@ -581,6 +621,7 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 		}
 				
 		this.setStringData(nome);
+		return nome;
 	}
 	
 	public void buscarInformacoes() throws Exception {
@@ -621,7 +662,6 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 	{
 		this.atualizarStringData(this.getSearchObject().getDatPedido());
 		this.getSearchObject().setDatPedido(new Date());		
-		this.pesquisar(null);
 	}
 
 	public Integer getTpPesquisaProduto() {
@@ -730,5 +770,13 @@ public class PedidoBean extends AbstractBean<Pedido, PedidoService>
 
 	public void setProdutoSelecionado(Produto produtoSelecionado) {
 		this.produtoSelecionado = produtoSelecionado;
+	}
+
+	public String getStringDataEntrega() {
+		return stringDataEntrega;
+	}
+
+	public void setStringDataEntrega(String stringDataEntrega) {
+		this.stringDataEntrega = stringDataEntrega;
 	}
 }

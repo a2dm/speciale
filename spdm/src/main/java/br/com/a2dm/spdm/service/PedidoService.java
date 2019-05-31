@@ -528,6 +528,7 @@ public class PedidoService extends A2DMHbNgc<Pedido>
 		
 		ProjectionList projection = Projections.projectionList();
 		projection.add(Projections.groupProperty("idPedido"));
+		projection.add(Projections.groupProperty("datPedido"));
 		projection.add(Projections.groupProperty("flgAtivo"));
 		projection.add(Projections.groupProperty("cliente.idCliente"));
 		projection.add(Projections.groupProperty("cliente.desCliente"));
@@ -536,12 +537,9 @@ public class PedidoService extends A2DMHbNgc<Pedido>
 		criteria.createAlias("cliente", "cliente");
 		criteria.createAlias("listaPedidoProduto", "listaPedidoProduto");
 		
-		if (vo.getFlgAtivo() != null
-				&& !vo.getFlgAtivo().equalsIgnoreCase(""))
-		{
-			criteria.add(Restrictions.eq("listaPedidoProduto.flgAtivo", vo.getFlgAtivo()));
+		if (vo.getDatPedido() != null) {
+			criteria.add(Restrictions.eq("datPedido", vo.getDatPedido()));
 		}
-		criteria.add(Restrictions.eq("datPedido", vo.getDatPedido()));
 		
 		if(vo.getIdCliente() != null
 				&& vo.getIdCliente().intValue() > 0)
@@ -556,7 +554,7 @@ public class PedidoService extends A2DMHbNgc<Pedido>
 		}
 		
 		if (vo.getFlgAtivo() != null
-				&& !vo.getFlgAtivo().equalsIgnoreCase("")) 
+				&& !vo.getFlgAtivo().equalsIgnoreCase("T")) 
 		{
 			criteria.add(Restrictions.eq("flgAtivo", vo.getFlgAtivo()));
 		}
@@ -576,6 +574,7 @@ public class PedidoService extends A2DMHbNgc<Pedido>
 	    		
 	    		Pedido pedidoResult = new Pedido();
 	    		pedidoResult.setIdPedido((BigInteger) resultado.get(i)[j++]);
+	    		pedidoResult.setStringData(new SimpleDateFormat("dd/MM/yyyy").format((Date) resultado.get(i)[j++]));
 	    		pedidoResult.setFlgAtivo((String) resultado.get(i)[j++]);
 	    		
 	    		pedidoResult.setCliente(new Cliente());
@@ -604,7 +603,14 @@ public class PedidoService extends A2DMHbNgc<Pedido>
 				PedidoProduto pedidoProduto = new PedidoProduto();
 				pedidoProduto.setPedido(new Pedido());
 				pedidoProduto.setFlgAtivo("s");
-				pedidoProduto.getPedido().setFlgAtivo("s");
+				pedidoProduto.setIdPedido(element.getIdPedido());
+				pedidoProduto.getPedido().setFlgAtivo(pedido.getFlgAtivo());
+				
+				if (pedido.getIdPedido() != null
+						&& pedido.getIdPedido().intValue() > 0) 
+				{
+					pedidoProduto.setIdPedido(pedido.getIdPedido());
+				}
 				
 				if (element.getCliente() != null && element.getCliente().getIdCliente() != null)
 				{

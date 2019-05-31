@@ -29,6 +29,19 @@
 		<h:panelGroup id="panelGroupDePesquisa" style="height:100%;width:100%;" rendered="#{crudBean.searching}">
 			<f:subview id="viewBusca">
 				<div class="box-body">
+					<h:outputText value="Pelo menos um campo com * é obrigatório." style="color: #9e5d28"></h:outputText>
+				</div>
+			
+				<div class="box-body">
+					<div class="form-group">
+                      <label for="inputEmail3" class="col-sm-2 control-label">Protocolo *</label>
+                      <div class="col-sm-2">
+                        <h:inputText value="#{crudBean.searchObject.idPedido}" styleClass="form-control" maxlength="50" id="protocolo">
+                        	<f:passThroughAttribute name="placeholder" value="Protocolo"/>
+                        </h:inputText>
+                      </div>
+                    </div>
+				
                     <div class="form-group">
                    	   <label for="inputEmail3" class="col-sm-2 control-label">Data da Produção *</label>
 	                   <div class="col-sm-2" style="width: 13% !important; padding-right: 30px;">
@@ -40,8 +53,7 @@
 	                   <label for="inputEmail3" class="col-sm-2 control-label" style="text-align: left; color: #800000">
 	                   	<h:outputText value="#{crudBean.stringData}"/>
 	                   	</label>  
-                 	</div> 
-                 	                 
+                 	</div>
             	</div>
             	
 			</f:subview>
@@ -62,6 +74,13 @@
 		                  </div>
 		               	  <label for="inputEmail3" class="col-sm-2 control-label" style="text-align: left; color: #800000">
 		                   	<h:outputText value="#{crudBean.stringData}"/>
+		                  </label>
+		               	</div>
+		               	
+		               	<div class="form-group">
+		                  <label for="inputEmail3" class="col-sm-2 control-label">Entrega</label>
+		               	  <label for="inputEmail3" class="col-sm-2 control-label" style="text-align: left; color: #800000">
+		                   	<h:outputText value="#{crudBean.stringDataEntrega}"/>
 		                  </label>
 		               	</div>
 	               	</h:panelGroup>
@@ -131,7 +150,7 @@
 						
 						<h:panelGroup layout="block" id="panelQtd">
 							<div class="form-group">
-	 	                   	   <label for="inputEmail3" class="col-sm-2 control-label">Quantidade *</label>
+	 	                   	   <label for="inputEmail3" class="col-sm-2 control-label">Quantidade / Und * </label>
 	 		                   <div class="col-sm-10">
 	 		                     <h:inputText value="#{crudBean.qtdSolicitada}" style="width: 150px; display: initial;" styleClass="form-control" maxlength="5" onkeypress="return soNumero(event, this);"/>
 	 		                     <a4j:commandButton image="/images/add.png" style="vertical-align: middle; border:white; width: 22px; height: 22px; margin-left:2em; margin-right:2em;" title="ADICIONAR PRODUTO" actionListener="#{crudBean.adicionarProduto}" render="panelListaProduto, panelPesquisaProduto"/>
@@ -233,7 +252,7 @@
 			        	</div>
 			     	</f:facet>
 			     	
-			     	<h:panelGroup id="panelPedidoPopulado" layout="block" rendered="#{crudBean.pedido != null and crudBean.pedido.flgAtivo == 'S'}">
+			     	<h:panelGroup id="panelPedidoPopulado" layout="block" rendered="#{crudBean.pedido != null}">
 				     	<div class="form-group">
 				        	<label for="inputEmail3" class="col-sm-2 control-label">Protocolo: </label>
 				        	<div class="col-sm-10">
@@ -248,6 +267,16 @@
 				        	<div class="col-sm-10">
 				            	<div class="radio">
 									<h:outputText value="#{crudBean.pedido.datPedido}" converter="converterData"/>
+								</div>
+				            </div>
+				        </div>
+				        
+				        <div class="form-group">
+				        	<label for="inputEmail3" class="col-sm-2 control-label">Situação: </label>
+				        	<div class="col-sm-10">
+				            	<div class="radio">
+									<h:outputText value="Ativo" rendered="#{crudBean.pedido.flgAtivo == 'S'}"/>
+									<h:outputText value="Inativo" rendered="#{crudBean.pedido.flgAtivo == 'N'}"/>
 								</div>
 				            </div>
 				        </div>
@@ -317,8 +346,8 @@
 				        			        
 			        </h:panelGroup>
 			            
-					<h:panelGroup id="panelPedidoEmpty" layout="block" rendered="#{crudBean.pedido == null or crudBean.pedido.flgAtivo == 'N'}">
-						Não existe nenhum pedido realizado para esta data.
+					<h:panelGroup id="panelPedidoEmpty" layout="block" rendered="#{crudBean.pedido == null}">
+						Não existe pedido para o filtro selecionado.
 					</h:panelGroup>
 				
 				</rich:panel>

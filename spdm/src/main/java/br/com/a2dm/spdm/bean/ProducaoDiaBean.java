@@ -1,11 +1,14 @@
 package br.com.a2dm.spdm.bean;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.faces.application.FacesMessage;
@@ -226,11 +229,32 @@ public class ProducaoDiaBean extends AbstractBean<Produto, ProdutoService>
 	@SuppressWarnings({ "unchecked", "deprecation", "rawtypes" })
 	public void configuraRelatorio(Map parameters, HttpServletRequest request)
 	{
+		if (this.getListaReport() != null
+				&& this.getListaReport().size() > 0) 
+		{
+			List<Produto> list = new ArrayList<>();
+			list.addAll(this.getListaReport());
+		
+			Double qtdMassaTotal = 0.0;
+			String receitaAnterior = "";
+			for (Produto produto : list) 
+			{
+				if (!produto.getReceita().getDesReceita().equalsIgnoreCase(receitaAnterior)) {
+					qtdMassaTotal = 0.0;
+				}
+				produto.setQtdMassaStr(new DecimalFormat("#,##0", new DecimalFormatSymbols (new Locale ("pt", "BR"))).format(produto.getQtdMassa()));
+				qtdMassaTotal += produto.getQtdMassa();
+				produto.setQtdMassaTotalStr(new DecimalFormat("#,##0", new DecimalFormatSymbols (new Locale ("pt", "BR"))).format(qtdMassaTotal));
+				receitaAnterior = produto.getReceita().getDesReceita();
+			}
+		}
+		
 		this.REPORT_NAME = "producao-dia";
 		
 		parameters.put("IMG_LOGO", request.getRealPath("images/logo-new3.jpg"));
 		parameters.put("DAT_PRODUCAO", new SimpleDateFormat("dd/MM/yyyy").format(((Produto)this.getListaReport().get(0)).getDatPedido()));
-		parameters.put("STR_MASSA", "MASSA: " + this.getQtdTotalMassaStr() + "kg");
+		parameters.put("TOTAL_DIA", this.getQtdTotalMassaStr());
+		parameters.put("STR_MASSA", "TOTAL DO DIA: " + this.getQtdTotalMassaStr() + "kg");
 		parameters.put("OBSERVACAO", this.getMsgObservacao());
 	}
 	

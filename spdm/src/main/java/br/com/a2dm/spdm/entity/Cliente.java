@@ -92,8 +92,28 @@ public class Cliente implements Serializable
 	@Filter(name = "filtroClienteProdutoAtivo", condition = ":flagAtivoClienteProduto = flg_ativo")
 	private List<ClienteProduto> listaClienteProduto;
 	
+	@Column(name = "vlr_frete")
+	private Double vlrFrete;
+	
+	@Column(name = "id_forma_pagamento")
+	private BigInteger idFormaPagamento;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_forma_pagamento", insertable = false, updatable = false)
+	private FormaPagamento formaPagamento;
+	
+	@Column(name = "id_tipo")
+	private BigInteger idTipo;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_tipo", insertable = false, updatable = false)
+	private Tipo tipo;
+	
 	@Transient
 	private List<Produto> listaProduto;
+	
+	@Transient
+	private String vlrFreteFormatado;
 	
 	@Transient
 	private HashMap<String, Object> filtroMap;
@@ -208,5 +228,53 @@ public class Cliente implements Serializable
 
 	public void setNumPrioridade(BigInteger numPrioridade) {
 		this.numPrioridade = numPrioridade;
+	}
+
+	public Double getVlrFrete() {
+		return vlrFrete;
+	}
+
+	public void setVlrFrete(Double vlrFrete) {
+		this.vlrFrete = vlrFrete;
+	}
+
+	public BigInteger getIdFormaPagamento() {
+		return idFormaPagamento;
+	}
+
+	public void setIdFormaPagamento(BigInteger idFormaPagamento) {
+		this.idFormaPagamento = idFormaPagamento;
+	}
+
+	public FormaPagamento getFormaPagamento() {
+		return formaPagamento;
+	}
+
+	public void setFormaPagamento(FormaPagamento formaPagamento) {
+		this.formaPagamento = formaPagamento;
+	}
+
+	public BigInteger getIdTipo() {
+		return idTipo;
+	}
+
+	public void setIdTipo(BigInteger idTipo) {
+		this.idTipo = idTipo;
+	}
+
+	public Tipo getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(Tipo tipo) {
+		this.tipo = tipo;
+	}
+
+	public String getVlrFreteFormatado() {
+		return vlrFreteFormatado;
+	}
+
+	public void setVlrFreteFormatado(String vlrFreteFormatado) {
+		this.vlrFreteFormatado = vlrFreteFormatado;
 	}
 }

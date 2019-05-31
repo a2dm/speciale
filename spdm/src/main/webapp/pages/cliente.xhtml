@@ -11,7 +11,7 @@
 				xmlns:t="http://myfaces.apache.org/tomahawk"
 				template="crud_template.xhtml">
 			
-			
+	
 	<ui:param name="crudBean" value="#{clienteBean}" />	
 	
 	<ui:define name="saveStateObjectsDefined">
@@ -23,6 +23,8 @@
 		<t:saveState value="#{crudBean.listaProduto}" />
 		<t:saveState value="#{crudBean.listaProdutoResult}" />
 		<t:saveState value="#{crudBean.listaPrioridade}" />
+		<t:saveState value="#{crudBean.listaFormaPagamento}" />
+		<t:saveState value="#{crudBean.listaTipo}" />
 	</ui:define>
 	
 	<ui:define name="content">
@@ -95,6 +97,33 @@
 								  </h:selectOneMenu>
 			                   </div>
 		                 	</div>
+		                 	
+		                 	<div class="form-group">
+		                   	   <label for="inputEmail3" class="col-sm-2 control-label">Valor do Frete</label>
+			                   <div class="col-sm-2">
+			                   	  <h:inputText value="#{crudBean.entity.vlrFreteFormatado}" styleClass="form-control" maxlength="12" onblur="formataMoeda(this);">
+					           		<f:passThroughAttribute name="placeholder" value="R$ 00,00"/>
+					           	  </h:inputText>
+			                   </div>
+		                 	</div>
+		                 	
+		                 	<div class="form-group">
+		                   	   <label for="inputEmail3" class="col-sm-2 control-label">Forma de Pagamento</label>
+			                   <div class="col-sm-2">
+			                   	  <h:selectOneMenu value="#{crudBean.entity.formaPagamento.idFormaPagamento}" converter="simpleIndexConverter" styleClass="form-control" style="width:250px; display: initial;">								
+									<t:selectItems var="o" itemValue="#{o.idFormaPagamento}" itemLabel="#{o.desFormaPagamento}" value="#{crudBean.listaFormaPagamento}" />
+								  </h:selectOneMenu>
+			                   </div>
+		                 	</div>
+		                 	
+		                 	<div class="form-group">
+		                   	   <label for="inputEmail3" class="col-sm-2 control-label">Tipo</label>
+			                   <div class="col-sm-2">
+  			        		      <h:selectOneMenu value="#{crudBean.entity.tipo.idTipo}" converter="simpleIndexConverter" styleClass="form-control" style="width:250px; display: initial;">								
+									<t:selectItems var="o" itemValue="#{o.idTipo}" itemLabel="#{o.desTipo}" value="#{crudBean.listaTipo}" />
+								  </h:selectOneMenu>
+			                   </div>
+		                 	</div>
 		                </div>
 		                
 	                </rich:tab>
@@ -130,7 +159,7 @@
 											<rich:column style="width: 5%; text-align: center;">
 												Código
 											</rich:column>
-											<rich:column style="width: 65%; text-align: center;">
+											<rich:column style="width: 35%; text-align: center;">
 												Descrição
 											</rich:column>
 											<rich:column style="width: 9%; text-align: center;">
@@ -141,6 +170,12 @@
 											</rich:column>
 											<rich:column style="width: 9%; text-align: center;">
 												Qtd Múlt
+											</rich:column>
+											<rich:column style="width: 10%; text-align: center;">
+												Vlr Und
+											</rich:column>
+											<rich:column style="width: 10%; text-align: center;">
+												Vlr Kg
 											</rich:column>											
 											<rich:column style="width: 3%; text-align: center;" />
 										</rich:columnGroup>
@@ -159,7 +194,16 @@
 									</rich:column>
 									<rich:column style="text-align: right;">
 										<h:outputText value="#{rst.qtdMultiplo}" />
-									</rich:column>									
+									</rich:column>
+									<rich:column style="text-align: right;">
+										<h:inputText value="#{rst.vlrUnidadeFormatado}" styleClass="form-control" maxlength="12" onblur="formataMoeda(this);">
+											<a4j:ajax event="blur" listener="#{crudBean.atualizarValorUnidade(rst)}" execute="@form"/>
+							           		<f:passThroughAttribute name="placeholder" value="R$ 00,00"/>
+							           	</h:inputText>
+						           	</rich:column>
+						           	<rich:column style="text-align: right;">
+						           		<h:outputText value="#{rst.vlrQuiloFormatado}" />
+						           	</rich:column>
 									<rich:column style="text-align: center; vertical-align: middle;">
 										<a4j:commandButton image="../images/inativar.png" style="border:none; width: 18px; height: 18px;" title="EXCLUIR" action="#{crudBean.removerProduto}" rendered="#{rst.flgAtivo == 'S'}" render="panelProdutoResult">
 											<f:setPropertyActionListener target="#{crudBean.idProdutoRemover}" value="#{rst.idProduto}" />
@@ -191,15 +235,25 @@
 								<rich:column style="width: 5%; text-align: center;">
 									Código
 								</rich:column>
-								<rich:column style="width: 68%; text-align: center;">
+								<rich:column style="width: 28%; text-align: center;">
 									Descrição
 								</rich:column>
 								<rich:column style="width: 9%; text-align: center;">
 									Hora Limite
 								</rich:column>
+								<rich:column style="width: 15%; text-align: center;">
+									Valor do Frete (R$)
+								</rich:column>
+								<rich:column style="width: 15%; text-align: center;">
+									Forma de Pagamento
+								</rich:column>
+								<rich:column style="width: 10%; text-align: center;">
+									Tipo
+								</rich:column>								
 								<rich:column style="width: 9%; text-align: center;">
 									Situação
 								</rich:column>
+								<rich:column style="width: 3%; text-align: center;" />
 								<rich:column style="width: 3%; text-align: center;" />
 								<rich:column style="width: 3%; text-align: center;" />
 								<rich:column style="width: 3%; text-align: center;" />
@@ -214,6 +268,15 @@
 						<rich:column style="text-align: center;" id="teste3">
 							<h:outputText value="#{rst.horLimite}"/>
 						</rich:column>
+						<rich:column style="text-align: right;">
+							<h:outputText value="#{rst.vlrFrete}" converter="converterMoeda"/>
+						</rich:column>
+						<rich:column style="text-align: left;">
+							<h:outputText value="#{rst.formaPagamento.desFormaPagamento}"/>
+						</rich:column>
+						<rich:column style="text-align: left;">
+							<h:outputText value="#{rst.tipo.desTipo}"/>
+						</rich:column>
 						<rich:column style="text-align: left;">
 							<h:outputText value="ATIVO" style="color: blue;" rendered="#{rst.flgAtivo == 'S'}"/>
 							<h:outputText value="INATIVO" style="color:red;" rendered="#{rst.flgAtivo == 'N'}"/>
@@ -223,16 +286,21 @@
 								<f:setPropertyActionListener target="#{crudBean.entity}" value="#{rst}" />
 							</a4j:commandButton>
 						</rich:column>
-						<rich:column style="text-align: center; vertical-align: middle;">
-							<a4j:commandButton image="../images/edit.png" style="border:none; width: 18px; height: 18px;" title="ALTERAR" action="#{crudBean.preparaAlterar}" rendered="#{rst.flgAtivo == 'S'}" render="formulario, panelTitle" >
+						<rich:column style="text-align: center;">
+							<a4j:commandButton image="../images/valor.png" style="border:none; width: 18px; height: 18px;" title="PREÇO POR PRODUTO" action="#{crudBean.visualizar}" render="formulario" oncomplete="#{rich:component('panVisualizarPrecoProduto')}.show();">
 								<f:setPropertyActionListener target="#{crudBean.entity}" value="#{rst}" />
 							</a4j:commandButton>
 						</rich:column>
 						<rich:column style="text-align: center; vertical-align: middle;">
-							<a4j:commandButton image="../images/inativar.png" style="border:none; width: 18px; height: 18px;" title="INATIVAR" action="#{crudBean.inativar}" rendered="#{rst.flgAtivo == 'S'}" render="formulario, panelTitle" onclick="if (!confirm('Deseja realmente inativar este registro?')) return false">
+							<a4j:commandButton image="../images/edit.png" style="border:none; width: 18px; height: 18px;" title="ALTERAR" action="#{crudBean.preparaAlterar}" rendered="#{rst.flgAtivo == 'S' and sessionScope.loginUsuario.idGrupo == bundle.grupoGerente}" render="formulario, panelTitle">
 								<f:setPropertyActionListener target="#{crudBean.entity}" value="#{rst}" />
 							</a4j:commandButton>
-							<a4j:commandButton image="../images/ativar.png" style="border:none; width: 18px; height: 18px;" title="ATIVAR" action="#{crudBean.ativar}" rendered="#{rst.flgAtivo == 'N'}" render="formulario, panelTitle" onclick="if (!confirm('Deseja realmente ativar este registro?')) return false">
+						</rich:column>
+						<rich:column style="text-align: center; vertical-align: middle;">
+							<a4j:commandButton image="../images/inativar.png" style="border:none; width: 18px; height: 18px;" title="INATIVAR" action="#{crudBean.inativar}" rendered="#{rst.flgAtivo == 'S' and sessionScope.loginUsuario.idGrupo == bundle.grupoGerente}" render="formulario, panelTitle" onclick="if (!confirm('Deseja realmente inativar este registro?')) return false">
+								<f:setPropertyActionListener target="#{crudBean.entity}" value="#{rst}" />
+							</a4j:commandButton>
+							<a4j:commandButton image="../images/ativar.png" style="border:none; width: 18px; height: 18px;" title="ATIVAR" action="#{crudBean.ativar}" rendered="#{rst.flgAtivo == 'N' and sessionScope.loginUsuario.idGrupo == bundle.grupoGerente}" render="formulario, panelTitle" onclick="if (!confirm('Deseja realmente ativar este registro?')) return false">
 								<f:setPropertyActionListener target="#{crudBean.entity}" value="#{rst}" />
 							</a4j:commandButton>												
 						</rich:column>
@@ -249,6 +317,10 @@
 	<ui:define name="modal">
 		<rich:popupPanel id="panVisualizar" styleClass="modal-content" domElementAttachment="form" modal="true" width="1110" height="580" resizeable="false" onmaskclick="#{rich:component('panVisualizar')}.hide()">
 			<ui:include src="panelVisualizarCliente.xhtml" />
+		</rich:popupPanel>
+		
+		<rich:popupPanel id="panVisualizarPrecoProduto" styleClass="modal-content" domElementAttachment="form" modal="true" width="1110" height="580" resizeable="false" onmaskclick="#{rich:component('panVisualizarPrecoProduto')}.hide()">
+			<ui:include src="panelVisualizarPrecoProduto.xhtml" />
 		</rich:popupPanel>
 	</ui:define>
 			

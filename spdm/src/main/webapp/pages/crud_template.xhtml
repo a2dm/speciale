@@ -24,7 +24,7 @@
 		<h:panelGroup rendered="#{crudBean.searching}">
 			<a4j:commandButton id="pesquisar" styleClass="btn btn-primary" value="Pesquisar (P)" accesskey="P" actionListener="#{crudBean.pesquisar}" render="tblResult"/>
 			<h:outputText value=" "/>
-			<a4j:commandButton id="preparaInserir" styleClass="btn btn-primary" value="Novo (N)" accesskey="N" actionListener="#{crudBean.preparaInserir}" render="formulario, panelTitle" />			
+			<a4j:commandButton id="preparaInserir" styleClass="btn btn-primary" value="Novo (N)" accesskey="N" actionListener="#{crudBean.preparaInserir}" render="formulario, panelTitle" rendered="#{sessionScope.loginUsuario.idGrupo != bundle.grupoFuncionario}"/>
 		</h:panelGroup>
 		<rich:popupPanel id="grafico" height="85" width="350">
 		</rich:popupPanel>	

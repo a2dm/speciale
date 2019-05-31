@@ -124,6 +124,9 @@ public class LogisticaDiaBean extends AbstractBean<Pedido, PedidoService>
 					
 					for (PedidoProduto pedidoProduto : pedido.getListaPedidoProduto())
 					{
+						pedidoProduto.getPedido().setCliente(new Cliente());
+						pedidoProduto.getPedido().getCliente().setDesCliente(pedido.getCliente().getDesCliente());
+						
 						if(pedidoProduto.getProduto().getIdReceita().intValue() == ReceitaService.RECEITA_ESPECIAL)
 						{
 							qtdEspecial += pedidoProduto.getQtdSolicitada().intValue();

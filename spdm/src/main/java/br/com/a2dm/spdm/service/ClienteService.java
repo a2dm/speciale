@@ -1,5 +1,6 @@
 package br.com.a2dm.spdm.service;
 
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +34,10 @@ public class ClienteService extends A2DMHbNgc<Cliente>
 	
 	public static final int JOIN_CLIENTE_PRODUTO_PRODUTO_RECEITA = 16;
 	
+	public static final int JOIN_FORMA_PAGAMENTO = 32;
+	
+	public static final int JOIN_TIPO = 64;
+	
 	private JSFUtil util = new JSFUtil();
 		
 	@SuppressWarnings("rawtypes")
@@ -62,6 +67,32 @@ public class ClienteService extends A2DMHbNgc<Cliente>
 	@Override
 	protected void validarInserir(Session sessao, Cliente vo) throws Exception
 	{
+		if (vo.getVlrFreteFormatado() != null
+				&& !vo.getVlrFreteFormatado().equalsIgnoreCase("")) 
+		{
+			vo.setVlrFrete(new Double(vo.getVlrFreteFormatado().toString().replace(".", "").replace(",", ".")));
+		} else {
+			vo.setVlrFrete(null);
+		}
+		
+		if (vo.getFormaPagamento().getIdFormaPagamento() == null
+				|| vo.getFormaPagamento().getIdFormaPagamento().intValue() <= 0) 
+		{
+			vo.setFormaPagamento(null);
+			vo.setIdFormaPagamento(null);
+		} else {
+			vo.setIdFormaPagamento(vo.getFormaPagamento().getIdFormaPagamento());
+		}
+		
+		if (vo.getTipo().getIdTipo() == null
+				|| vo.getTipo().getIdTipo().intValue() <= 0) 
+		{
+			vo.setTipo(null);
+			vo.setIdTipo(null);
+		} else {
+			vo.setIdTipo(vo.getTipo().getIdTipo());
+		}
+		
 		Cliente cliente = new Cliente();
 		cliente.setFlgAtivo("S");		
 		cliente.setFiltroMap(new HashMap<String, Object>());
@@ -89,6 +120,19 @@ public class ClienteService extends A2DMHbNgc<Cliente>
 				ClienteProduto clienteProduto = new ClienteProduto();
 				clienteProduto.setIdCliente(vo.getIdCliente());
 				clienteProduto.setIdProduto(produto.getIdProduto());
+				
+				if (produto.getVlrUnidadeFormatado() != null
+						&& !produto.getVlrUnidadeFormatado().equalsIgnoreCase("")) 
+				{
+					clienteProduto.setVlrUnidade(new Double(produto.getVlrUnidadeFormatado().toString().replace(".", "").replace(",", ".")));
+				}
+				
+				if (produto.getVlrQuiloFormatado() != null
+						&& !produto.getVlrQuiloFormatado().equalsIgnoreCase("")) 
+				{
+					clienteProduto.setVlrQuilo(new Double(produto.getVlrQuiloFormatado().toString().replace(".", "").replace(",", ".")));
+				}
+				
 				clienteProduto.setFlgAtivo("S");
 				clienteProduto.setFlgfavorito("N");
 				clienteProduto.setDatCadastro(new Date());
@@ -104,6 +148,32 @@ public class ClienteService extends A2DMHbNgc<Cliente>
 	@Override
 	protected void validarAlterar(Session sessao, Cliente vo) throws Exception
 	{
+		if (vo.getVlrFreteFormatado() != null
+				&& !vo.getVlrFreteFormatado().equalsIgnoreCase("")) 
+		{
+			vo.setVlrFrete(new Double(vo.getVlrFreteFormatado().toString().replace(".", "").replace(",", ".")));
+		} else {
+			vo.setVlrFrete(null);
+		}
+		
+		if (vo.getFormaPagamento().getIdFormaPagamento() == null
+				|| vo.getFormaPagamento().getIdFormaPagamento().intValue() <= 0) 
+		{
+			vo.setFormaPagamento(null);
+			vo.setIdFormaPagamento(null);
+		} else {
+			vo.setIdFormaPagamento(vo.getFormaPagamento().getIdFormaPagamento());
+		}
+		
+		if (vo.getTipo().getIdTipo() == null
+				|| vo.getTipo().getIdTipo().intValue() <= 0) 
+		{
+			vo.setTipo(null);
+			vo.setIdTipo(null);
+		} else {
+			vo.setIdTipo(vo.getTipo().getIdTipo());
+		}
+		
 		Cliente cliente = new Cliente();
 		cliente.setFiltroMap(new HashMap<String, Object>());
 		cliente.getFiltroMap().put("idClienteNotEq", vo.getIdCliente());
@@ -121,9 +191,10 @@ public class ClienteService extends A2DMHbNgc<Cliente>
 	@Override
 	public Cliente alterar(Session sessao, Cliente vo) throws Exception
 	{
+		vo.setListaClienteProduto(null);
 		validarAlterar(sessao, vo);
 		sessao.merge(vo);		
-				
+
 		if(vo.getListaProduto() != null
 				&& vo.getListaProduto().size() >= 0)
 		{
@@ -143,6 +214,18 @@ public class ClienteService extends A2DMHbNgc<Cliente>
 					{
 						clienteProduto.setFlgAtivo("S");
 						clienteProduto.setIdUsuarioAlt(util.getUsuarioLogado().getIdUsuario());
+
+						if (produto.getVlrUnidadeFormatado() != null
+								&& !produto.getVlrUnidadeFormatado().equalsIgnoreCase("")) 
+						{
+							clienteProduto.setVlrUnidade(new Double(produto.getVlrUnidadeFormatado().toString().replace(".", "").replace(",", ".")));
+						}
+						
+						if (produto.getVlrQuiloFormatado() != null
+								&& !produto.getVlrQuiloFormatado().equalsIgnoreCase("")) 
+						{
+							clienteProduto.setVlrQuilo(new Double(produto.getVlrQuiloFormatado().toString().replace(".", "").replace(",", ".")));
+						}
 						clienteProduto.setDatAlteracao(new Date());
 						
 						ClienteProdutoService.getInstancia().alterar(sessao, clienteProduto);
@@ -153,6 +236,19 @@ public class ClienteService extends A2DMHbNgc<Cliente>
 						clienteProduto.setIdCliente(vo.getIdCliente());
 						clienteProduto.setIdProduto(produto.getIdProduto());
 						clienteProduto.setFlgAtivo("S");
+						
+						if (produto.getVlrUnidadeFormatado() != null
+								&& !produto.getVlrUnidadeFormatado().equalsIgnoreCase("")) 
+						{
+							clienteProduto.setVlrUnidade(new Double(produto.getVlrUnidadeFormatado().toString().replace(".", "").replace(",", ".")));
+						}
+						
+						if (produto.getVlrQuiloFormatado() != null
+								&& !produto.getVlrQuiloFormatado().equalsIgnoreCase("")) 
+						{
+							clienteProduto.setVlrQuilo(new Double(produto.getVlrQuiloFormatado().toString().replace(".", "").replace(",", ".")));
+						}
+						
 						clienteProduto.setDatCadastro(new Date());
 						clienteProduto.setIdUsuarioCad(util.getUsuarioLogado().getIdUsuario());
 						
@@ -170,6 +266,8 @@ public class ClienteService extends A2DMHbNgc<Cliente>
 					
 					clienteProduto.setFlgAtivo("N");
 					clienteProduto.setFlgfavorito("N");
+					clienteProduto.setVlrUnidade(null);
+					clienteProduto.setVlrQuilo(null);
 					clienteProduto.setIdUsuarioAlt(util.getUsuarioLogado().getIdUsuario());
 					clienteProduto.setDatAlteracao(new Date());
 					
@@ -288,6 +386,16 @@ public class ClienteService extends A2DMHbNgc<Cliente>
 			criteria.createAlias("usuarioAlt", "usuarioAlt", JoinType.LEFT_OUTER_JOIN);
 	    }
 		
+		if ((join & JOIN_FORMA_PAGAMENTO) != 0)
+	    {
+			criteria.createAlias("formaPagamento", "formaPagamento", JoinType.LEFT_OUTER_JOIN);
+	    }
+		
+		if ((join & JOIN_TIPO) != 0)
+	    {
+			criteria.createAlias("tipo", "tipo", JoinType.LEFT_OUTER_JOIN);
+	    }
+		
 		return criteria;
 	}
 		
@@ -309,5 +417,104 @@ public class ClienteService extends A2DMHbNgc<Cliente>
 	protected Map filtroPropriedade() 
 	{
 		return filtroPropriedade;
+	}
+	
+	public void atualizarValorUnidade(BigInteger idCliente, Produto produto) throws Exception
+	{
+		Session sessao = HibernateUtil.getSession();
+		sessao.setFlushMode(FlushMode.COMMIT);
+		Transaction tx = sessao.beginTransaction();
+		try
+		{
+			atualizarValorUnidade(sessao, idCliente, produto);
+			tx.commit();
+		}
+		catch (Exception e)
+		{
+			tx.rollback();
+			throw e;
+		}
+		finally
+		{
+			sessao.close();
+		}
+	}
+
+	public void atualizarValorUnidade(Session sessao, BigInteger idCliente, Produto produto) throws Exception {
+		if (idCliente != null
+				&& idCliente.intValue() > 0) 
+		{
+			ClienteProduto clienteProduto = new ClienteProduto();
+			clienteProduto.setIdCliente(idCliente);
+			clienteProduto.setIdProduto(produto.getIdProduto());
+			
+			clienteProduto = ClienteProdutoService.getInstancia().get(sessao, clienteProduto, 0);
+			
+			if (clienteProduto != null) 
+			{
+				if (produto.getVlrUnidadeFormatado() != null
+						&& !produto.getVlrUnidadeFormatado().equalsIgnoreCase("")) {
+					clienteProduto.setVlrUnidade(new Double(produto.getVlrUnidadeFormatado().toString().replace(".", "").replace(",", ".")));
+				} 
+				else 
+				{
+					clienteProduto.setVlrUnidade(null);
+				}
+				clienteProduto.setIdUsuarioAlt(util.getUsuarioLogado().getIdUsuario());
+				clienteProduto.setDatAlteracao(new Date());
+				
+				ClienteProdutoService.getInstancia().alterar(sessao, clienteProduto);
+			}
+		}
+	}
+	
+	public void atualizarValorQuilo(BigInteger idCliente, Produto produto) throws Exception
+	{
+		Session sessao = HibernateUtil.getSession();
+		sessao.setFlushMode(FlushMode.COMMIT);
+		Transaction tx = sessao.beginTransaction();
+		try
+		{
+			atualizarValorQuilo(sessao, idCliente, produto);
+			tx.commit();
+		}
+		catch (Exception e)
+		{
+			tx.rollback();
+			throw e;
+		}
+		finally
+		{
+			sessao.close();
+		}
+	}
+
+	public void atualizarValorQuilo(Session sessao, BigInteger idCliente, Produto produto) throws Exception {
+		if (idCliente != null
+				&& idCliente.intValue() > 0) 
+		{
+			ClienteProduto clienteProduto = new ClienteProduto();
+			clienteProduto.setIdCliente(idCliente);
+			clienteProduto.setIdProduto(produto.getIdProduto());
+			
+			clienteProduto = ClienteProdutoService.getInstancia().get(sessao, clienteProduto, 0);
+			
+			if (clienteProduto != null) 
+			{
+				if (produto.getVlrQuiloFormatado() != null
+						&& !produto.getVlrQuiloFormatado().equalsIgnoreCase("")) 
+				{
+					clienteProduto.setVlrQuilo(new Double(produto.getVlrQuiloFormatado().toString().replace(".", "").replace(",", ".")));
+				}
+				else 
+				{
+					clienteProduto.setVlrQuilo(null);
+				}
+				clienteProduto.setIdUsuarioAlt(util.getUsuarioLogado().getIdUsuario());
+				clienteProduto.setDatAlteracao(new Date());
+				
+				ClienteProdutoService.getInstancia().alterar(sessao, clienteProduto);
+			}
+		}
 	}
 }

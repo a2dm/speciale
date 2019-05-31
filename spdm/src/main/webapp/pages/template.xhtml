@@ -60,7 +60,7 @@
 			       
 			       	<h:commandLink action="principal" styleClass="logo">
 			          <span class="logo-mini"><b>S</b>PC</span>
-			          <span class="logo-lg"><img src="../images/logoTemp.png" alt="" width="200px" height="60px;"/></span>
+			          <span class="logo-lg"><img src="../images/SPECIALE - Logotipo_2a_assinatura_horiz.png" alt="" width="200px" height="45px;"/></span>
 			        </h:commandLink>
 			        
 			        
@@ -145,7 +145,7 @@
 		            </li>
 		           	</h:panelGroup>
 		           	
-		           	<h:panelGroup layout="block" rendered="#{sessionScope.loginUsuario.idGrupo == bundle.grupoGerente}">
+		           	<h:panelGroup layout="block" rendered="#{sessionScope.loginUsuario.idGrupo == bundle.grupoFuncionario or sessionScope.loginUsuario.idGrupo == bundle.grupoGerente}">
 		            <li class="treeview #{sessionScope.flgMenuMan}">
 		              <a href="#">
 		                <i class="fa fa-cogs"></i>
@@ -153,10 +153,16 @@
 		                <i class="fa fa-angle-left pull-right"></i>
 		              </a>
 		              <ul class="treeview-menu">
-		                <li class="#{sessionScope.flgMenuManUsr}"><h:commandLink action="#{usuarioBean.preparaPesquisar}"><i class="fa fa-user"></i> Usuário</h:commandLink></li>
+		              	<h:panelGroup layout="block" rendered="#{sessionScope.loginUsuario.idGrupo == bundle.grupoGerente}">
+		                	<li class="#{sessionScope.flgMenuManUsr}"><h:commandLink action="#{usuarioBean.preparaPesquisar}"><i class="fa fa-user"></i> Usuário</h:commandLink></li>
+		                </h:panelGroup>
 		                <li class="#{sessionScope.flgMenuManCli}"><h:commandLink action="#{clienteBean.preparaPesquisar}"><i class="fa fa-user-secret"></i> Cliente</h:commandLink></li>
-		                <li class="#{sessionScope.flgMenuManRec}"><h:commandLink action="#{receitaBean.preparaPesquisar}"><i class="fa fa-edit"></i> Receita</h:commandLink></li>
-		                <li class="#{sessionScope.flgMenuManPrd}"><h:commandLink action="#{produtoBean.preparaPesquisar}"><i class="fa fa-inbox"></i> Produto</h:commandLink></li>		                
+		                <h:panelGroup layout="block" rendered="#{sessionScope.loginUsuario.idGrupo == bundle.grupoGerente}">
+			                <li class="#{sessionScope.flgMenuManRec}"><h:commandLink action="#{receitaBean.preparaPesquisar}"><i class="fa fa-edit"></i> Receita</h:commandLink></li>
+			                <li class="#{sessionScope.flgMenuManPrd}"><h:commandLink action="#{produtoBean.preparaPesquisar}"><i class="fa fa-inbox"></i> Produto</h:commandLink></li>
+			                <li class="#{sessionScope.flgMenuManRec}"><h:commandLink action="#{formaPagamentoBean.preparaPesquisar}"><i class="fa fa-inbox"></i> Forma de Pagamento</h:commandLink></li>
+			                <li class="#{sessionScope.flgMenuManRec}"><h:commandLink action="#{tipoBean.preparaPesquisar}"><i class="fa fa-inbox"></i> Tipo</h:commandLink></li>
+		                </h:panelGroup>		                
 		              </ul>
 		            </li>
 		            </h:panelGroup>

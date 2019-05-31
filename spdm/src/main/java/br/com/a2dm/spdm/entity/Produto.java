@@ -128,6 +128,18 @@ public class Produto implements Serializable {
 	
 	@Transient
 	private Integer qtdMassaInt;
+	
+	@Transient
+	private String vlrUnidadeFormatado;
+	
+	@Transient
+	private String vlrQuiloFormatado;
+	
+	@Transient
+	private String qtdMassaStr;
+	
+	@Transient
+	private String qtdMassaTotalStr;
 
 	public BigInteger getIdProduto() {
 		return idProduto;
@@ -344,4 +356,39 @@ public class Produto implements Serializable {
 	public void setQtdMassaInt(Integer qtdMassaInt) {
 		this.qtdMassaInt = qtdMassaInt;
 	}
+
+	public String getVlrUnidadeFormatado() {
+		return vlrUnidadeFormatado;
+	}
+
+	public void setVlrUnidadeFormatado(String vlrUnidadeFormatado) {
+		this.vlrUnidadeFormatado = vlrUnidadeFormatado;
+	}
+
+	public String getVlrQuiloFormatado() {
+		return vlrQuiloFormatado;
+	}
+
+	public void setVlrQuiloFormatado(String vlrQuiloFormatado) {
+		this.vlrQuiloFormatado = vlrQuiloFormatado;
+	}
+
+	public String getQtdMassaStr() {
+		return qtdMassaStr;
+	}
+
+	public void setQtdMassaStr(String qtdMassaStr) {
+		this.qtdMassaStr = qtdMassaStr;
+	}
+
+	public String getQtdMassaTotalStr() {
+		return qtdMassaTotalStr;
+	}
+
+	public void setQtdMassaTotalStr(String qtdMassaTotalStr) {
+		this.qtdMassaTotalStr = qtdMassaTotalStr;
+	}
+	
+	
+
 }

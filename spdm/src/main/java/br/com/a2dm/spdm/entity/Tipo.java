@@ -24,36 +24,25 @@ import org.hibernate.annotations.Proxy;
 import br.com.a2dm.brcmn.entity.Usuario;
 
 /** 
- * @author Carlos Diego
- * @since 10/08/2016
+ * @author Mateus Bastos
+ * @since 03/06/2019
  */
 
 @Entity
-@Table(name = "tb_cliente_produto", schema="ped")
-@SequenceGenerator(name = "SQ_CLIENTE_PRODUTO", sequenceName = "SQ_CLIENTE_PRODUTO", allocationSize = 1)
+@Table(name = "tb_tipo", schema="ped")
+@SequenceGenerator(name = "SQ_TIPO", sequenceName = "SQ_TIPO", allocationSize = 1)
 @Proxy(lazy = true)
-public class ClienteProduto implements Serializable
+public class Tipo implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SQ_CLIENTE_PRODUTO")
-	@Column(name = "id_cliente_produto")
-	private BigInteger idClienteProduto;
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SQ_TIPO")
+	@Column(name = "id_tipo")
+	private BigInteger idTipo;
 	
-	@Column(name = "id_cliente")
-	private BigInteger idCliente;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_cliente", insertable = false, updatable = false)
-	private Cliente cliente;
-	
-	@Column(name = "id_produto")
-	private BigInteger idProduto;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_produto", insertable = false, updatable = false)
-	private Produto produto;
+	@Column(name = "des_tipo")
+	private String desTipo;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "dat_cadastro")
@@ -80,46 +69,23 @@ public class ClienteProduto implements Serializable
 	@Column(name = "flg_ativo")
 	private String flgAtivo;
 	
-	@Column(name = "flg_favorito")
-	private String flgfavorito;
-	
-	@Column(name = "valor_unidade")
-	private Double vlrUnidade;
-	
-	@Column(name = "valor_quilo")
-	private Double vlrQuilo;
-	
-	@Transient
-	private String vlrUnidadeFormatado;
-	
-	@Transient
-	private String vlrQuiloFormatado;
-	
 	@Transient
 	private HashMap<String, Object> filtroMap;
 
-	public BigInteger getIdClienteProduto() {
-		return idClienteProduto;
+	public BigInteger getIdTipo() {
+		return idTipo;
 	}
 
-	public void setIdClienteProduto(BigInteger idClienteProduto) {
-		this.idClienteProduto = idClienteProduto;
+	public void setIdTipo(BigInteger idTipo) {
+		this.idTipo = idTipo;
 	}
 
-	public BigInteger getIdCliente() {
-		return idCliente;
+	public String getDesTipo() {
+		return desTipo;
 	}
 
-	public void setIdCliente(BigInteger idCliente) {
-		this.idCliente = idCliente;
-	}
-
-	public BigInteger getIdProduto() {
-		return idProduto;
-	}
-
-	public void setIdProduto(BigInteger idProduto) {
-		this.idProduto = idProduto;
+	public void setDesTipo(String desTipo) {
+		this.desTipo = desTipo;
 	}
 
 	public Date getDatCadastro() {
@@ -177,14 +143,6 @@ public class ClienteProduto implements Serializable
 	public void setFlgAtivo(String flgAtivo) {
 		this.flgAtivo = flgAtivo;
 	}
-	
-	public String getFlgfavorito() {
-		return flgfavorito;
-	}
-
-	public void setFlgfavorito(String flgfavorito) {
-		this.flgfavorito = flgfavorito;
-	}
 
 	public HashMap<String, Object> getFiltroMap() {
 		return filtroMap;
@@ -192,53 +150,5 @@ public class ClienteProduto implements Serializable
 
 	public void setFiltroMap(HashMap<String, Object> filtroMap) {
 		this.filtroMap = filtroMap;
-	}
-
-	public Cliente getCliente() {
-		return cliente;
-	}
-
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
-	}
-
-	public Produto getProduto() {
-		return produto;
-	}
-
-	public void setProduto(Produto produto) {
-		this.produto = produto;
-	}
-
-	public Double getVlrUnidade() {
-		return vlrUnidade;
-	}
-
-	public void setVlrUnidade(Double vlrUnidade) {
-		this.vlrUnidade = vlrUnidade;
-	}
-
-	public Double getVlrQuilo() {
-		return vlrQuilo;
-	}
-
-	public void setVlrQuilo(Double vlrQuilo) {
-		this.vlrQuilo = vlrQuilo;
-	}
-
-	public String getVlrUnidadeFormatado() {
-		return vlrUnidadeFormatado;
-	}
-
-	public void setVlrUnidadeFormatado(String vlrUnidadeFormatado) {
-		this.vlrUnidadeFormatado = vlrUnidadeFormatado;
-	}
-
-	public String getVlrQuiloFormatado() {
-		return vlrQuiloFormatado;
-	}
-
-	public void setVlrQuiloFormatado(String vlrQuiloFormatado) {
-		this.vlrQuiloFormatado = vlrQuiloFormatado;
 	}
 }

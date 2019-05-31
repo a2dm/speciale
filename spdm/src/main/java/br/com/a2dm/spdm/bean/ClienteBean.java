@@ -2,9 +2,12 @@ package br.com.a2dm.spdm.bean;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -21,10 +24,13 @@ import br.com.a2dm.brcmn.util.validacoes.ValidaPermissao;
 import br.com.a2dm.spdm.config.MenuControl;
 import br.com.a2dm.spdm.entity.Cliente;
 import br.com.a2dm.spdm.entity.ClienteProduto;
+import br.com.a2dm.spdm.entity.FormaPagamento;
 import br.com.a2dm.spdm.entity.Produto;
+import br.com.a2dm.spdm.entity.Tipo;
 import br.com.a2dm.spdm.service.ClienteService;
+import br.com.a2dm.spdm.service.FormaPagamentoService;
 import br.com.a2dm.spdm.service.ProdutoService;
-
+import br.com.a2dm.spdm.service.TipoService;
 
 @RequestScoped
 @ManagedBean
@@ -37,8 +43,14 @@ public class ClienteBean extends AbstractBean<Cliente, ClienteService>
 	private BigInteger idProdutoRemover;
 	private Produto produto;
 	private List<Produto> listaProduto;
+	private List<FormaPagamento> listaFormaPagamento;
+	private List<Tipo> listaTipo;
 	private List<Produto> listaProdutoResult;
 	private List<SelectItem> listaPrioridade;
+	private BigInteger idProduto;
+	private BigInteger idCliente;
+	private Double vlrUnidade;
+	private Double vlrQuilo;
 	
 	private final String LISTA_PRODUTOS_SESSAO = "produtos";
 	
@@ -61,9 +73,22 @@ public class ClienteBean extends AbstractBean<Cliente, ClienteService>
 		
 		Produto produto = new Produto();
 		produto.setFlgAtivo("S");
-		
 		List<Produto> lista = ProdutoService.getInstancia().pesquisar(produto, 0);	
 		this.getListaProduto().addAll(lista);
+		
+		this.iniciaListaFormaPagamento();
+
+		FormaPagamento formaPagamento = new FormaPagamento();
+		formaPagamento.setFlgAtivo("S");
+		List<FormaPagamento> listaFormaPagamento = FormaPagamentoService.getInstancia().pesquisar(formaPagamento, 0);
+		this.getListaFormaPagamento().addAll(listaFormaPagamento);
+		
+		this.iniciaListaTipo();
+
+		Tipo tipo = new Tipo();
+		tipo.setFlgAtivo("S");
+		List<Tipo> listaTipo = TipoService.getInstancia().pesquisar(tipo, 0);
+		this.getListaTipo().addAll(listaTipo);
 		
 		SelectItem si0 = new SelectItem(null, " --- ");
 		SelectItem si1 = new SelectItem(1, "1");
@@ -95,7 +120,9 @@ public class ClienteBean extends AbstractBean<Cliente, ClienteService>
 	protected int getJoinPesquisar()
 	{
 		return ClienteService.JOIN_USUARIO_CAD
-			 | ClienteService.JOIN_USUARIO_ALT;				
+			 | ClienteService.JOIN_USUARIO_ALT
+			 | ClienteService.JOIN_FORMA_PAGAMENTO
+			 | ClienteService.JOIN_TIPO;				
 	}
 	
 	@Override
@@ -110,6 +137,8 @@ public class ClienteBean extends AbstractBean<Cliente, ClienteService>
 		this.getEntity().setHorLimite("07:00");
 		this.setTpPesquisaProduto(1);
 		this.setProduto(new Produto());
+		this.getEntity().setFormaPagamento(new FormaPagamento());
+		this.getEntity().setTipo(new Tipo());
 		this.setListaProdutoResult(new ArrayList<Produto>());
 		this.atualizarFiltroProduto();
 	}
@@ -153,19 +182,41 @@ public class ClienteBean extends AbstractBean<Cliente, ClienteService>
 				cliente = ClienteService.getInstancia().get(cliente, ClienteService.JOIN_CLIENTE_PRODUTO
 						   										   | ClienteService.JOIN_CLIENTE_PRODUTO_PRODUTO
 						   										   | ClienteService.JOIN_CLIENTE_PRODUTO_PRODUTO_RECEITA
+						   										   | ClienteService.JOIN_FORMA_PAGAMENTO
+						   										   | ClienteService.JOIN_TIPO
 						   										   | ClienteService.JOIN_USUARIO_CAD
 						   										   | ClienteService.JOIN_USUARIO_ALT);
-							
-				this.setListaProdutoResult(new ArrayList<Produto>());
+				
+				if (cliente.getVlrFrete() != null) {
+					cliente.setVlrFreteFormatado(new DecimalFormat("#,##0.00", new DecimalFormatSymbols (new Locale ("pt", "BR"))).format(cliente.getVlrFrete()));
+				}
+				
+				this.setListaProdutoResult(new ArrayList<>());
 				List<Produto> listaProdutoSessao = new ArrayList<Produto>();
 				
 				for (ClienteProduto clienteProduto : cliente.getListaClienteProduto())
 				{
+					if (clienteProduto.getVlrUnidade() != null) {
+						clienteProduto.getProduto().setVlrUnidadeFormatado(new DecimalFormat("#,##0.00", new DecimalFormatSymbols (new Locale ("pt", "BR"))).format(clienteProduto.getVlrUnidade()));
+					}
+					
+					if (clienteProduto.getVlrQuilo() != null) {
+						clienteProduto.getProduto().setVlrQuiloFormatado(new DecimalFormat("#,##0.00", new DecimalFormatSymbols (new Locale ("pt", "BR"))).format(clienteProduto.getVlrQuilo()));
+					}
+					
 					this.getListaProdutoResult().add(clienteProduto.getProduto());
 					listaProdutoSessao.add(clienteProduto.getProduto());
 				}				
 				
 				setEntity(cliente);
+				
+				if (this.getEntity().getFormaPagamento() == null) {
+					this.getEntity().setFormaPagamento(new FormaPagamento());
+				}
+				
+				if (this.getEntity().getTipo() == null) {
+					this.getEntity().setTipo(new Tipo());
+				}
 				
 				this.setTpPesquisaProduto(1);
 				this.setProduto(new Produto());
@@ -174,14 +225,30 @@ public class ClienteBean extends AbstractBean<Cliente, ClienteService>
 				util.getSession().setAttribute(LISTA_PRODUTOS_SESSAO, listaProdutoSessao);
 				
 				
-				//SETANDO LISTA DE PRODUTOS
+				// SETANDO LISTA DE PRODUTOS
 				Produto produto = new Produto();
 				produto.setFlgAtivo("S");
 				
 				List<Produto> listaProduto = ProdutoService.getInstancia().pesquisar(produto, 0);
 				this.iniciaListaProdutos();
 				this.getListaProduto().addAll(listaProduto);
-			}
+				
+				// SETANDO LISTA DE FORMA DE PAGAMENTO
+				FormaPagamento formaPagamento = new FormaPagamento();
+				formaPagamento.setFlgAtivo("S");
+				
+				List<FormaPagamento> listaFormaPagamento = FormaPagamentoService.getInstancia().pesquisar(formaPagamento, 0);
+				this.iniciaListaFormaPagamento();
+				this.getListaFormaPagamento().addAll(listaFormaPagamento);
+				
+				// SETANDO LISTA DE TIPO
+				Tipo tipo = new Tipo();
+				tipo.setFlgAtivo("S");
+				
+				List<Tipo> listaTipo = TipoService.getInstancia().pesquisar(tipo, 0);
+				this.iniciaListaTipo();
+				this.getListaTipo().addAll(listaTipo);
+			} 
 		}
 	    catch (Exception e)
 	    {
@@ -346,6 +413,28 @@ public class ClienteBean extends AbstractBean<Cliente, ClienteService>
 		this.setListaProduto(lista);
 	}
 	
+	private void iniciaListaFormaPagamento()
+	{
+		ArrayList<FormaPagamento> lista = new ArrayList<>();
+		FormaPagamento formaPagamento = new FormaPagamento();
+		formaPagamento.setIdFormaPagamento(null);
+		formaPagamento.setDesFormaPagamento("Escolha a Forma de Pagamento");		
+		lista.add(formaPagamento);
+		
+		this.setListaFormaPagamento(lista);
+	}
+	
+	private void iniciaListaTipo()
+	{
+		ArrayList<Tipo> lista = new ArrayList<>();
+		Tipo tipo = new Tipo();
+		tipo.setIdTipo(null);
+		tipo.setDesTipo("Escolha o Tipo");		
+		lista.add(tipo);
+		
+		this.setListaTipo(lista);
+	}
+	
 	@Override
 	protected void completarInserir() throws Exception
 	{
@@ -399,6 +488,30 @@ public class ClienteBean extends AbstractBean<Cliente, ClienteService>
 					this.getListaProduto().addAll(lista);
 				}
 			}
+		}
+		catch (Exception e) 
+		{
+			FacesMessage message = new FacesMessage(e.getMessage());
+	        message.setSeverity(FacesMessage.SEVERITY_ERROR);
+	        FacesContext.getCurrentInstance().addMessage(null, message);
+		}
+	}
+	
+	public void atualizarValorUnidade(Produto produto) {
+		try {
+			ClienteService.getInstancia().atualizarValorUnidade(getEntity().getIdCliente(), produto);
+		}
+		catch (Exception e) 
+		{
+			FacesMessage message = new FacesMessage(e.getMessage());
+	        message.setSeverity(FacesMessage.SEVERITY_ERROR);
+	        FacesContext.getCurrentInstance().addMessage(null, message);
+		}
+	}
+	
+	public void atualizarValorQuilo(Produto produto) {
+		try {
+			ClienteService.getInstancia().atualizarValorQuilo(getEntity().getIdCliente(), produto);
 		}
 		catch (Exception e) 
 		{
@@ -571,5 +684,53 @@ public class ClienteBean extends AbstractBean<Cliente, ClienteService>
 
 	public void setListaPrioridade(List<SelectItem> listaPrioridade) {
 		this.listaPrioridade = listaPrioridade;
+	}
+
+	public List<FormaPagamento> getListaFormaPagamento() {
+		return listaFormaPagamento;
+	}
+
+	public void setListaFormaPagamento(List<FormaPagamento> listaFormaPagamento) {
+		this.listaFormaPagamento = listaFormaPagamento;
+	}
+
+	public List<Tipo> getListaTipo() {
+		return listaTipo;
+	}
+
+	public void setListaTipo(List<Tipo> listaTipo) {
+		this.listaTipo = listaTipo;
+	}
+
+	public BigInteger getIdProduto() {
+		return idProduto;
+	}
+
+	public void setIdProduto(BigInteger idProduto) {
+		this.idProduto = idProduto;
+	}
+
+	public BigInteger getIdCliente() {
+		return idCliente;
+	}
+
+	public void setIdCliente(BigInteger idCliente) {
+		this.idCliente = idCliente;
+	}
+
+	public Double getVlrUnidade() {
+		return vlrUnidade;
+	}
+
+	public void setVlrUnidade(Double vlrUnidade) {
+		this.vlrUnidade = vlrUnidade;
+	}
+
+	public Double getVlrQuilo() {
+		return vlrQuilo;
+	}
+
+	public void setVlrQuilo(Double vlrQuilo) {
+		this.vlrQuilo = vlrQuilo;
 	}
 }

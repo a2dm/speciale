@@ -60,7 +60,7 @@ public class GeradorPedidoBean extends AbstractBean<Pedido, PedidoService>
 	@Override
 	protected void completarPesquisar() throws Exception
 	{
-		if(this.getSearchObject().getFlgAtivo().equals("T"))
+		if(this.getSearchObject().getFlgAtivo() != null && this.getSearchObject().getFlgAtivo().equalsIgnoreCase("T"))
 		{
 			this.getSearchObject().setFlgAtivo(null);
 		}
@@ -100,6 +100,7 @@ public class GeradorPedidoBean extends AbstractBean<Pedido, PedidoService>
 	protected void setDefaultInserir() throws Exception
 	{		
 		this.setListaPedidoResult(new ArrayList<Pedido>());
+		this.setProduto(new Produto());
 	}
 	
 	public void buscarProdutos() throws Exception {
@@ -144,10 +145,12 @@ public class GeradorPedidoBean extends AbstractBean<Pedido, PedidoService>
 	@Override
 	protected void validarPesquisar() throws Exception
 	{
-		if(this.getSearchObject().getDatPedido() == null
-				|| this.getSearchObject().getDatPedido().toString().trim().equals(""))
+		if((this.getSearchObject().getIdPedido() == null
+				|| this.getSearchObject().getIdPedido().intValue() <= 0)
+				&& (this.getSearchObject().getDatPedido() == null
+					|| this.getSearchObject().getDatPedido().toString().trim().equals("")))
 		{
-			throw new Exception("O campo Data é obrigatório.");
+			throw new Exception("Pelo menos um campo com * é obrigatório!");
 		}
 	}
 	

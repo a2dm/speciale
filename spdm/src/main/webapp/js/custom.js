@@ -225,6 +225,60 @@ function formataData(evt, campo)
 	return false;
 }
 
+function formataMoeda(campo)
+{	
+	  if(campo.value != '')
+	  {
+		  decs=2;
+
+		  var money = campo.value;
+		  
+		  if(parseFloat(money.replace(',','.')) < 0){ money = ''; }
+		  
+		   while(money.toString().indexOf('.') != -1)
+		   {
+		   	money = money.replace(".","");
+		   }
+		   money = money.replace(",",".");
+		   if (isNaN(new Number(money)))
+		   {
+			   campo.value = '';
+			   return;
+		   }
+		   money = new Number(money);
+		   money = money.toFixed(decs);
+		   money = money.toString().replace(".",",");
+		   var number, comma, numberAux = "";
+		
+		   number = ( money + "" ).replace( "\.", "" );
+		   
+		   var zeros = "";
+		   for (i=0; i<decs; i++) zeros +="0";
+		   
+		   number = ( number.indexOf( "," ) == -1 ? number + "," + zeros : number ); //se for numero inteiro, coloca-se as casas decimais
+		   comma = number.indexOf( "," ) -1; //posicao da virgula
+		
+		   for ( var x = comma, count = 1; x >= 0; x--, count++ )
+		   {
+			   numberAux = number.substring( x, x +1 ) + numberAux;
+			   if ( count == (3) ) {
+				   if ( x != 0 && number.substring( x -1, x ) != "-" ) {
+				       numberAux = "." + numberAux;
+				       count = 0;
+				   }
+			   }
+		   }
+		
+		   var comma_casas_decimais = number.substring( comma +1, number.length );
+		   if (comma_casas_decimais.length == decs)
+		   {
+		   		comma_casas_decimais += '0';
+		   }
+		
+		   campo.value = numberAux + comma_casas_decimais;
+	   }
+}
+
 function verificaTamanho(campo, tamMax, resposta)
 {
 	var strLen;
