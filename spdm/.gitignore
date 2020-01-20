@@ -1,1 +1,5 @@
 /target/
+.project
+.classpash
+.settings
+/bin/
