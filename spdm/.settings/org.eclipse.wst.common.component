@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+<<<<<<< HEAD
         
     <wb-module deploy-name="spdm">
                 
@@ -8,6 +9,22 @@
                 
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
                 
+=======
+            
+    
+    <wb-module deploy-name="spdm">
+                        
+        
+        <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
+                        
+        
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+                        
+        
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+                        
+        
+>>>>>>> 635d97c9b01e9e2461e34c1c8652e351b0922252
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <dependent-module archiveName="spdm-service-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/spdm-service/spdm-service">
             <dependency-type>uses</dependency-type>
@@ -15,10 +32,25 @@
         <dependent-module archiveName="brcmn-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/brcmn/brcmn">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+<<<<<<< HEAD
                 
+=======
+                        
+        
+>>>>>>> 635d97c9b01e9e2461e34c1c8652e351b0922252
         <property name="context-root" value="spdm"/>
+                        
+        
         <property name="java-output-path" value="/spdm/target/classes"/>
+<<<<<<< HEAD
             
     </wb-module>
     
+=======
+                    
+    
+    </wb-module>
+        
+
+>>>>>>> 635d97c9b01e9e2461e34c1c8652e351b0922252
 </project-modules>
